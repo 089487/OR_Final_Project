@@ -1,0 +1,6 @@
+gurobipy==13.0.1
+numpy>=1.26
+pandas>=2.2
+matplotlib>=3.8
+seaborn>=0.13
+tabulate>=0.9

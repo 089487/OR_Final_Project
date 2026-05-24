@@ -1,0 +1,65 @@
+season,scoring,method,draft_position,round,overall_pick,player,projected_points,adp,eligible_positions,assigned_position,representative_draft_position,representative_delta,objective
+2026,yahoo,Static IP,6,1,6,Vladimir Guerrero Jr._H,519.5,18.4,1B;Util,1B,6,0.0,9213.7
+2026,yahoo,Static IP,6,2,19,Tarik Skubal_P,732.9,6.8,SP,SP,6,0.0,9213.7
+2026,yahoo,Static IP,6,3,30,Cal Raleigh_H,454.0,14.6,C;Util,C,6,0.0,9213.7
+2026,yahoo,Static IP,6,4,43,Juan Soto_H,578.5,3.6,OF;Util,OF,6,0.0,9213.7
+2026,yahoo,Static IP,6,5,54,Cristopher Sanchez_P,655.2,26.8,SP,SP,6,0.0,9213.7
+2026,yahoo,Static IP,6,6,67,Kyle Tucker_H,510.5,10.8,OF;Util,OF,6,0.0,9213.7
+2026,yahoo,Static IP,6,7,78,Logan Webb_P,659.3,46.8,SP,SP,6,0.0,9213.7
+2026,yahoo,Static IP,6,8,91,Bobby Witt Jr._H,533.0,3.6,SS,SS,6,0.0,9213.7
+2026,yahoo,Static IP,6,9,102,Fernando Tatis Jr._H,481.5,13.0,2B;OF,2B,6,0.0,9213.7
+2026,yahoo,Static IP,6,10,115,David Peterson_P,497.5,313.0,SP;RP,RP,6,0.0,9213.7
+2026,yahoo,Static IP,6,11,126,Jose Ramirez_H,519.0,5.4,3B;Util,3B,6,0.0,9213.7
+2026,yahoo,Static IP,6,12,139,Aaron Judge_H,583.0,1.8,OF;Util,OF,6,0.0,9213.7
+2026,yahoo,Static IP,6,13,150,Garrett Crochet_P,706.5,12.0,SP,SP,6,0.0,9213.7
+2026,yahoo,Static IP,6,14,163,Shohei Ohtani_H,610.0,2.0,Util,Util,6,0.0,9213.7
+2026,yahoo,Static IP,6,15,174,Brandon Pfaadt_P,479.1,331.6,SP;RP,RP,6,0.0,9213.7
+2026,yahoo,Static IP,6,16,187,Paul Skenes_P,694.2,9.0,SP,SP,6,0.0,9213.7
+2026,yahoo,ADP-aware ILP,6,1,6,Tarik Skubal_P,732.9,6.8,SP,SP,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,2,19,Kyle Schwarber_H,487.5,21.0,OF;Util,OF,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,3,30,Bryan Woo_P,628.3,35.2,SP,SP,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,4,43,Logan Webb_P,659.3,46.8,SP,SP,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,5,54,Vinnie Pasquantino_H,435.5,74.4,1B;Util,Util,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,6,67,Framber Valdez_P,623.2,73.6,SP,SP,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,7,78,Alex Bregman_H,423.5,88.8,3B,3B,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,8,91,Kevin Gausman_P,572.6,96.0,SP,SP,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,9,102,Willy Adames_H,403.5,106.4,SS,SS,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,10,115,Taylor Ward_H,400.0,117.8,OF,OF,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,11,126,Yandy Diaz_H,414.0,126.2,1B;Util,1B,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,12,139,Ian Happ_H,402.0,146.8,OF,OF,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,13,150,Adley Rutschman_H,352.5,151.0,C,C,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,14,163,David Peterson_P,497.5,313.0,SP;RP,RP,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,15,174,Gleyber Torres_H,397.0,207.2,2B,2B,6,0.0,7908.400000000001
+2026,yahoo,ADP-aware ILP,6,16,187,Brandon Pfaadt_P,479.1,331.6,SP;RP,RP,6,0.0,7908.400000000001
+2026,yahoo,Direct Greedy,6,1,6,Tarik Skubal_P,732.9,6.8,SP,SP,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,2,19,Logan Webb_P,659.3,46.8,SP,SP,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,3,30,Bryan Woo_P,628.3,35.2,SP,SP,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,4,43,Framber Valdez_P,623.2,73.6,SP,SP,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,5,54,Jesus Luzardo_P,600.9,72.6,SP,SP,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,6,67,David Peterson_P,497.5,313.0,SP;RP,RP,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,7,78,Brandon Pfaadt_P,479.1,331.6,SP;RP,RP,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,8,91,Yandy Diaz_H,414.0,126.2,1B;Util,1B,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,9,102,Willy Adames_H,403.5,106.4,SS,SS,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,10,115,Ian Happ_H,402.0,146.8,OF,OF,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,11,126,Steven Kwan_H,399.0,147.2,OF,OF,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,12,139,Gleyber Torres_H,397.0,207.2,2B,2B,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,13,150,Spencer Torkelson_H,385.0,180.8,1B,Util,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,14,163,Alec Burleson_H,373.0,172.6,1B;OF;Util,OF,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,15,174,Ivan Herrera_H,352.0,176.0,C;Util,C,6,0.0,7695.7
+2026,yahoo,Direct Greedy,6,16,187,Miguel Vargas_H,349.0,289.0,1B;3B,3B,6,0.0,7695.7
+2026,yahoo,Opportunity Cost Greedy,6,1,6,Tarik Skubal_P,732.9,6.8,SP,SP,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,2,19,Ketel Marte_H,454.5,26.6,2B;Util,2B,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,3,30,Brent Rooker_H,455.0,41.4,OF;Util,OF,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,4,43,Logan Webb_P,659.3,46.8,SP,SP,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,5,54,William Contreras_H,400.5,56.0,C;Util,C,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,6,67,Framber Valdez_P,623.2,73.6,SP,SP,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,7,78,Alex Bregman_H,423.5,88.8,3B,3B,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,8,91,Kevin Gausman_P,572.6,96.0,SP,SP,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,9,102,Willy Adames_H,403.5,106.4,SS,SS,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,11,126,Matt Chapman_H,391.0,126.0,3B,Util,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,11,126,Yandy Diaz_H,414.0,126.2,1B;Util,1B,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,12,139,Ian Happ_H,402.0,146.8,OF,OF,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,14,163,Alec Burleson_H,373.0,172.6,1B;OF;Util,OF,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,16,187,Zac Gallen_P,553.7,203.8,SP,SP,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,16,187,David Peterson_P,497.5,313.0,SP;RP,RP,6,0.0,7835.3
+2026,yahoo,Opportunity Cost Greedy,6,16,187,Brandon Pfaadt_P,479.1,331.6,SP;RP,RP,6,0.0,7835.3

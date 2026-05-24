@@ -1,0 +1,24 @@
+{
+  "source": "fangraphs",
+  "description": "Fangraphs scoring weights (v_i calculation)",
+  "batters": {
+    "1B": 5.6,
+    "2B": 2.9,
+    "3B": 5.7,
+    "HR": 9.4,
+    "BB": 3.0,
+    "HBP": 3.0,
+    "SB": 1.9,
+    "CS": -2.8,
+    "SO": -1.0
+  },
+  "pitchers": {
+    "IP": 5.0,
+    "SO": 2.0,
+    "BB": -3.0,
+    "HBP": -3.0,
+    "HR": -13.0,
+    "SV": 5.0,
+    "HLD": 4.0
+  }
+}

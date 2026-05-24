@@ -1,0 +1,2 @@
+method,mean_objective,median_objective,mean_optimal_gap,mean_optimal_gap_pct,mean_adp_cost,cases
+Direct Greedy,7662.86626984127,7672.7,254.3428571428577,0.03212866088492757,,252

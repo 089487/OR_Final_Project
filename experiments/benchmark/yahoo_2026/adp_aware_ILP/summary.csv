@@ -1,0 +1,2 @@
+method,mean_objective,median_objective,mean_optimal_gap,mean_optimal_gap_pct,mean_adp_cost,cases
+ADP-aware ILP,7917.209126984127,7907.900000000001,0.0,0.0,,252

@@ -1,0 +1,24 @@
+{
+  "source": "yahoo",
+  "description": "Yahoo Fantasy Baseball scoring weights (打者/投手)",
+  "batters": {
+    "1B": 1.0,
+    "2B": 2.0,
+    "3B": 3.0,
+    "HR": 4.0,
+    "R": 1.0,
+    "RBI": 1.0,
+    "BB": 1.0,
+    "HBP": 1.0,
+    "SB": 1.0,
+    "SO": -0.5
+  },
+  "pitchers": {
+    "IP": 3.0,
+    "SO": 1.0,
+    "W": 5.0,
+    "L": -5.0,
+    "SV": 5.0,
+    "ER": -2.0
+  }
+}
