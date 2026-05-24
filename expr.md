@@ -1,48 +1,33 @@
 # Experiment Inventory
 
-This file lists the experiments used in the cleaned repository.
+This file records the experiments that should be reported and the output
+structure expected by future reruns.
 
-## 1. Unified Benchmark
+## 1. Main Benchmark
 
-Script:
-
-```text
-scripts/run_benchmark.py
-```
-
-Output:
-
-```text
-experiments/benchmark/yahoo_2026/
-```
-
-Purpose:
-
-- compare the project methods on one shared grid
-- evaluate draft position sensitivity
-- evaluate ADP delta sensitivity
-- compute heuristic optimal gaps against ADP-aware ILP
-- estimate the cost of ADP availability constraints using Static IP
+Purpose: compare optimization and heuristic draft strategies across draft
+positions and ADP tolerance values.
 
 Methods:
 
-```text
-ADP-aware ILP
-Static IP
-Direct Greedy
-Opportunity Cost Greedy
-```
+- `Static IP`: no-ADP integer-program baseline.
+- `ADP-aware ILP`: integer program with snake-draft availability.
+- `Direct Greedy`: highest-points feasible player at each pick.
+- `Opportunity Cost Greedy`: largest current advantage over future replacement
+  value.
 
 Grid:
 
 ```text
 draft_position = 1..12
 delta = -10..10, stride 1
+scoring = yahoo, fangraph
 ```
 
-Command:
+Yahoo command:
 
 ```bash
+source ~/myenv/bin/activate
 python scripts/run_benchmark.py \
   --players data/processed/2026_yahoo_data.csv \
   --outdir experiments/benchmark/yahoo_2026 \
@@ -53,175 +38,178 @@ python scripts/run_benchmark.py \
   --time-limit 60
 ```
 
-Expected output size:
+FanGraphs command:
 
-```text
-12 draft positions * 21 delta values * 4 methods = 1008 rows
+```bash
+source ~/myenv/bin/activate
+python scripts/run_benchmark.py \
+  --players data/processed/2026_fangraph_data.csv \
+  --outdir experiments/benchmark/fangraph_2026 \
+  --scoring fangraph \
+  --delta-min -10 \
+  --delta-max 10 \
+  --delta-step 1 \
+  --time-limit 60
 ```
 
-Key outputs:
+Use `tmux` for full benchmark runs.
+
+Expected output:
 
 ```text
-experiments/benchmark/yahoo_2026/static_IP/results.csv
-experiments/benchmark/yahoo_2026/adp_aware_ILP/results.csv
-experiments/benchmark/yahoo_2026/heuristic_greedy/results.csv
-experiments/benchmark/yahoo_2026/heuristic_opportunity_cost/results.csv
-experiments/benchmark/yahoo_2026/*/summary.csv
-experiments/benchmark/yahoo_2026/*/draft_result_position6_delta0.csv
-experiments/benchmark/yahoo_2026/summary/benchmark_results.csv
-experiments/benchmark/yahoo_2026/summary/summary_by_method.csv
-experiments/benchmark/yahoo_2026/summary/summary_by_position.csv
-experiments/benchmark/yahoo_2026/summary/summary_by_delta.csv
-experiments/benchmark/yahoo_2026/summary/draft_result_position6_delta0_all_methods.csv
-experiments/benchmark/yahoo_2026/summary/position6_delta0_roster_comparison.md
-experiments/benchmark/yahoo_2026/summary/*.png
+experiments/benchmark/<scoring>_<year>/
+  static_IP/
+    results.csv
+    summary.csv
+    draft_result_position6_delta0.csv
+  adp_aware_ILP/
+    results.csv
+    summary.csv
+    draft_result_position6_delta0.csv
+  heuristic_greedy/
+    results.csv
+    summary.csv
+    draft_result_position6_delta0.csv
+  heuristic_opportunity_cost/
+    results.csv
+    summary.csv
+    draft_result_position6_delta0.csv
+  summary/
+    benchmark_results.csv
+    summary_by_method.csv
+    summary_by_position.csv
+    summary_by_delta.csv
+    draft_result_position6_delta0_all_methods.csv
+    position6_delta0_roster_comparison.md
+    method_comparison.png
+    objective_by_position_delta.png
+    optimal_gap_by_position_delta.png
+    adp_cost_by_position_delta.png
 ```
 
-Benchmark directory convention:
+Expected output size for one scoring table:
 
 ```text
-experiments/benchmark/yahoo_2026/
-├── static_IP/
-├── adp_aware_ILP/
-├── heuristic_greedy/
-├── heuristic_opportunity_cost/
-└── summary/
+12 draft positions * 21 deltas * 4 methods = 1008 rows
 ```
 
-Gap definition:
+The representative draft output fixes `draft_position=6`, `delta=0` and records
+the selected roster for each algorithm.
+
+## 2. Gap and ADP Cost Definitions
+
+Heuristic optimality gap is measured against the ADP-aware ILP:
 
 ```text
-optimal_gap = ADP-aware ILP objective - heuristic objective
-optimal_gap_pct = optimal_gap / ADP-aware ILP objective
+optimal_gap = (objective_ADP_aware_ILP - objective_heuristic) / objective_ADP_aware_ILP
 ```
 
-Only heuristic methods use `optimal_gap_pct` as the performance metric.
-`Static IP` is a no-ADP upper baseline and should not be evaluated by
-optimality gap against ADP-aware ILP. For Static IP, use:
+`Static IP` is a no-ADP upper baseline and should not receive this heuristic
+optimality gap. Its diagnostic is:
 
 ```text
-adp_cost = Static IP objective - ADP-aware ILP objective
+adp_cost = objective_Static_IP - objective_ADP_aware_ILP
 ```
 
-## 2. Shadow Price Analysis
+This separates two questions:
 
-Script:
+- how much value is lost because draft availability matters;
+- how close each heuristic is to the ADP-aware optimum.
 
-```text
-scripts/run_shadow_price.py
-```
+## 3. Shadow Price Analysis
 
-Planned output:
+Purpose: explain roster-slot marginal values from the LP relaxation of the
+ADP-aware model.
 
-```text
-experiments/shadow_prices/yahoo_2026/
-```
-
-Purpose:
-
-- solve the ADP-aware LP relaxation
-- report roster-position dual values
-- support positional scarcity interpretation
-
-Fixed setting:
+Fixed scenario:
 
 ```text
 draft_position = 6
 delta = 0
 ```
 
-This is model interpretation, not the main method-comparison benchmark.
+Yahoo command:
 
-Expected outputs:
-
-```text
-experiments/shadow_prices/yahoo_2026/shadow_prices.csv
-experiments/shadow_prices/yahoo_2026/position_shadow_prices.png
-experiments/shadow_prices/yahoo_2026/shadow_price_summary.md
+```bash
+source ~/myenv/bin/activate
+python scripts/run_shadow_price.py \
+  --players data/processed/2026_yahoo_data.csv \
+  --outdir experiments/shadow_prices/yahoo_2026 \
+  --scoring yahoo \
+  --draft-position 6 \
+  --delta 0
 ```
 
-## 3. Mock Draft Experiment 1: Same Strategy Environment
+FanGraphs command:
 
-Script:
+```bash
+source ~/myenv/bin/activate
+python scripts/run_shadow_price.py \
+  --players data/processed/2026_fangraph_data.csv \
+  --outdir experiments/shadow_prices/fangraph_2026 \
+  --scoring fangraph \
+  --draft-position 6 \
+  --delta 0
+```
+
+Expected output:
+
+```text
+experiments/shadow_prices/<scoring>_<year>/
+  shadow_prices.csv
+  position_shadow_prices.png
+  shadow_price_summary.md
+```
+
+Interpretation note: these are LP relaxation dual values, not integer-program
+shadow prices. They should be reported separately from benchmark optimality
+gaps.
+
+## 4. Benchmarking New Data
+
+Process for a new season or scoring source:
+
+1. Collect raw projection and ADP files under `data/raw/` and `data/adp/`.
+2. Convert them into a processed player pool under `data/processed/`.
+3. Confirm the processed file contains player name, projected points, ADP, and
+   eligible positions.
+4. Run `scripts/run_benchmark.py` with a new output directory:
+
+```bash
+python scripts/run_benchmark.py \
+  --players data/processed/<year>_<scoring>_data.csv \
+  --outdir experiments/benchmark/<scoring>_<year> \
+  --scoring <scoring> \
+  --delta-min -10 \
+  --delta-max 10 \
+  --delta-step 1 \
+  --time-limit 60
+```
+
+5. Run shadow price analysis for the same processed file if the report needs
+   marginal roster-slot interpretation.
+
+If a benchmark directory already exists, remove or archive it before rerunning.
+This avoids mixing old flat-output files with the current structured layout.
+
+## 5. Supplemental Mock Draft
+
+Mock draft simulation is supplementary. It is useful for discussing how a
+strategy behaves when all teams are drafting from the same player pool, but it
+is not the central benchmark for the final project.
+
+Existing scripts:
 
 ```text
 scripts/mock_draft.py
+scripts/evaluate_heuristics.py
 ```
 
-Folder:
+Recommended report usage: mention mock draft as a realism check while keeping
+the main quantitative comparison on the benchmark grid above.
 
-```text
-experiments/mock_draft/experiment_1_same_strategy/
-```
+## 6. Historical Or Superseded Outputs
 
-Purpose:
-
-- supplemental dynamic draft demonstration
-- compare what happens when every team uses the same deterministic strategy
-
-Methods:
-
-```text
-ip
-direct_greedy
-opportunity_cost_greedy
-```
-
-Because these strategies are deterministic given the same data, each run uses:
-
-```text
---simulations 1
-```
-
-## 4. Mock Draft Experiment 2: Our Strategy Against Opponents
-
-Script:
-
-```text
-scripts/mock_draft.py
-```
-
-Folder:
-
-```text
-experiments/mock_draft/experiment_2_our_vs_opponents/
-```
-
-Purpose:
-
-- planned supplemental experiment
-- compare our strategy against stochastic `noisy_adp` opponents
-
-Because `noisy_adp` is stochastic, repeated simulations are meaningful here.
-
-Status:
-
-- design only for now
-- not a main project result unless explicitly run later
-
-## Historical Or Superseded Outputs
-
-These old split outputs are superseded by the unified benchmark:
-
-```text
-results_2026_yahoo_delta_m10_10/
-heuristic_results_yahoo/
-```
-
-Smoke-test and duplicate outputs should not be kept as final results:
-
-```text
-heuristic_results/
-mock_results/
-mock_results_all_ip/
-heuristic_quota_smoke/
-heuristic_results_yahoo_quota/
-heuristic_results_yahoo_smoke/
-heuristic_results_yahoo_smoke_fast/
-mock_refactor_smoke/
-mock_results_all_ip_test/
-mock_results_test/
-mock_results_yahoo/
-results/
-results_refactor_smoke/
-```
+Older outputs that used a flat benchmark layout or regression-based ADP
+experiments should not be treated as final results. The final benchmark layout
+is the structured method-folder layout documented above.

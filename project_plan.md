@@ -72,6 +72,8 @@ Main outputs:
 - objective value by draft position
 - objective value by ADP delta
 - summary report
+- per-method `results.csv`, `summary.csv`, and `draft_result_position6_delta0.csv`
+- combined `summary/` folder with method-comparison plots and optimality-gap summaries
 
 ## Shadow Price Analysis
 
@@ -85,6 +87,13 @@ Use LP relaxation dual values to interpret roster constraints:
 
 The shadow price analysis should be presented as model interpretation, not as a
 literal integer marginal value.
+
+Default execution should use `scripts/run_shadow_price.py` at:
+
+```text
+draft_position = 6
+delta = 0
+```
 
 ## Heuristic Experiments
 
