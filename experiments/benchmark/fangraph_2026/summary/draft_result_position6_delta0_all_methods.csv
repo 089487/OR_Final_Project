@@ -1,0 +1,65 @@
+season,scoring,method,draft_position,round,overall_pick,player,projected_points,adp,eligible_positions,assigned_position,representative_draft_position,representative_delta,objective
+2026,fangraph,Static IP,6,1,6,Vladimir Guerrero Jr._H,1125.8,18.4,1B;Util,1B,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,2,19,Tarik Skubal_P,1067.5,6.8,SP,SP,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,3,30,Shohei Ohtani_H,1168.3,2.0,Util,Util,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,4,43,Juan Soto_H,1192.9,3.6,OF;Util,OF,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,5,54,Jose Ramirez_H,1080.7,5.4,3B;Util,3B,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,6,67,Cristopher Sanchez_P,991.0,26.8,SP,SP,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,7,78,Brandon Pfaadt_P,684.5,331.6,SP;RP,RP,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,8,91,Bobby Witt Jr._H,1091.4,3.6,SS,SS,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,9,102,Fernando Tatis Jr._H,1022.2,13.0,2B;OF,2B,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,10,115,Aaron Judge_H,1149.0,1.8,OF;Util,OF,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,11,126,Logan Webb_P,1025.5,46.8,SP,SP,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,12,139,William Contreras_H,890.7,56.0,C;Util,C,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,13,150,Garrett Crochet_P,1011.5,12.0,SP,SP,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,14,163,Ronald Acuna Jr._H,1077.4,6.6,OF,OF,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,15,174,David Peterson_P,716.5,313.0,SP;RP,RP,6,0.0,16329.900000000001
+2026,fangraph,Static IP,6,16,187,Paul Skenes_P,1035.0,9.0,SP,SP,6,0.0,16329.900000000001
+2026,fangraph,ADP-aware ILP,6,1,6,Tarik Skubal_P,1067.5,6.8,SP,SP,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,2,19,Cristopher Sanchez_P,991.0,26.8,SP,SP,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,3,30,Bryan Woo_P,881.5,35.2,SP,SP,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,4,43,Logan Webb_P,1025.5,46.8,SP,SP,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,5,54,Maikel Garcia_H,958.0,64.4,2B;3B;SS;OF,OF,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,6,67,Framber Valdez_P,908.0,73.6,SP,SP,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,7,78,Alex Bregman_H,928.3,88.8,3B,3B,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,8,91,Jose Altuve_H,893.3,96.2,2B;OF;Util,OF,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,9,102,David Peterson_P,716.5,313.0,SP;RP,RP,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,10,115,Yandy Diaz_H,974.7,126.2,1B;Util,1B,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,11,126,Gleyber Torres_H,922.1,207.2,2B,2B,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,12,139,Steven Kwan_H,993.6,147.2,OF,OF,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,13,150,Luis Arraez_H,989.5,232.6,1B;2B;Util,Util,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,14,163,Jacob Wilson_H,904.2,166.8,SS,SS,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,15,174,Ivan Herrera_H,808.6,176.0,C;Util,C,6,0.0,14646.800000000003
+2026,fangraph,ADP-aware ILP,6,16,187,Brandon Pfaadt_P,684.5,331.6,SP;RP,RP,6,0.0,14646.800000000003
+2026,fangraph,Direct Greedy,6,1,6,Vladimir Guerrero Jr._H,1125.8,18.4,1B;Util,1B,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,2,19,Logan Webb_P,1025.5,46.8,SP,SP,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,3,30,Steven Kwan_H,993.6,147.2,OF,OF,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,4,43,Luis Arraez_H,989.5,232.6,1B;2B;Util,2B,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,5,54,Geraldo Perdomo_H,975.8,60.8,SS,SS,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,6,67,Yandy Diaz_H,974.7,126.2,1B;Util,Util,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,7,78,Alex Bregman_H,928.3,88.8,3B,3B,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,8,91,Jose Altuve_H,893.3,96.2,2B;OF;Util,OF,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,9,102,Alec Burleson_H,858.8,172.6,1B;OF;Util,OF,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,10,115,Ivan Herrera_H,808.6,176.0,C;Util,C,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,11,126,Ranger Suarez_P,773.5,162.4,SP,SP,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,12,139,Jose Soriano_P,766.0,301.8,SP,SP,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,13,150,Tanner Bibee_P,760.5,174.8,SP,SP,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,14,163,Zac Gallen_P,759.5,203.8,SP,SP,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,15,174,David Peterson_P,716.5,313.0,SP;RP,RP,6,0.0,14034.4
+2026,fangraph,Direct Greedy,6,16,187,Brandon Pfaadt_P,684.5,331.6,SP;RP,RP,6,0.0,14034.4
+2026,fangraph,Opportunity Cost Greedy,6,1,6,Vladimir Guerrero Jr._H,1125.8,18.4,1B;Util,1B,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,4,43,Logan Webb_P,1025.5,46.8,SP,SP,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,5,54,William Contreras_H,890.7,56.0,C;Util,C,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,5,54,Geraldo Perdomo_H,975.8,60.8,SS,SS,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,5,54,Maikel Garcia_H,958.0,64.4,2B;3B;SS;OF,OF,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,6,67,Framber Valdez_P,908.0,73.6,SP,SP,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,7,78,Alex Bregman_H,928.3,88.8,3B,3B,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,8,91,Sonny Gray_P,808.5,101.6,SP,SP,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,12,139,Steven Kwan_H,993.6,147.2,OF,OF,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,13,150,Ranger Suarez_P,773.5,162.4,SP,SP,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,14,163,Jacob Wilson_H,904.2,166.8,SS,Util,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,14,163,Alec Burleson_H,858.8,172.6,1B;OF;Util,OF,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,16,187,Luis Arraez_H,989.5,232.6,1B;2B;Util,2B,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,16,187,Jose Soriano_P,766.0,301.8,SP,SP,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,16,187,David Peterson_P,716.5,313.0,SP;RP,RP,6,0.0,14307.2
+2026,fangraph,Opportunity Cost Greedy,6,16,187,Brandon Pfaadt_P,684.5,331.6,SP;RP,RP,6,0.0,14307.2
