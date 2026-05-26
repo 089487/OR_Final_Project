@@ -31,7 +31,8 @@ def solve_ilp(
     vtype = GRB.CONTINUOUS if relax else GRB.BINARY
     model = gp.Model("fantasy_baseball_draft")
     model.Params.OutputFlag = 0
-    model.Params.TimeLimit = time_limit
+    if time_limit and time_limit > 0:
+        model.Params.TimeLimit = time_limit
 
     y = model.addVars(indices, lb=0.0, ub=1.0, vtype=vtype, name="drafted")
     x = model.addVars(indices, positions, lb=0.0, ub=1.0, vtype=vtype, name="assign")
@@ -76,7 +77,7 @@ def solve_ilp(
 
     model.optimize()
     status = _status_name(model.Status)
-    if model.Status not in (GRB.OPTIMAL, GRB.TIME_LIMIT, GRB.SUBOPTIMAL):
+    if model.Status not in (GRB.OPTIMAL, GRB.TIME_LIMIT, GRB.SUBOPTIMAL) or model.SolCount == 0:
         return DraftSolution(
             method=method_name or ("ADP ILP" if enforce_adp else "Static IP"),
             season=season,
@@ -85,6 +86,9 @@ def solve_ilp(
             objective=float("nan"),
             status=status,
             roster=pd.DataFrame(),
+            mip_gap=_safe_attr(model, "MIPGap"),
+            best_bound=_safe_attr(model, "ObjBound"),
+            runtime_seconds=_safe_attr(model, "Runtime"),
         )
 
     rows = []
@@ -108,14 +112,6 @@ def solve_ilp(
             )
 
     roster = pd.DataFrame(rows).sort_values("round").reset_index(drop=True)
-    shadow_prices = None
-    if relax and model.Status == GRB.OPTIMAL:
-        shadow_prices = pd.DataFrame(
-            [
-                {"position": pos, "shadow_price": model.getConstrByName(f"roster_{pos}").Pi}
-                for pos in positions
-            ]
-        )
 
     return DraftSolution(
         method=method_name or ("ADP ILP" if enforce_adp else "Static IP"),
@@ -125,7 +121,9 @@ def solve_ilp(
         objective=float(model.ObjVal),
         status=status,
         roster=roster,
-        shadow_prices=shadow_prices,
+        mip_gap=_safe_attr(model, "MIPGap"),
+        best_bound=_safe_attr(model, "ObjBound"),
+        runtime_seconds=_safe_attr(model, "Runtime"),
     )
 
 
@@ -146,3 +144,14 @@ def _status_name(status_code: int) -> str:
         GRB.SUBOPTIMAL: "SUBOPTIMAL",
     }
     return status_map.get(status_code, f"STATUS_{status_code}")
+
+
+def _safe_attr(model: gp.Model, name: str) -> float | None:
+    try:
+        value = getattr(model, name)
+    except (gp.GurobiError, AttributeError):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None

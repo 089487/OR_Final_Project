@@ -18,15 +18,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from run_experiments import make_delta_values
-from src.draft_model import (
-    ROSTER_REQUIREMENTS,
-    load_players,
-    snake_picks,
-    solve_greedy,
-    solve_ilp,
-    solve_opportunity_cost_greedy,
-)
+from src.draft_core import ROSTER_REQUIREMENTS, load_players, snake_picks
+from src.heuristics import solve_greedy, solve_opportunity_cost_greedy
+from src.ip_model import solve_ilp
 
 
 def parse_args() -> argparse.Namespace:
@@ -39,9 +33,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--delta-min", type=float, default=-10.0)
     parser.add_argument("--delta-max", type=float, default=10.0)
     parser.add_argument("--delta-step", type=float, default=1.0)
-    parser.add_argument("--time-limit", type=int, default=60)
+    parser.add_argument("--time-limit", type=int, default=0, help="Gurobi time limit in seconds. Use 0 for no limit.")
     parser.add_argument("--verbose", action="store_true", help="Write selected rosters for every method.")
     return parser.parse_args()
+
+
+def make_delta_values(delta_grid: str | None, delta_min: float, delta_max: float, delta_step: float) -> list[float]:
+    if delta_grid:
+        return [float(value.strip()) for value in delta_grid.split(",") if value.strip()]
+    values = []
+    current = delta_min
+    while current <= delta_max + 1e-9:
+        values.append(round(current, 10))
+        current += delta_step
+    return values
 
 
 def main() -> None:
@@ -175,6 +180,9 @@ def make_result_row(
         "delta": delta,
         "method": solution.method,
         "objective": objective,
+        "runtime_seconds": solution.runtime_seconds,
+        "mip_gap": solution.mip_gap,
+        "best_bound": solution.best_bound,
         "adp_aware_objective": adp_objective,
         "optimal_gap": gap if is_gap_method else 0.0 if solution.method == "ADP-aware ILP" else float("nan"),
         "optimal_gap_pct": gap / adp_objective if is_gap_method and adp_objective else 0.0 if solution.method == "ADP-aware ILP" else float("nan"),
@@ -312,6 +320,8 @@ def summarize_single_method(results: pd.DataFrame) -> pd.DataFrame:
                 "median_objective": results["objective"].median(),
                 "mean_optimal_gap": results["optimal_gap"].mean(),
                 "mean_optimal_gap_pct": results["optimal_gap_pct"].mean(),
+                "mean_runtime_seconds": results["runtime_seconds"].mean(),
+                "mean_mip_gap": results["mip_gap"].mean(),
                 "mean_adp_cost": results["adp_cost"].mean(),
                 "cases": len(results),
             }
@@ -346,6 +356,8 @@ def summarize_by_method(results: pd.DataFrame) -> pd.DataFrame:
             median_optimal_gap=("optimal_gap", "median"),
             max_optimal_gap=("optimal_gap", "max"),
             mean_optimal_gap_pct=("optimal_gap_pct", "mean"),
+            mean_runtime_seconds=("runtime_seconds", "mean"),
+            mean_mip_gap=("mip_gap", "mean"),
             mean_adp_cost=("adp_cost", "mean"),
             cases=("objective", "size"),
         )
@@ -360,6 +372,7 @@ def summarize_by_position(results: pd.DataFrame) -> pd.DataFrame:
             mean_objective=("objective", "mean"),
             mean_optimal_gap=("optimal_gap", "mean"),
             mean_optimal_gap_pct=("optimal_gap_pct", "mean"),
+            mean_runtime_seconds=("runtime_seconds", "mean"),
             cases=("objective", "size"),
         )
         .sort_values(["draft_position", "method"])
@@ -373,6 +386,7 @@ def summarize_by_delta(results: pd.DataFrame) -> pd.DataFrame:
             mean_objective=("objective", "mean"),
             mean_optimal_gap=("optimal_gap", "mean"),
             mean_optimal_gap_pct=("optimal_gap_pct", "mean"),
+            mean_runtime_seconds=("runtime_seconds", "mean"),
             cases=("objective", "size"),
         )
         .sort_values(["delta", "method"])

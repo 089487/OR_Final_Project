@@ -1,39 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import heapq
+from time import perf_counter
 
 import pandas as pd
 
-from src.draft_core import (
-    DraftSolution,
-    HITTER_POSITIONS,
-    PITCHER_POSITIONS,
-    ROSTER_REQUIREMENTS,
-    eligible_for,
-    is_hitter,
-    is_pitcher,
-)
-
-
-HITTER_SLOT_ORDER = ("C", "1B", "2B", "3B", "SS", "OF", "OF", "OF", "Util")
-
-
-@dataclass(frozen=True)
-class FeasibilityState:
-    hitter_dp: frozenset[int]
-    sp_only: int = 0
-    rp_only: int = 0
-    p_flex: int = 0
-
-
-@dataclass(frozen=True)
-class FeasibilityConfig:
-    hitter_slots: tuple[str, ...]
-    slot_output_positions: tuple[str, ...]
-    slot_bits_by_position: dict[str, int]
-    hitter_capacity: int
-    sp_capacity: int
-    rp_capacity: int
+from src.draft_core import DraftSolution, ROSTER_REQUIREMENTS, eligible_for
 
 
 def solve_greedy(
@@ -46,39 +18,68 @@ def solve_greedy(
     roster_requirements: dict[str, int] | None = None,
     enforce_adp: bool = True,
 ) -> DraftSolution:
-    """Direct greedy: pick the highest-value currently available feasible player."""
+    """Direct greedy: fill the scarcest open position with its best available player."""
+    start_time = perf_counter()
     roster_requirements = dict(roster_requirements or ROSTER_REQUIREMENTS)
-    config = build_feasibility_config(roster_requirements)
-    data = players.sort_values("projected_points", ascending=False).reset_index(drop=True)
-    selected: list[int] = []
-    selected_set: set[int] = set()
-    state = initial_state()
+    positions = tuple(roster_requirements)
+    data = players.reset_index(drop=True).copy()
+    data["_expiration"] = data["adp"].astype(float) + float(delta)
+    eligible_positions_by_player = build_eligible_positions_by_player(data, positions)
+    heaps = build_position_heaps(data, eligible_positions_by_player, positions)
+    active_count = {
+        position: sum(position in player_positions for player_positions in eligible_positions_by_player)
+        for position in positions
+    }
+    alive = [True] * len(data)
+    selected = [False] * len(data)
+    expiration_order = build_expiration_order(data, delta)
+    expire_ptr = 0
+    remaining = dict(roster_requirements)
     rows: list[dict[str, object]] = []
 
     for round_idx, overall_pick in enumerate(picks):
-        chosen_index = None
-        chosen_state = None
-        for i, row in data.iterrows():
-            if i in selected_set:
-                continue
-            if enforce_adp and float(row["adp"]) + delta < overall_pick:
-                continue
-            next_state, _positions = try_add_player(state, row["eligible_positions"], config)
-            if next_state is None:
-                continue
-            chosen_index = i
-            chosen_state = next_state
-            break
+        if enforce_adp:
+            expire_ptr = expire_players(
+                expiration_order=expiration_order,
+                expire_ptr=expire_ptr,
+                current_pick=overall_pick,
+                alive=alive,
+                selected=selected,
+                active_count=active_count,
+                eligible_positions_by_player=eligible_positions_by_player,
+            )
+        choice = choose_direct_position_and_player(
+            data=data,
+            heaps=heaps,
+            alive=alive,
+            selected=selected,
+            active_count=active_count,
+            remaining=remaining,
+        )
+        if choice is None:
+            return _infeasible_solution("Direct Greedy", season, draft_position, delta, rows, perf_counter() - start_time)
 
-        if chosen_index is None or chosen_state is None:
-            return _infeasible_solution("Direct Greedy", season, draft_position, delta, rows)
+        player_index, assigned_position = choice
+        mark_selected(
+            player_index=player_index,
+            alive=alive,
+            selected=selected,
+            active_count=active_count,
+            eligible_positions_by_player=eligible_positions_by_player,
+        )
+        remaining[assigned_position] -= 1
+        rows.append(
+            make_roster_row(
+                data.loc[player_index],
+                season,
+                "Direct Greedy",
+                draft_position,
+                round_idx,
+                picks,
+                assigned_position,
+            )
+        )
 
-        selected.append(chosen_index)
-        selected_set.add(chosen_index)
-        state = chosen_state
-        rows.append(make_roster_row(data.loc[chosen_index], season, "Direct Greedy", draft_position, round_idx, picks))
-
-    refresh_final_assignments(rows, data, selected, config)
     roster = pd.DataFrame(rows)
     return DraftSolution(
         method="Direct Greedy",
@@ -88,6 +89,7 @@ def solve_greedy(
         objective=float(roster["projected_points"].sum()),
         status="OPTIMAL",
         roster=roster,
+        runtime_seconds=perf_counter() - start_time,
     )
 
 
@@ -101,53 +103,99 @@ def solve_opportunity_cost_greedy(
     roster_requirements: dict[str, int] | None = None,
     enforce_adp: bool = True,
 ) -> DraftSolution:
-    """Choose expiring ADP-bucket player with largest points minus future positional best."""
+    """Choose expiring ADP-bucket player-position pair with largest opportunity cost."""
+    start_time = perf_counter()
     roster_requirements = dict(roster_requirements or ROSTER_REQUIREMENTS)
-    config = build_feasibility_config(roster_requirements)
+    positions = tuple(roster_requirements)
     data = players.reset_index(drop=True).copy()
-    bucket_indices = build_adp_buckets(data, picks, delta)
-    future_best = build_future_best_points(data, bucket_indices, picks, config)
-    selected: list[int] = []
-    selected_set: set[int] = set()
-    state = initial_state()
+    data["_expiration"] = data["adp"].astype(float) + float(delta)
+    eligible_positions_by_player = build_eligible_positions_by_player(data, positions)
+    current_heaps = build_position_heaps(data, eligible_positions_by_player, positions)
+    future_heaps = build_position_heaps(data, eligible_positions_by_player, positions)
+    current_alive = [True] * len(data)
+    future_alive = [True] * len(data)
+    current_count = {
+        position: sum(position in player_positions for player_positions in eligible_positions_by_player)
+        for position in positions
+    }
+    future_count = dict(current_count)
+    expiration_order = build_expiration_order(data, delta)
+    current_expire_ptr = 0
+    future_expire_ptr = 0
+    selected = [False] * len(data)
+    remaining = dict(roster_requirements)
     rows: list[dict[str, object]] = []
     current_can_choose = 0
 
-    for round_idx, overall_pick in enumerate(picks):
+    for round_idx, current_pick in enumerate(picks):
+        next_pick = picks[round_idx + 1] if round_idx + 1 < len(picks) else float("inf")
         current_can_choose += 1
+        if enforce_adp:
+            current_expire_ptr = expire_players(
+                expiration_order=expiration_order,
+                expire_ptr=current_expire_ptr,
+                current_pick=current_pick,
+                alive=current_alive,
+                selected=selected,
+                active_count=current_count,
+                eligible_positions_by_player=eligible_positions_by_player,
+            )
+            future_expire_ptr = expire_players(
+                expiration_order=expiration_order,
+                expire_ptr=future_expire_ptr,
+                current_pick=next_pick,
+                alive=future_alive,
+                selected=selected,
+                active_count=future_count,
+                eligible_positions_by_player=eligible_positions_by_player,
+            )
 
         while current_can_choose > 0:
-            chosen = choose_opportunity_candidate(
+            choice = choose_opportunity_candidate(
                 data=data,
-                candidate_indices=bucket_indices[round_idx],
-                selected_set=selected_set,
-                state=state,
-                config=config,
-                future_best=future_best,
-                round_idx=round_idx,
+                current_heaps=current_heaps,
+                future_heaps=future_heaps,
+                selected=selected,
+                remaining=remaining,
+                current_count=current_count,
+                future_count=future_count,
+                current_pick=current_pick if enforce_adp else float("-inf"),
+                next_pick=next_pick if enforce_adp else float("-inf"),
             )
-            if chosen is None:
+            if choice is None:
                 break
 
-            chosen_index, state = chosen
-            selected.append(chosen_index)
-            selected_set.add(chosen_index)
+            player_index, assigned_position = choice
+            mark_selected(
+                player_index=player_index,
+                alive=current_alive,
+                selected=selected,
+                active_count=current_count,
+                eligible_positions_by_player=eligible_positions_by_player,
+            )
+            mark_selected_if_alive(
+                player_index=player_index,
+                alive=future_alive,
+                active_count=future_count,
+                eligible_positions_by_player=eligible_positions_by_player,
+            )
+            remaining[assigned_position] -= 1
             current_can_choose -= 1
             rows.append(
                 make_roster_row(
-                    data.loc[chosen_index],
+                    data.loc[player_index],
                     season,
                     "Opportunity Cost Greedy",
                     draft_position,
                     round_idx,
                     picks,
+                    assigned_position,
                 )
             )
 
     if len(rows) < len(picks):
-        return _infeasible_solution("Opportunity Cost Greedy", season, draft_position, delta, rows)
+        return _infeasible_solution("Opportunity Cost Greedy", season, draft_position, delta, rows, perf_counter() - start_time)
 
-    refresh_final_assignments(rows, data, selected, config)
     roster = pd.DataFrame(rows)
     return DraftSolution(
         method="Opportunity Cost Greedy",
@@ -157,310 +205,196 @@ def solve_opportunity_cost_greedy(
         objective=float(roster["projected_points"].sum()),
         status="OPTIMAL",
         roster=roster,
+        runtime_seconds=perf_counter() - start_time,
     )
 
 
-def build_feasibility_config(roster_requirements: dict[str, int]) -> FeasibilityConfig:
-    hitter_slots = []
-    slot_output_positions = []
-    for position in ("C", "1B", "2B", "3B", "SS", "OF", "Util"):
-        for _ in range(roster_requirements.get(position, 0)):
-            hitter_slots.append(position)
-            slot_output_positions.append(position)
-
-    slot_bits_by_position: dict[str, int] = {}
-    for slot_index, position in enumerate(hitter_slots):
-        slot_bits_by_position[position] = slot_bits_by_position.get(position, 0) | (1 << slot_index)
-
-    return FeasibilityConfig(
-        hitter_slots=tuple(hitter_slots),
-        slot_output_positions=tuple(slot_output_positions),
-        slot_bits_by_position=slot_bits_by_position,
-        hitter_capacity=len(hitter_slots),
-        sp_capacity=roster_requirements.get("SP", 0),
-        rp_capacity=roster_requirements.get("RP", 0),
-    )
-
-
-def initial_state() -> FeasibilityState:
-    return FeasibilityState(hitter_dp=frozenset({0}))
-
-
-def try_add_player(
-    state: FeasibilityState,
-    player_positions: tuple[str, ...],
-    config: FeasibilityConfig,
-) -> tuple[FeasibilityState | None, set[str]]:
-    if is_pitcher(player_positions) and not is_hitter(player_positions):
-        return try_add_pitcher(state, player_positions, config)
-    if is_hitter(player_positions):
-        return try_add_hitter(state, player_positions, config)
-    return None, set()
-
-
-def try_add_hitter(
-    state: FeasibilityState,
-    player_positions: tuple[str, ...],
-    config: FeasibilityConfig,
-) -> tuple[FeasibilityState | None, set[str]]:
-    player_mask = hitter_slot_mask(player_positions, config)
-    if player_mask == 0:
-        return None, set()
-
-    new_masks: set[int] = set()
-    added_positions: set[str] = set()
-    for old_mask in state.hitter_dp:
-        available = player_mask & ~old_mask
-        while available:
-            slot_bit = available & -available
-            available -= slot_bit
-            slot_index = slot_bit.bit_length() - 1
-            new_masks.add(old_mask | slot_bit)
-            added_positions.add(config.slot_output_positions[slot_index])
-
-    if not new_masks:
-        return None, set()
-    return (
-        FeasibilityState(
-            hitter_dp=frozenset(new_masks),
-            sp_only=state.sp_only,
-            rp_only=state.rp_only,
-            p_flex=state.p_flex,
-        ),
-        added_positions,
-    )
-
-
-def try_add_pitcher(
-    state: FeasibilityState,
-    player_positions: tuple[str, ...],
-    config: FeasibilityConfig,
-) -> tuple[FeasibilityState | None, set[str]]:
-    can_sp = "SP" in player_positions
-    can_rp = "RP" in player_positions
-    sp_only = state.sp_only
-    rp_only = state.rp_only
-    p_flex = state.p_flex
-
-    if can_sp and can_rp:
-        p_flex += 1
-        possible_positions = {"SP", "RP"}
-    elif can_sp:
-        sp_only += 1
-        possible_positions = {"SP"}
-    elif can_rp:
-        rp_only += 1
-        possible_positions = {"RP"}
-    else:
-        return None, set()
-
-    total_pitchers = sp_only + rp_only + p_flex
-    if sp_only > config.sp_capacity or rp_only > config.rp_capacity:
-        return None, set()
-    if total_pitchers > config.sp_capacity + config.rp_capacity:
-        return None, set()
-
-    open_positions = set()
-    if sp_only + p_flex <= config.sp_capacity:
-        open_positions.add("SP")
-    if rp_only + p_flex <= config.rp_capacity:
-        open_positions.add("RP")
-    possible_positions &= open_positions or possible_positions
-    return FeasibilityState(state.hitter_dp, sp_only, rp_only, p_flex), possible_positions
-
-
-def hitter_slot_mask(player_positions: tuple[str, ...], config: FeasibilityConfig) -> int:
-    positions = set(player_positions)
-    mask = 0
-    for position in HITTER_POSITIONS:
-        if position in positions:
-            mask |= config.slot_bits_by_position.get(position, 0)
-    if is_hitter(player_positions):
-        mask |= config.slot_bits_by_position.get("Util", 0)
-    return mask
-
-
-def build_adp_buckets(data: pd.DataFrame, picks: list[int], delta: float) -> list[list[int]]:
-    buckets = [[] for _ in picks]
-    for i, row in data.iterrows():
-        availability = float(row["adp"]) + delta
-        for round_idx, current_pick in enumerate(picks):
-            next_pick = picks[round_idx + 1] if round_idx + 1 < len(picks) else float("inf")
-            if current_pick <= availability < next_pick:
-                buckets[round_idx].append(i)
-                break
-    return buckets
-
-
-def build_future_best_points(
+def choose_direct_position_and_player(
+    *,
     data: pd.DataFrame,
-    buckets: list[list[int]],
-    picks: list[int],
-    config: FeasibilityConfig,
-) -> dict[str, list[float]]:
-    positions = ("C", "1B", "2B", "3B", "SS", "OF", "Util", "SP", "RP")
-    best_in_round = {position: [0.0] * len(picks) for position in positions}
-    for round_idx, bucket in enumerate(buckets):
-        for player_index in bucket:
-            row = data.loc[player_index]
-            points = float(row["projected_points"])
-            for position in possible_output_positions(row["eligible_positions"], config):
-                best_in_round[position][round_idx] = max(best_in_round[position][round_idx], points)
+    heaps: dict[str, list[tuple[float, int]]],
+    alive: list[bool],
+    selected: list[bool],
+    active_count: dict[str, int],
+    remaining: dict[str, int],
+) -> tuple[int, str] | None:
+    candidate_positions = []
+    for position, need in remaining.items():
+        if need <= 0:
+            continue
+        if active_count[position] <= 0:
+            continue
+        clean_heap(heaps[position], alive=alive, selected=selected)
+        if not heaps[position]:
+            continue
+        points = -heaps[position][0][0]
+        candidate_positions.append((position, points))
+    if not candidate_positions:
+        return None
 
-    suffix = {position: [0.0] * (len(picks) + 1) for position in positions}
-    for position in positions:
-        for round_idx in reversed(range(len(picks))):
-            suffix[position][round_idx] = max(
-                suffix[position][round_idx + 1],
-                best_in_round[position][round_idx],
-            )
-    return suffix
-
-
-def possible_output_positions(player_positions: tuple[str, ...], config: FeasibilityConfig) -> set[str]:
-    state = initial_state()
-    _next_state, positions = try_add_player(state, player_positions, config)
-    return positions
+    assigned_position, _points = max(
+        candidate_positions,
+        key=lambda item: (
+            remaining[item[0]] / active_count[item[0]],
+            item[1],
+        ),
+    )
+    player_index = heaps[assigned_position][0][1]
+    return player_index, assigned_position
 
 
 def choose_opportunity_candidate(
     *,
     data: pd.DataFrame,
-    candidate_indices: list[int],
-    selected_set: set[int],
-    state: FeasibilityState,
-    config: FeasibilityConfig,
-    future_best: dict[str, list[float]],
-    round_idx: int,
-) -> tuple[int, FeasibilityState] | None:
+    current_heaps: dict[str, list[tuple[float, int]]],
+    future_heaps: dict[str, list[tuple[float, int]]],
+    selected: list[bool],
+    remaining: dict[str, int],
+    current_count: dict[str, int],
+    future_count: dict[str, int],
+    current_pick: float,
+    next_pick: float,
+) -> tuple[int, str] | None:
     best_choice = None
-    best_score = float("-inf")
-    best_points = float("-inf")
-    for player_index in candidate_indices:
-        if player_index in selected_set:
+    best_priority: tuple[float, float, float] | None = None
+    should_pick = False
+    fallback_choice = None
+    fallback_priority: tuple[float, float] | None = None
+    for position, need in remaining.items():
+        if need <= 0:
             continue
-        row = data.loc[player_index]
-        next_state, positions = try_add_player(state, row["eligible_positions"], config)
-        if next_state is None:
+        if current_count[position] <= 0:
             continue
-        points = float(row["projected_points"])
-        replacement = max(
-            (points - future_best[position][round_idx + 1] for position in positions),
-            default=float("-inf"),
-        )
-        if (replacement, points) > (best_score, best_points):
-            best_choice = (player_index, next_state)
-            best_score = replacement
-            best_points = points
-    if best_score < 0:
-        return None
+        clean_heap_by_pick(current_heaps[position], data=data, selected=selected, threshold=current_pick)
+        if not current_heaps[position]:
+            continue
+        clean_heap_by_pick(future_heaps[position], data=data, selected=selected, threshold=next_pick)
+
+        current_points = -current_heaps[position][0][0]
+        current_player = current_heaps[position][0][1]
+        future_points = -future_heaps[position][0][0] if future_heaps[position] else 0.0
+        score = current_points - future_points
+        scarcity_priority = (need / current_count[position], current_points)
+        if fallback_priority is None or scarcity_priority > fallback_priority:
+            fallback_choice = (current_player, position)
+            fallback_priority = scarcity_priority
+        forced = current_count[position] <= need or future_count[position] < need
+        if forced:
+            priority = (1.0, need / current_count[position], current_points)
+        else:
+            priority = (0.0, score, current_points)
+        if best_priority is None or priority > best_priority:
+            best_choice = (current_player, position)
+            best_priority = priority
+            should_pick = forced or score > 0
+
+    if not should_pick:
+        return fallback_choice
     return best_choice
 
 
-def choose_direct_candidate(
+def build_eligible_positions_by_player(data: pd.DataFrame, positions: tuple[str, ...]) -> list[tuple[str, ...]]:
+    return [
+        tuple(position for position in positions if eligible_for(row["eligible_positions"], position))
+        for _player_index, row in data.iterrows()
+    ]
+
+
+def build_position_heaps(
+    data: pd.DataFrame,
+    eligible_positions_by_player: list[tuple[str, ...]],
+    positions: tuple[str, ...],
+) -> dict[str, list[tuple[float, int]]]:
+    heaps = {position: [] for position in positions}
+    for player_index, player_positions in enumerate(eligible_positions_by_player):
+        points = -float(data.at[player_index, "projected_points"])
+        for position in player_positions:
+            heaps[position].append((points, player_index))
+    for heap in heaps.values():
+        heapq.heapify(heap)
+    return heaps
+
+
+def build_expiration_order(data: pd.DataFrame, delta: float) -> list[tuple[float, int]]:
+    return sorted(
+        (float(row["adp"]) + delta, int(player_index))
+        for player_index, row in data.iterrows()
+    )
+
+
+def expire_players(
+    *,
+    expiration_order: list[tuple[float, int]],
+    expire_ptr: int,
+    current_pick: float,
+    alive: list[bool],
+    selected: list[bool],
+    active_count: dict[str, int],
+    eligible_positions_by_player: list[tuple[str, ...]],
+) -> int:
+    while expire_ptr < len(expiration_order) and expiration_order[expire_ptr][0] < current_pick:
+        _expiration, player_index = expiration_order[expire_ptr]
+        if alive[player_index] and not selected[player_index]:
+            alive[player_index] = False
+            for position in eligible_positions_by_player[player_index]:
+                active_count[position] -= 1
+        expire_ptr += 1
+    return expire_ptr
+
+
+def mark_selected(
+    *,
+    player_index: int,
+    alive: list[bool],
+    selected: list[bool],
+    active_count: dict[str, int],
+    eligible_positions_by_player: list[tuple[str, ...]],
+) -> None:
+    selected[player_index] = True
+    if not alive[player_index]:
+        return
+    alive[player_index] = False
+    for position in eligible_positions_by_player[player_index]:
+        active_count[position] -= 1
+
+
+def mark_selected_if_alive(
+    *,
+    player_index: int,
+    alive: list[bool],
+    active_count: dict[str, int],
+    eligible_positions_by_player: list[tuple[str, ...]],
+) -> None:
+    if not alive[player_index]:
+        return
+    alive[player_index] = False
+    for position in eligible_positions_by_player[player_index]:
+        active_count[position] -= 1
+
+
+def clean_heap(
+    heap: list[tuple[float, int]],
+    *,
+    alive: list[bool],
+    selected: list[bool],
+) -> None:
+    while heap and (selected[heap[0][1]] or not alive[heap[0][1]]):
+        heapq.heappop(heap)
+
+
+def clean_heap_by_pick(
+    heap: list[tuple[float, int]],
     *,
     data: pd.DataFrame,
-    selected_set: set[int],
-    state: FeasibilityState,
-    config: FeasibilityConfig,
-    current_pick: int,
-    delta: float,
-    enforce_adp: bool,
-) -> tuple[int, FeasibilityState] | None:
-    for player_index, row in data.sort_values("projected_points", ascending=False).iterrows():
-        if player_index in selected_set:
-            continue
-        if enforce_adp and float(row["adp"]) + delta < current_pick:
-            continue
-        next_state, _positions = try_add_player(state, row["eligible_positions"], config)
-        if next_state is not None:
-            return player_index, next_state
-    return None
-
-
-def refresh_final_assignments(
-    rows: list[dict[str, object]],
-    data: pd.DataFrame,
-    selected: list[int],
-    config: FeasibilityConfig,
+    selected: list[bool],
+    threshold: float,
 ) -> None:
-    assignment = reconstruct_assignment(data, selected, config)
-    for row in rows:
-        player_index = row.pop("_player_index")
-        row["assigned_position"] = assignment.get(player_index, row["assigned_position"])
-
-
-def reconstruct_assignment(
-    data: pd.DataFrame,
-    selected: list[int],
-    config: FeasibilityConfig,
-) -> dict[int, str]:
-    hitter_indices = [i for i in selected if is_hitter(data.at[i, "eligible_positions"])]
-    pitcher_indices = [i for i in selected if is_pitcher(data.at[i, "eligible_positions"]) and not is_hitter(data.at[i, "eligible_positions"])]
-    assignment = reconstruct_hitter_assignment(data, hitter_indices, config)
-    assignment.update(reconstruct_pitcher_assignment(data, pitcher_indices, config))
-    return assignment
-
-
-def reconstruct_hitter_assignment(
-    data: pd.DataFrame,
-    hitter_indices: list[int],
-    config: FeasibilityConfig,
-) -> dict[int, str]:
-    parents: list[dict[int, tuple[int, int]]] = [{0: (-1, -1)}]
-    for player_index in hitter_indices:
-        prev = parents[-1]
-        current: dict[int, tuple[int, int]] = {}
-        player_mask = hitter_slot_mask(data.at[player_index, "eligible_positions"], config)
-        for old_mask in prev:
-            available = player_mask & ~old_mask
-            while available:
-                slot_bit = available & -available
-                available -= slot_bit
-                new_mask = old_mask | slot_bit
-                current.setdefault(new_mask, (old_mask, slot_bit))
-        parents.append(current)
-
-    if not parents[-1]:
-        return {}
-    final_mask = next(iter(parents[-1]))
-    assignment: dict[int, str] = {}
-    for level in range(len(hitter_indices), 0, -1):
-        old_mask, slot_bit = parents[level][final_mask]
-        slot_index = slot_bit.bit_length() - 1
-        assignment[hitter_indices[level - 1]] = config.slot_output_positions[slot_index]
-        final_mask = old_mask
-    return assignment
-
-
-def reconstruct_pitcher_assignment(
-    data: pd.DataFrame,
-    pitcher_indices: list[int],
-    config: FeasibilityConfig,
-) -> dict[int, str]:
-    assignment: dict[int, str] = {}
-    flex = []
-    sp_left = config.sp_capacity
-    rp_left = config.rp_capacity
-    for player_index in pitcher_indices:
-        positions = set(data.at[player_index, "eligible_positions"])
-        if "SP" in positions and "RP" in positions:
-            flex.append(player_index)
-        elif "SP" in positions:
-            assignment[player_index] = "SP"
-            sp_left -= 1
-        elif "RP" in positions:
-            assignment[player_index] = "RP"
-            rp_left -= 1
-
-    for player_index in flex:
-        if sp_left > 0:
-            assignment[player_index] = "SP"
-            sp_left -= 1
-        elif rp_left > 0:
-            assignment[player_index] = "RP"
-            rp_left -= 1
-    return assignment
+    while heap:
+        player_index = heap[0][1]
+        if selected[player_index] or float(data.at[player_index, "_expiration"]) < threshold:
+            heapq.heappop(heap)
+            continue
+        break
 
 
 def make_roster_row(
@@ -470,9 +404,9 @@ def make_roster_row(
     draft_position: int,
     round_idx: int,
     picks: list[int],
+    assigned_position: str,
 ) -> dict[str, object]:
     return {
-        "_player_index": int(row.name),
         "season": season,
         "method": method,
         "draft_position": draft_position,
@@ -482,7 +416,7 @@ def make_roster_row(
         "projected_points": float(row["projected_points"]),
         "adp": float(row["adp"]),
         "eligible_positions": ";".join(row["eligible_positions"]),
-        "assigned_position": "",
+        "assigned_position": assigned_position,
     }
 
 
@@ -492,8 +426,8 @@ def _infeasible_solution(
     draft_position: int,
     delta: float,
     rows: list[dict[str, object]],
+    runtime_seconds: float | None = None,
 ) -> DraftSolution:
-    clean_rows = [{k: v for k, v in row.items() if k != "_player_index"} for row in rows]
     return DraftSolution(
         method=method,
         season=season,
@@ -501,5 +435,6 @@ def _infeasible_solution(
         delta=delta,
         objective=float("nan"),
         status="INFEASIBLE",
-        roster=pd.DataFrame(clean_rows),
+        roster=pd.DataFrame(rows),
+        runtime_seconds=runtime_seconds,
     )

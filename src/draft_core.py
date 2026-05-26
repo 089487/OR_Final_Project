@@ -33,7 +33,9 @@ class DraftSolution:
     objective: float
     status: str
     roster: pd.DataFrame
-    shadow_prices: pd.DataFrame | None = None
+    mip_gap: float | None = None
+    best_bound: float | None = None
+    runtime_seconds: float | None = None
 
 
 def snake_picks(num_teams: int, draft_position: int, rounds: int) -> list[int]:
