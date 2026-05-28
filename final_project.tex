@@ -36,14 +36,24 @@ We study fantasy baseball snake-draft roster construction as an operations resea
 \end{abstract}
 
 \section{Introduction}
-Fantasy baseball drafts are sequential resource-allocation problems. A manager selects players over multiple rounds, but every selection interacts with future choices: a roster position may become scarce, a flexible player may fit several slots, and a high-value player may disappear before the manager's next pick. Average Draft Position (ADP) captures market expectations about when a player is likely to be selected. Therefore, the best projected player is not always the best decision if waiting one round causes a large expected loss at a scarce position.
+Fantasy Baseball is a strategic game in which participants act as team managers and build rosters using real Major League Baseball players. During the season, the real-life statistics of these players, such as home runs, stolen bases, strikeouts, and innings pitched, are converted into fantasy points by a scoring system. Before the season begins, most leagues allocate players through a draft. In a Head-to-Head points league, a good draft can create a large advantage because it determines the initial roster that generates most of the team's expected season value.
 
-This project asks whether an operations research model can provide a useful benchmark for draft quality and whether a scalable heuristic can remain close to that benchmark on larger instances. Our final comparison uses three methods. ADP-aware ILP is the exact benchmark. Direct Greedy is a simple benchmark heuristic. Opportunity Cost Greedy is the proposed scalable heuristic.
+This project focuses on the snake draft format. In a snake draft, managers take turns selecting players, and the order reverses every round. For example, in a 12-team league, the manager with the first pick in Round 1 receives the last pick in Round 2. This reversal makes the problem more interesting than simply ranking players: a manager may wait a long time between two consecutive picks, and the player pool can change substantially before the next decision.
+
+Draft planning is challenging for several reasons. First, a valid fantasy roster must satisfy strict position requirements, such as filling catcher, infield, outfield, utility, starting pitcher, and relief pitcher slots. Second, many players have multi-position eligibility, which creates flexibility but also complicates assignment decisions. Third, the draft is a competitive environment. A manager cannot assume that a desirable player will remain available later, because other managers are simultaneously selecting from the same pool. Average Draft Position (ADP), estimated from market drafts and mock drafts, provides a practical proxy for this availability risk.
+
+These observations create a real decision-making trade-off. Selecting the highest projected points at the current pick may lead to an unbalanced roster or force the manager into weak positions later. Waiting on a position may be attractive if replacement players are expected to remain, but costly if the position becomes scarce before the next pick. The manager must therefore balance player value, positional scarcity, roster feasibility, and expected market availability. This is a natural setting for operations research: the exact optimization model can clarify the benchmark solution, while a scalable heuristic can provide practical decisions when the instance becomes too large for exact optimization.
+
+Our study compares three methods. ADP-aware ILP is the exact benchmark that optimizes projected roster points under roster, eligibility, snake-pick, and ADP availability constraints. Direct Greedy is a simple benchmark heuristic that fills the scarcest open position first. Opportunity Cost Greedy is our proposed scalable heuristic, designed to select players where waiting until the next pick is most costly.
 
 \section{Problem Description}
-The decision maker is one team in a snake draft. Given a player pool, projected fantasy points, eligible positions, ADP values, roster requirements, and the team's draft position, the manager must choose a roster. Each owned pick must select one available player, and every selected player must be assigned to exactly one eligible roster position. A player with ADP \(A_i\) is considered available at pick \(S_k\) only when \(A_i+\delta\ge S_k\), where \(\delta\) is an availability buffer.
+We consider the decision-making process of one fantasy manager participating in a snake draft. The manager knows the league size, draft position, roster rules, scoring system, and the list of remaining players. The manager also has forecasts for each player's fantasy points and ADP, plus the positions that each player can fill. The planning task is to decide which player to select at each owned draft pick and how the selected players should be assigned to the final roster.
 
-The trade-off is between current value and future availability. Drafting the highest current projected points may ignore positional scarcity. Waiting for a position may be beneficial if strong replacements will remain, but dangerous if the position will become infeasible or much lower in value. This is why we need both an exact optimization benchmark and a heuristic that explicitly reasons about future replacement value.
+Conceptually, the manager controls two types of decisions. The first decision is selection: at each owned pick, exactly one player should be drafted from the currently available pool. The second decision is assignment: each drafted player must be placed into one roster slot that the player is eligible to fill. Multi-position players create useful flexibility, but they also create an assignment problem because using a flexible player in one slot may block a better roster configuration later.
+
+The important inputs are player projections, ADP values, position eligibility, roster requirements, league size, draft order, and the ADP buffer used to represent availability uncertainty. Projected points measure the expected contribution of each player. ADP measures market availability: if a player is usually drafted much earlier than our current pick, we should not assume that the player is available. Roster requirements define the operational feasibility rules of the fantasy team, such as the number of outfielders, starting pitchers, and relief pitchers that must be filled.
+
+The objective is to maximize the expected total fantasy points of the final roster. The constraints reflect business rules of the draft: each pick can select only one player, no player can be selected twice, every drafted player must fill exactly one roster slot, every roster slot requirement must be satisfied, players can only be assigned to eligible positions, and players whose ADP suggests that they should already be gone cannot be selected at that pick. In the exact benchmark, these decisions are optimized jointly. In the greedy heuristics, decisions are made sequentially to imitate a scalable draft assistant.
 
 \section{Model Formulation}
 Let \(I\) be the player set, \(P\) the roster-position set, and \(K\) the set of owned picks. Let \(V_i\) be projected points, \(E_{ip}\in\{0,1\}\) eligibility, \(R_p\) required slots, \(A_i\) ADP, and \(S_k\) the overall pick number. For a snake draft with \(M\) teams and draft position \(j\), the pick in round \(r\) is
@@ -125,34 +135,109 @@ then clipped to the player-pool range.
 The point scenarios are normal, uniform, and high-low. The high-low scenario creates a small elite group and many low-value players, so missing an elite player is more costly. The position scenarios control eligibility and flexibility: uniform-by-type randomly samples hitter and pitcher patterns; point-flexible gives high-value players more eligibility; single-position removes flexibility; roster-ratio matches player position supply to roster demand.
 
 \section{Experiment Design}
-The report uses synthetic experiments as the main performance evaluation and real data as validation. Table~\ref{tab:design} summarizes the scenarios.
+To systematically evaluate the effectiveness and robustness of our proposed heuristic algorithm, we conducted a comprehensive numerical study following the factorial design methodology, generating random instances designed with different factors and scenarios. The synthetic study evaluates algorithmic behavior under controlled environments, while the 2026 Yahoo and FanGraphs datasets provide real-world validation.
+
+\textbf{General Settings:}
+Across the main synthetic instances, the base league consists of \(t=12\) teams and a roster size of \(r=16\). The roster requirements are one C, one 1B, one 2B, one 3B, one SS, three OF, one Util, five SP, and two RP. Let \(D=rt\) be total league draft demand and \(n\) be the number of generated players. The default player-demand ratio is \(n/D=3\), so the base player pool has \(D=192\) total demanded roster slots and \(n=576\) players. Unless otherwise specified, the draft position is the middle draft slot, \(\delta=0\), \(\sigma_{\text{ADP}}=30\), and 10 random seeds are used.
+
+Projected points are generated independently from positions by default. The normal point scenario samples from a clipped normal distribution with mean \(400\), standard deviation \(120\), and support \([10,800]\). The uniform scenario samples \(U(10,800)\). The high-low scenario assigns 10\% of players to an elite group sampled from \(U(500,800)\), while the remaining 90\% are sampled from \(U(10,500)\). ADP is generated by ranking players by projected points, adding normal noise \(N(0,\sigma_{\text{ADP}})\), and clipping the result to \([1,n]\).
+
+\vspace{0.1cm}
+We designed six scenario groups driven by five operational factors to test the algorithms under various draft environments:
+
+\begin{itemize}[itemsep=2pt, parsep=0pt, topsep=4pt]
+    \item \textbf{Factor A: Player Value Distribution.} We vary the distribution of projected fantasy points to test whether heuristic performance changes when player value is smooth or concentrated. The \textit{Normal} scenario is the baseline balanced market. The \textit{Uniform} scenario creates a broad value spread. The \textit{High-Low} scenario creates a small elite group and many low-value players, making missed elite picks more costly.
+
+    \item \textbf{Factor B: Position Eligibility Structure.} We vary eligibility generation to test roster flexibility and positional scarcity.
+    \begin{itemize}[itemsep=2pt, parsep=0pt, topsep=2pt]
+        \item \textbf{Uniform By Type:} Players are first classified as hitters or pitchers using roster proportions \(P(H)=9/16\) and \(P(P)=7/16\). Hitter and pitcher eligibility patterns are then sampled from predefined position sets.
+        \item \textbf{Point Flexible:} High-value players are more likely to receive multiple eligible positions. This represents a favorable setting where valuable players are easier to fit into the roster.
+        \item \textbf{Single Position:} Every player has exactly one eligible position. This is the lowest-flexibility setting and should make greedy mistakes harder to repair.
+        \item \textbf{Roster Ratio:} Primary positions are sampled in proportion to roster demand; for example, OF appears about three times as often as C because the roster has three OF slots and one C slot.
+    \end{itemize}
+
+    \item \textbf{Factor C: Roster and Player-Pool Scale.} We vary the roster scale \(s\in\{1,2,3\}\) and player-demand ratio \(n/D\in\{1,3,10\}\). Scaling \(s\) multiplies every roster requirement, so \(s=1,2,3\) correspond to roster sizes \(r=16,32,48\). Larger \(n\) and \(r\) directly increase the number of ILP variables \(n(1+p+r)\).
+
+    \item \textbf{Factor D: ADP Availability Uncertainty.} We vary \(\sigma_{\text{ADP}}\in\{0,10,30,60,100\}\) and \(\delta=-10,\ldots,10\). When \(\sigma_{\text{ADP}}=0\), ADP perfectly follows projected points. Larger values create more noisy availability, including both bargains and traps.
+
+    \item \textbf{Factor E: Large-Scale Stress.} We combine high-low points, single-position eligibility, \(\sigma_{\text{ADP}}=60\), larger roster scales, larger league sizes, and larger player pools. These scenarios are intentionally constructed to test whether the exact ADP-aware ILP becomes slow or impractical, while the heuristics still produce feasible rosters quickly.
+\end{itemize}
+
+The parameter configurations are summarized by factor-level scenarios in Tables~\ref{tab:design}--\ref{tab:stress}. The labels in these tables describe the experimental condition itself rather than the output-folder names, so the reader can see exactly which operational factor is being changed in each scenario.
 
 \begin{table}[H]
 \centering
-\small
+\scriptsize
 \setlength{\tabcolsep}{3pt}
-\caption{Synthetic experiment design.}
+\caption{Factor-level synthetic scenarios for baseline, point, position, and ADP experiments.}
 \label{tab:design}
 \begin{tabular}{
->{\raggedright\arraybackslash}p{0.07\linewidth}
+>{\raggedright\arraybackslash}p{0.08\linewidth}
+>{\raggedright\arraybackslash}p{0.18\linewidth}
+>{\raggedright\arraybackslash}p{0.22\linewidth}
 >{\raggedright\arraybackslash}p{0.30\linewidth}
->{\raggedright\arraybackslash}p{0.44\linewidth}
 >{\raggedright\arraybackslash}p{0.10\linewidth}
 }
 \toprule
-ID & Purpose & Main controlled factors & Cases\\
+Scenario & Main factor & Varying setting & Fixed controls & Cases\\
 \midrule
-N1 & Establish a normal baseline. & normal points, roster-ratio positions, \(s=1\), \(n/D=3\), \(\sigma_{\text{ADP}}=30\), \(\delta=0\). & 10 seeds\\
-N2 & Test whether value distribution changes heuristic quality. & normal, uniform, and high-low point scenarios; other factors fixed as N1. & 30 cases\\
-N3 & Test whether eligibility structure and roster flexibility matter. & uniform-by-type, point-flexible, single-position, and roster-ratio position scenarios. & 40 cases\\
-N4 & Test moderate scaling where ILP can still solve all cases. & roster scale \(s=1,2,3\) and player-demand ratio \(n/D=1,3,10\). & 45 cases\\
-N5 & Test ADP uncertainty and delta sensitivity. & \(\sigma_{\text{ADP}}=0,10,30,60,100\) and \(\delta=-10,\ldots,10\). & 1050 cases\\
-N6 & Stress test scalability beyond moderate instances. & larger rosters and player pools, high-low points, single-position eligibility. & stress run\\
+S0 & Baseline & normal points, roster-ratio positions, \(\sigma_{\text{ADP}}=30\), \(\delta=0\) & \(s=1,\ t=12,\ n/D=3\) & 10\\
+A1 & Player value distribution & uniform points & roster-ratio positions, \(s=1,\ t=12,\ n/D=3,\ \sigma=30,\ \delta=0\) & 10\\
+A2 & Player value distribution & high-low points & roster-ratio positions, \(s=1,\ t=12,\ n/D=3,\ \sigma=30,\ \delta=0\) & 10\\
+B1 & Position eligibility & uniform-by-type positions & normal points, \(s=1,\ t=12,\ n/D=3,\ \sigma=30,\ \delta=0\) & 10\\
+B2 & Position eligibility & point-flexible positions & normal points, \(s=1,\ t=12,\ n/D=3,\ \sigma=30,\ \delta=0\) & 10\\
+B3 & Position eligibility & single-position only & normal points, \(s=1,\ t=12,\ n/D=3,\ \sigma=30,\ \delta=0\) & 10\\
+B4 & Position eligibility & roster-ratio positions & normal points, \(s=1,\ t=12,\ n/D=3,\ \sigma=30,\ \delta=0\) & 10\\
+D1 & ADP uncertainty & \(\sigma_{\text{ADP}}=0,\ \delta=-10,\ldots,10\) & normal points, roster-ratio positions, \(s=1,\ t=12,\ n/D=3\) & 210\\
+D2 & ADP uncertainty & \(\sigma_{\text{ADP}}=10,\ \delta=-10,\ldots,10\) & normal points, roster-ratio positions, \(s=1,\ t=12,\ n/D=3\) & 210\\
+D3 & ADP uncertainty & \(\sigma_{\text{ADP}}=30,\ \delta=-10,\ldots,10\) & normal points, roster-ratio positions, \(s=1,\ t=12,\ n/D=3\) & 210\\
+D4 & ADP uncertainty & \(\sigma_{\text{ADP}}=60,\ \delta=-10,\ldots,10\) & normal points, roster-ratio positions, \(s=1,\ t=12,\ n/D=3\) & 210\\
+D5 & ADP uncertainty & \(\sigma_{\text{ADP}}=100,\ \delta=-10,\ldots,10\) & normal points, roster-ratio positions, \(s=1,\ t=12,\ n/D=3\) & 210\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The scenarios are intentionally separated so that each experiment answers one question. N1 checks whether all methods behave reasonably in a balanced baseline. N2 changes only the point distribution, so it tests whether greedy methods fail mainly when value is concentrated among a few elite players. N3 changes only eligibility generation, so it tests whether roster flexibility helps or hurts the heuristics. N4 increases roster scale and player-pool size while keeping the design moderate enough for the ILP to solve every case, making it the cleanest comparison of runtime growth and objective quality. N5 varies ADP noise and \(\delta\), so it isolates uncertainty in draft availability. N6 combines low flexibility, high-low points, larger rosters, and larger player pools to deliberately create instances where exact optimization becomes slow or impractical.
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{6pt}
+\caption{Moderate scale scenarios, crossing roster scale and player-pool size.}
+\label{tab:scale-design}
+\begin{tabular}{lrrrrr}
+\toprule
+Scenario & Roster scale \(s\) & Roster size \(r\) & Teams \(t\) & \(n/D\) & Players \(n\)\\
+\midrule
+C1 & 1 & 16 & 12 & 1 & 192\\
+C2 & 1 & 16 & 12 & 3 & 576\\
+C3 & 1 & 16 & 12 & 10 & 1,920\\
+C4 & 2 & 32 & 12 & 1 & 384\\
+C5 & 2 & 32 & 12 & 3 & 1,152\\
+C6 & 2 & 32 & 12 & 10 & 3,840\\
+C7 & 3 & 48 & 12 & 1 & 576\\
+C8 & 3 & 48 & 12 & 3 & 1,728\\
+C9 & 3 & 48 & 12 & 10 & 5,760\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\caption{Large-scale stress ladder.}
+\label{tab:stress}
+\begin{tabular}{lrrrrr}
+\toprule
+Level & Roster scale \(s\) & Roster size \(r\) & Teams \(t\) & \(n/D\) & Players \(n\)\\
+\midrule
+E1 stress\_small & 3 & 48 & 12 & 10 & 5,760\\
+E2 stress\_medium & 4 & 64 & 15 & 10 & 9,600\\
+E3 stress\_large & 6 & 96 & 15 & 15 & 21,600\\
+E4 stress\_xlarge & 10 & 160 & 20 & 20 & 64,000\\
+E5 timeout\_target & 16 & 256 & 24 & 30 & 184,320\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The performance metrics are objective value, runtime, method status, Gurobi MIPGap for ILP, and heuristic optimality gap. For a heuristic solution \(H\), the optimality gap is
 \[
@@ -163,8 +248,8 @@ The performance metrics are objective value, runtime, method status, Gurobi MIPG
 This gap is computed only against ADP-aware ILP, not against a no-ADP model.
 
 \section{Results}
-\subsection{N1 to N3: baseline, points, and positions}
-Table~\ref{tab:n1n3} shows the main quality results for N1 to N3. These experiments are designed to explain where heuristic errors come from before moving to larger scaling experiments.
+\subsection{Baseline, points, and positions}
+Table~\ref{tab:n1n3} shows the main quality results for the baseline, point-distribution, and position-eligibility scenarios. These experiments are designed to explain where heuristic errors come from before moving to larger scaling experiments.
 
 \begin{table}[H]
 \centering
@@ -175,22 +260,21 @@ Table~\ref{tab:n1n3} shows the main quality results for N1 to N3. These experime
 \toprule
 Scenario & ILP mean objective & Opportunity Cost gap & Direct Greedy gap\\
 \midrule
-N1 baseline & 9228.582 & 1.919\% & 4.785\%\\
-N2 normal points & 9228.582 & 1.919\% & 4.785\%\\
-N2 uniform points & 11440.292 & 1.439\% & 3.243\%\\
-N2 high-low points & 9137.382 & 2.867\% & 8.390\%\\
-N3 uniform-by-type & 9112.331 & 1.074\% & 4.889\%\\
-N3 point-flexible & 9139.980 & 1.344\% & 5.364\%\\
-N3 single-position & 9070.910 & 0.939\% & 5.107\%\\
-N3 roster-ratio & 9228.582 & 1.919\% & 4.785\%\\
+S0 baseline & 9228.582 & 1.919\% & 4.785\%\\
+A1 uniform points & 11440.292 & 1.439\% & 3.243\%\\
+A2 high-low points & 9137.382 & 2.867\% & 8.390\%\\
+B1 uniform-by-type & 9112.331 & 1.074\% & 4.889\%\\
+B2 point-flexible & 9139.980 & 1.344\% & 5.364\%\\
+B3 single-position & 9070.910 & 0.939\% & 5.107\%\\
+B4 roster-ratio & 9228.582 & 1.919\% & 4.785\%\\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Opportunity Cost Greedy is consistently closer to the ADP-aware ILP than Direct Greedy. The high-low point distribution is the hardest point scenario because missing elite players is expensive. Position distribution does not create infeasibility after adding the feasibility fallback, but Direct Greedy remains more sensitive to eligibility structure.
 
-\subsection{N5: ADP uncertainty}
-N5 varies ADP noise and the availability buffer. Table~\ref{tab:n5} aggregates over all \(\delta\) values for each noise level. As ADP becomes noisier, both heuristics generally move farther from the exact benchmark, but Opportunity Cost Greedy remains substantially closer.
+\subsection{ADP uncertainty}
+Scenarios D1--D5 vary ADP noise and the availability buffer. Table~\ref{tab:n5} aggregates over all \(\delta\) values for each noise level. As ADP becomes noisier, both heuristics generally move farther from the exact benchmark, but Opportunity Cost Greedy remains substantially closer.
 
 \begin{table}[H]
 \centering
@@ -210,10 +294,10 @@ N5 varies ADP noise and the availability buffer. Table~\ref{tab:n5} aggregates o
 \end{tabular}
 \end{table}
 
-\subsection{N4 and N6: scaling}
-N4 confirms that both heuristics remain close to the exact benchmark while using much less runtime on moderate instances. Across 45 N4 cases, ADP-aware ILP has mean runtime \(0.644\) seconds and max runtime \(4.915\) seconds. Opportunity Cost Greedy has mean gap \(1.623\%\), mean runtime \(0.093\) seconds, and max gap \(3.714\%\). Direct Greedy has mean gap \(4.177\%\), mean runtime \(0.088\) seconds, and max gap \(10.349\%\).
+\subsection{Moderate and stress scaling}
+The moderate scale grid C1--C9 confirms that both heuristics remain close to the exact benchmark while using much less runtime. Across 45 moderate scale cases, ADP-aware ILP has mean runtime \(0.644\) seconds and max runtime \(4.915\) seconds. Opportunity Cost Greedy has mean gap \(1.623\%\), mean runtime \(0.093\) seconds, and max gap \(3.714\%\). Direct Greedy has mean gap \(4.177\%\), mean runtime \(0.088\) seconds, and max gap \(10.349\%\).
 
-N6 then extends to stress instances. Table~\ref{tab:scaling} shows the scale separation. The ILP remains exact when it completes, but runtime grows sharply. At the timeout-target size, the ILP run was manually interrupted without producing benchmark output, while both heuristics solved the instances in under ten seconds.
+The stress ladder E1--E5 then extends to much larger instances. Table~\ref{tab:scaling} shows the scale separation. The ILP remains exact when it completes, but runtime grows sharply. At the timeout-target size, the ILP run was manually interrupted without producing benchmark output, while both heuristics solved the instances in under ten seconds.
 
 \begin{table}[H]
 \centering
