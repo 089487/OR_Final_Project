@@ -1,0 +1,4 @@
+experiment,season,seed,method,status,objective,runtime_seconds,mip_gap,best_bound,gap_to_best_bound,adp_aware_objective,optimal_gap,optimal_gap_pct,draft_position,delta,points_scenario,position_scenario,roster_scale,roster_size,num_players,num_positions,approx_variable_count,approx_constraint_count,num_teams,player_demand_ratio,sigma_adp
+N6_stress_medium,9999,0,ADP-aware ILP,OPTIMAL,43803.09,12.230124950408936,0.0,43803.09,0.0,43803.09,,,8,0.0,high_low,single_position,4,64,9600,9,710400,720073,15,10,60.0
+N6_stress_medium,9999,0,Direct Greedy,OPTIMAL,43027.17,0.9509514919482172,,,,43803.09,775.9199999999983,0.017713818819631178,8,0.0,high_low,single_position,4,64,9600,9,710400,720073,15,10,60.0
+N6_stress_medium,9999,0,Opportunity Cost Greedy,OPTIMAL,43520.229999999996,1.143684753216803,,,,43803.09,282.8600000000006,0.006457535301733293,8,0.0,high_low,single_position,4,64,9600,9,710400,720073,15,10,60.0

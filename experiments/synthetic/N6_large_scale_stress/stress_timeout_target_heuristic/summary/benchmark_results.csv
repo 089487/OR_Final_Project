@@ -1,0 +1,4 @@
+experiment,season,seed,method,status,objective,runtime_seconds,mip_gap,best_bound,gap_to_best_bound,adp_aware_objective,optimal_gap,optimal_gap_pct,draft_position,delta,points_scenario,position_scenario,roster_scale,roster_size,num_players,num_positions,approx_variable_count,approx_constraint_count,num_teams,player_demand_ratio,sigma_adp
+N6_stress_timeout_target,9999,0,ADP-aware ILP,ERROR_TimeoutError,,1869.8054787889123,,,,,,,12,0.0,high_low,single_position,16,256,184320,9,49029120,49213705,24,30,60.0
+N6_stress_timeout_target,9999,0,Direct Greedy,OPTIMAL,192129.16999999998,17.759686089586467,,,,,,,12,0.0,high_low,single_position,16,256,184320,9,49029120,49213705,24,30,60.0
+N6_stress_timeout_target,9999,0,Opportunity Cost Greedy,OPTIMAL,192223.62,23.285587834194303,,,,,,,12,0.0,high_low,single_position,16,256,184320,9,49029120,49213705,24,30,60.0

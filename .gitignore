@@ -24,6 +24,12 @@ experiments/synthetic/
 experiments/synthetic/*
 !experiments/synthetic/scaling_summary/
 !experiments/synthetic/scaling_summary/**
+!experiments/synthetic/N6_large_scale_stress/
+experiments/synthetic/N6_large_scale_stress/*
+!experiments/synthetic/N6_large_scale_stress/*/
+experiments/synthetic/N6_large_scale_stress/*/*
+!experiments/synthetic/N6_large_scale_stress/*/summary/
+!experiments/synthetic/N6_large_scale_stress/*/summary/benchmark_results.csv
 experiments/.matplotlib/
 logs/
 results/
