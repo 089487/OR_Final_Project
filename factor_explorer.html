@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N1-N6 Factor Explorer</title>
+  <style>
+    :root {
+      --bg: #f5f1e8;
+      --panel: #fffaf0;
+      --panel-2: #f9efe0;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --accent: #b45309;
+      --accent-2: #7c2d12;
+      --line: #e5d6c3;
+      --shadow: 0 10px 30px rgba(92, 64, 51, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(180, 83, 9, 0.10), transparent 26%),
+        radial-gradient(circle at top right, rgba(124, 45, 18, 0.08), transparent 24%),
+        linear-gradient(180deg, #fbf7f1 0%, var(--bg) 100%);
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+    header {
+      background: linear-gradient(135deg, #fff7ed, #fff3e0);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 28px 28px 22px;
+      margin-bottom: 22px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      max-width: 850px;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .pill {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.75);
+      color: var(--accent-2);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .scenario {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .scenario summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 20px 22px;
+      background: linear-gradient(90deg, #fffaf2 0%, #fff4e6 100%);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+    .scenario summary::-webkit-details-marker { display: none; }
+    .scenario-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent-2);
+      letter-spacing: -0.02em;
+    }
+    .scenario-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .content {
+      padding: 18px 18px 22px;
+    }
+    .factor-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .factor {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      overflow: hidden;
+    }
+    .factor summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      background: rgba(255,255,255,0.58);
+    }
+    .factor summary::-webkit-details-marker { display: none; }
+    .factor-name {
+      font-weight: 800;
+      color: var(--ink);
+      font-size: 15px;
+    }
+    .factor-values {
+      color: var(--accent);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .chev {
+      color: var(--muted);
+      font-size: 12px;
+      transition: transform 0.2s ease;
+      user-select: none;
+    }
+    .factor[open] .chev { transform: rotate(180deg); }
+    .factor-body {
+      padding: 0 16px 16px 16px;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,250,240,0.95));
+    }
+    .factor-body p {
+      margin: 12px 0 0;
+      line-height: 1.7;
+      color: var(--ink);
+    }
+    .factor-body ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    .tagrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .mini {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .scenario-note {
+      margin-top: 8px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--accent);
+      background: rgba(255,255,255,0.72);
+      border-radius: 12px;
+      color: #4b5563;
+      line-height: 1.65;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--accent-2);
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+    }
+    button:hover { background: #fff7ed; }
+    @media (max-width: 760px) {
+      .factor summary {
+        grid-template-columns: 1fr;
+      }
+      .scenario summary {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>N1-N6 Factor Explorer</h1>
+      <p class="subtitle">
+        這是一個互動式總覽，用來快速理解 synthetic experiments 裡每個 factor 的意義。
+        每個 N1~N6 區塊都可以展開，點任意 factor 就能看到它的定義、代表意義、以及它如何改變 draft 問題的難度。
+      </p>
+      <div class="legend">
+        <span class="pill">click to expand</span>
+        <span class="pill">HackMD-style spoilers</span>
+        <span class="pill">N1 ~ N6</span>
+        <span class="pill">baseline → stress test</span>
+      </div>
+    </header>
+
+    <div class="topbar">
+      <div class="mini">Tip: 先看 N1 baseline，再看 N2-N6 的單一 factor 變化。</div>
+      <div class="controls">
+        <button id="expandAll">Expand all</button>
+        <button id="collapseAll">Collapse all</button>
+      </div>
+    </div>
+
+    <main id="app"></main>
+  </div>
+
+  <script>
+    const data = [
+      {
+        id: "N1",
+        title: "N1 Baseline",
+        summary: "Balanced reference case for comparing the exact ILP and the two heuristics.",
+        note: "This is the project's default synthetic world: normal points, roster-ratio positions, moderate ADP noise, and a medium-sized player pool.",
+        factors: [
+          {
+            name: "points_scenario",
+            values: "normal",
+            meaning: "Point distribution setting.",
+            detail: "Normal means the projected points are generated around a central value range, so most players sit near the middle instead of clustering at extremes. In the paper, this is the baseline value landscape."
+          },
+          {
+            name: "position_scenario",
+            values: "roster_ratio",
+            meaning: "Position distribution setting.",
+            detail: "Roster-ratio means position eligibility is generated to align with roster position requirements. In other words, the supply of player positions roughly matches the demand pattern of the fantasy roster, so the instance is balanced rather than too sparse or too flexible."
+          },
+          {
+            name: "roster_scale",
+            values: "1",
+            meaning: "Roster size multiplier.",
+            detail: "A value of 1 keeps the base 16-slot roster unchanged. Larger values multiply every roster requirement and are used in scaling experiments."
+          },
+          {
+            name: "num_teams",
+            values: "12",
+            meaning: "League size.",
+            detail: "Twelve teams means the snake-draft order repeats across 12 picks per round. This setting also determines the total draft demand in the league."
+          },
+          {
+            name: "player_demand_ratio",
+            values: "3",
+            meaning: "Player-pool size relative to demand.",
+            detail: "A ratio of 3 means the synthetic pool contains three times as many players as the league must draft in total. This creates a moderate amount of replacement supply."
+          },
+          {
+            name: "sigma_adp",
+            values: "30",
+            meaning: "ADP noise standard deviation.",
+            detail: "A value of 30 adds moderate randomness to ADP, so the market signal is informative but not perfectly aligned with true player value."
+          },
+          {
+            name: "delta",
+            values: "0",
+            meaning: "ADP availability buffer.",
+            detail: "Delta shifts the cutoff for player availability. If ADP plus delta is earlier than the current pick, the player is treated as already unavailable."
+          },
+          {
+            name: "seeds",
+            values: "0:10",
+            meaning: "Random replications.",
+            detail: "The experiment uses ten random seeds so that mean performance and standard deviation can be reported reliably."
+          }
+        ]
+      },
+      {
+        id: "N2",
+        title: "N2 Points Distribution",
+        summary: "Only the points distribution changes; everything else stays fixed.",
+        note: "This experiment isolates how value concentration affects heuristic performance.",
+        factors: [
+          {
+            name: "points_scenario",
+            values: "normal / uniform / high_low",
+            meaning: "Player-value distribution setting.",
+            detail: "Normal keeps the baseline distribution. Uniform spreads value evenly across the range. High-low concentrates value into a small elite group, so missing top players becomes much more expensive."
+          },
+          { name: "position_scenario", values: "roster_ratio", meaning: "Balanced position-allocation setting.", detail: "Roster-ratio keeps position supply aligned with roster demand, so the only major change across runs is the shape of the points distribution." },
+          { name: "roster_scale", values: "1", meaning: "Fixed roster size.", detail: "The base roster is unchanged, so scale does not confound the effect of points." },
+          { name: "num_teams", values: "12", meaning: "Fixed league size.", detail: "The draft length stays the same across all point scenarios." },
+          { name: "player_demand_ratio", values: "3", meaning: "Fixed pool size relative to demand.", detail: "The player pool remains moderately large, so only the value distribution changes." },
+          { name: "sigma_adp", values: "30", meaning: "Fixed ADP noise level.", detail: "Market uncertainty is held constant so we can isolate the effect of the points distribution." },
+          { name: "delta", values: "0", meaning: "Fixed ADP tolerance.", detail: "The availability rule does not change across the point-distribution runs." },
+          { name: "seeds", values: "0:10", meaning: "Random replications.", detail: "Ten seeds let us estimate both average performance and variability." }
+        ]
+      },
+      {
+        id: "N3",
+        title: "N3 Position Distribution",
+        summary: "Only the position flexibility structure changes.",
+        note: "This experiment tests how roster flexibility and scarcity affect the heuristics.",
+        factors: [
+          { name: "position_scenario", values: "uniform_by_type / point_flexible / single_position / roster_ratio", meaning: "Position distribution setting.", detail: "Uniform-by-type samples eligibility patterns randomly within hitter and pitcher groups. Point-flexible makes stronger players more likely to have multiple positions. Single-position removes flexibility entirely. Roster-ratio aligns position supply with roster demand." },
+          { name: "points_scenario", values: "normal", meaning: "Fixed baseline value distribution.", detail: "Player value stays the same so only the position structure changes." },
+          { name: "roster_scale", values: "1", meaning: "Fixed roster size.", detail: "The number of roster slots stays unchanged, so the experiment isolates position flexibility." },
+          { name: "num_teams", values: "12", meaning: "Fixed league size.", detail: "The draft horizon stays constant." },
+          { name: "player_demand_ratio", values: "3", meaning: "Fixed pool size relative to demand.", detail: "The supply of players is held moderate while position structure changes." },
+          { name: "sigma_adp", values: "30", meaning: "Fixed ADP noise level.", detail: "ADP uncertainty is not the variable of interest here." },
+          { name: "delta", values: "0", meaning: "Fixed ADP tolerance.", detail: "The availability rule stays the same across all position scenarios." },
+          { name: "seeds", values: "0:10", meaning: "Random replications.", detail: "Multiple seeds let us measure the average effect of position structure." }
+        ]
+      },
+      {
+        id: "N4",
+        title: "N4 Scaling",
+        summary: "This is the scaling experiment: roster size and player-pool size both grow.",
+        note: "N4 is the main runtime-growth experiment.",
+        factors: [
+          { name: "roster_scale", values: "1 / 2 / 3", meaning: "Roster size multiplier.", detail: "A larger roster scale multiplies every roster requirement, increasing the number of picks and enlarging the ILP." },
+          { name: "player_demand_ratio", values: "1 / 3 / 10", meaning: "Player-pool size relative to total demand.", detail: "Higher ratios create much larger synthetic player pools, which makes the optimization problem substantially bigger." },
+          { name: "points_scenario", values: "normal", meaning: "Fixed baseline value distribution.", detail: "Value generation is held constant so runtime comparisons are cleaner." },
+          { name: "position_scenario", values: "roster_ratio", meaning: "Balanced position-allocation setting.", detail: "Position supply stays aligned with demand while scale changes." },
+          { name: "sigma_adp", values: "30", meaning: "Fixed ADP noise level.", detail: "Moderate market uncertainty keeps the scenario realistic." },
+          { name: "delta", values: "0", meaning: "Fixed ADP tolerance.", detail: "The availability rule stays constant so scale is the main variable." },
+          { name: "num_teams", values: "12", meaning: "Fixed league size.", detail: "This keeps total draft demand comparable across scale settings." }
+        ]
+      },
+      {
+        id: "N5",
+        title: "N5 ADP Uncertainty",
+        summary: "This experiment studies noisy draft markets and tolerance to ADP timing.",
+        note: "N5 is the best setting for understanding the role of sigma_adp and delta.",
+        factors: [
+          { name: "sigma_adp", values: "0 / 10 / 30 / 60 / 100", meaning: "ADP noise standard deviation.", detail: "This controls how much the ADP ranking deviates from the true points ranking. Larger values make the market more uncertain and create more bargains and traps." },
+          { name: "delta", values: "-10 .. 10", meaning: "ADP availability buffer.", detail: "This shifts the cutoff for when a player becomes unavailable. Negative delta is stricter; positive delta is more permissive." },
+          { name: "points_scenario", values: "normal", meaning: "Fixed baseline value distribution.", detail: "Value generation stays constant while ADP noise varies." },
+          { name: "position_scenario", values: "roster_ratio", meaning: "Balanced position-allocation setting.", detail: "Roster flexibility is held steady so the experiment focuses on ADP uncertainty." },
+          { name: "roster_scale", values: "1", meaning: "Fixed roster size.", detail: "The draft size stays unchanged so ADP effects are easier to isolate." },
+          { name: "num_teams", values: "12", meaning: "Fixed league size.", detail: "The snake-draft structure remains constant." },
+          { name: "player_demand_ratio", values: "3", meaning: "Fixed pool size relative to demand.", detail: "The player pool is held at a moderate size." },
+          { name: "seeds", values: "0:10", meaning: "Random replications.", detail: "Multiple seeds let us estimate sensitivity to ADP noise." }
+        ]
+      },
+      {
+        id: "N6",
+        title: "N6 Large-Scale Stress",
+        summary: "This is the stress test that pushes exact optimization toward its practical limit.",
+        note: "N6 focuses on scalability rather than fine-grained comparative quality.",
+        factors: [
+          { name: "roster_scale", values: "larger than N1-N5", meaning: "Roster size multiplier.", detail: "More roster slots mean more picks and more binary variables in the ILP." },
+          { name: "player_demand_ratio", values: "larger than N1-N5", meaning: "Player-pool size relative to demand.", detail: "A larger ratio dramatically expands the search space." },
+          { name: "num_teams", values: "12 / 15 / 20", meaning: "League size.", detail: "More teams stretch the snake draft and increase total demand." },
+          { name: "seeds", values: "fewer seeds per stress level", meaning: "Random replications.", detail: "Fewer replications keep the stress experiment feasible while still showing the scale trend." },
+          { name: "points_scenario", values: "high_low in the stress setup", meaning: "Elite-heavy value distribution.", detail: "Strong players are scarce, making the stress case harder and more realistic." },
+          { name: "position_scenario", values: "single_position in the stress setup", meaning: "Low-flexibility position structure.", detail: "Single-position eligibility makes the draft harder to repair greedily." },
+          { name: "sigma_adp", values: "large noise in the stress setup", meaning: "ADP noise standard deviation.", detail: "A large sigma_adp makes the market less predictable and more stressful for the methods." }
+        ]
+      }
+    ];
+
+    const app = document.getElementById("app");
+
+    function factorHTML(factor) {
+      return `
+        <details class="factor">
+          <summary>
+            <div>
+              <div class="factor-name">${factor.name}</div>
+              <div class="mini">${factor.meaning}</div>
+            </div>
+            <div class="factor-values">${factor.values}</div>
+            <div class="chev">▼</div>
+          </summary>
+          <div class="factor-body">
+            <p>${factor.detail}</p>
+          </div>
+        </details>
+      `;
+    }
+
+    function scenarioHTML(s) {
+      return `
+        <details class="scenario" open>
+          <summary>
+            <div>
+              <div class="scenario-title">${s.id} — ${s.title}</div>
+              <div class="scenario-desc">${s.summary}</div>
+            </div>
+            <div class="scenario-desc">${s.note}</div>
+          </summary>
+          <div class="content">
+            <div class="scenario-note">${s.note}</div>
+            <div class="factor-grid">
+              ${s.factors.map(factorHTML).join("")}
+            </div>
+          </div>
+        </details>
+      `;
+    }
+
+    app.innerHTML = data.map(scenarioHTML).join("");
+
+    document.getElementById("expandAll").addEventListener("click", () => {
+      document.querySelectorAll("details").forEach(d => d.open = true);
+    });
+    document.getElementById("collapseAll").addEventListener("click", () => {
+      document.querySelectorAll(".factor").forEach(d => d.open = false);
+      document.querySelectorAll(".scenario").forEach(d => d.open = true);
+    });
+  </script>
+</body>
+</html>
