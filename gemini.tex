@@ -172,9 +172,39 @@ Let $N$ be the total number of players in the draft pool, $R$ be the number of r
 
 \section{Data Collection and Generation}
 
-To rigorously test our algorithms, we utilized both real-world projections (2026 Yahoo and FanGraphs data) and a sophisticated \textbf{Synthetic Data Generator}. Real data proves practical viability, but synthetic data is crucial because it allows us to isolate and manipulate specific operational variables (Factors) that affect drafting difficulty.
+To rigorously test our algorithms and simulate the vast ecosystem of MLB draft-eligible players, we developed a highly customizable \textbf{Synthetic Data Generator}. While real data (2026 Yahoo/FanGraphs projections) is used for final validation, synthetic data is indispensable. It allows us to mathematically isolate specific operational variables (Factors)—such as talent distribution, positional versatility, and market efficiency—and stress-test the algorithms under controlled extreme conditions.
 
-We designed an experimental framework across 6 Scenarios (N1 to N6). Table \ref{tab:scenarios_setup} lists the fixed and varied parameters.
+The total number of generated players is defined dynamically based on the league size ($T$), base roster slots ($R = 16$), roster scale multiplier ($S$), and player-demand ratio ($D$): 
+\[ N_{players} = S \times 16 \times T \times D \]
+
+Our experimental framework is divided into 6 distinct Scenarios (N1 to N6). We generate synthetic profiles encompassing three primary dimensions:
+
+\subsection{Factor 1: Projected Points Distribution ($v_i$)}
+We designed three points distributions to simulate different talent pools, clipping all generated values to a realistic range of $[10.0, 800.0]$:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Normal (Baseline)}: Values follow a normal distribution $v_i \sim \mathcal{N}(400, 120^2)$. This represents an average draft class where the majority of players are solid, mid-tier contributors.
+    \item \textbf{Uniform}: Values are uniformly distributed $v_i \sim \mathcal{U}(10, 800)$. This flattens the talent curve, offering many viable replacement options and minimizing scarcity.
+    \item \textbf{High-Low (Star-Heavy)}: Simulates a highly skewed draft class. Only $10\%$ of players are classified as elites, with values drawn from $\mathcal{U}(500, 800)$. The remaining $90\%$ fall into $\mathcal{U}(10, 500)$. In this scenario, missing out on top-tier talent is severely punished in the objective function.
+\end{itemize}
+
+\subsection{Factor 2: Position Eligibility Distribution ($E_i$)}
+We control how versatile the player pool is using four distinct generation logics:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Roster-Ratio (Baseline)}: Players are assigned exactly one position, but the probability of generating a specific position aligns precisely with roster demand (e.g., more OF and SP players are generated).
+    \item \textbf{Uniform-by-Type}: Randomly designates a player as a hitter or pitcher, then uniformly assigns a position pattern (including dual-eligibility like \texttt{1B;3B} or \texttt{SP;RP}).
+    \item \textbf{Point-Flexible}: The most forgiving environment. The generator ranks all players by points. Players in the top 20\% (elite) have an $80\%$ chance of gaining multi-position eligibility (up to 3 positions). This mimics real life where superstars often possess high versatility.
+    \item \textbf{Single-Position}: Every player possesses exactly one eligible position. This eliminates all flexibility, representing the ultimate test of scarcity and making early greedy mistakes almost impossible to repair.
+\end{itemize}
+
+\subsection{Factor 3: Market Volatility and ADP Noise ($\sigma_{\text{adp}}$)}
+To generate ADP, we first sort all players by their true projected points in descending order to establish a ``True Rank''. We then simulate market noise by adding a Gaussian error term:
+\[ \text{ADP}_i = \text{TrueRank}_i + \mathcal{N}(0, \sigma_{\text{adp}}^2) \]
+\begin{itemize}[leftmargin=1.5em]
+    \item $\sigma_{\text{adp}} = 0$ represents a perfectly efficient market where opponents draft strictly by objective value.
+    \item Higher $\sigma_{\text{adp}}$ introduces market chaos. Opponents may make unpredictable ``reaches'' (drafting a player too early) or leave bargains on the board. This tests how robust our algorithms are when future availability is highly uncertain.
+\end{itemize}
+
+Table \ref{tab:scenarios_setup} outlines the configuration for the 6 experiment sets, manipulating these factors systematically.
 
 \begin{table}[H]
 \centering
@@ -195,30 +225,6 @@ Scenario & Goal & Points Dist. & Positions Dist. & Scale \& Demand & ADP Noise (
 \end{tabular}
 \end{table}
 
-\textbf{Detailed Factor Meaning \& Business Context:}
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Points Distribution (N2)}: 
-    \begin{itemize}
-        \item \textit{Normal}: Represents an average draft class where most players are mid-tier.
-        \item \textit{Uniform}: Flattens the value curve, offering many viable replacement options.
-        \item \textit{High-Low}: Represents a highly \textbf{Star-Heavy} draft class (like early rounds of fantasy drafts). A tiny percentage of players hold massive value. Missing out on these elites is severely punished in the objective function.
-    \end{itemize}
-    \item \textbf{Position Distribution (N3)}: 
-    \begin{itemize}
-        \item \textit{Point-Flexible}: Elite players are given multi-position eligibility (e.g., a superstar who can play 2B/SS/OF). This represents a highly forgiving environment.
-        \item \textit{Single-Position}: Every player can only play exactly one position. This is the ultimate test of scarcity and makes early greedy mistakes almost impossible to repair.
-        \item \textit{Roster-Ratio}: A balanced setting where position supply naturally mimics roster demand.
-    \end{itemize}
-    \item \textbf{Market Volatility / ADP Noise (N5)}: 
-    \begin{itemize}
-        \item $\sigma_{\text{adp}}$ controls market unpredictability. $\sigma=0$ means ADP perfectly matches player value (a highly efficient market). Large $\sigma$ introduces chaos, simulating unexpected draft runs by opponents, creating both traps (overvalued players) and bargains.
-    \end{itemize}
-    \item \textbf{Scale and Demand (N4, N6)}: 
-    \begin{itemize}
-        \item \textit{Player Demand Ratio (D)}: The size of the player pool divided by the league's total draft slots. $D=1$ means almost every available player must be drafted to fill the league, creating brutal scarcity.
-        \item \textit{Roster Scale (S)}: Multiplies the base 16-man roster. Pushing this to extremes simulates managing massive franchise ecosystems rather than single rosters.
-    \end{itemize}
-\end{itemize}
 
 \section{Performance Evaluation}
 
@@ -230,11 +236,11 @@ where $Z$ is the total projected points. A smaller gap indicates superior perfor
 
 \subsection{N1 to N3: Base, Points, and Positional Flexibility}
 
-Table \ref{tab:n1_n3} summarizes the results for the fundamental scenarios. In the \textbf{N1 Baseline}, our proposed Opportunity Cost Greedy (OCG) achieves a gap of 1.92\%, reducing the error of Direct Greedy (4.79\%) by more than half.
+Table \ref{tab:n1_n3} summarizes the results for the fundamental scenarios. In the \textbf{N1 Baseline}, our proposed Opportunity Cost Greedy (OCG) achieves a tight gap of 1.92\%, reducing the error of the naive Direct Greedy baseline (4.79\%) by more than half.
 
-In \textbf{N2}, the \textit{high-low} (star-heavy) distribution exposes the weakness of the naive baseline. Direct Greedy's gap balloons to 8.39\% because it myopically drafts for positional needs while letting elite superstars slip away to opponents. OCG, by explicitly calculating the delay-cost, realizes it cannot afford to pass on elites, securing a tight 2.87\% gap.
+The true strategic value of OCG is revealed in \textbf{N2 (Points Dist.)}. When the draft class shifts to \textit{high-low} (star-heavy), Direct Greedy's gap balloons to 8.39\%. Direct Greedy myopically drafts for immediate positional needs, allowing elite superstars to slip away to opponents. OCG explicitly calculates the delay-cost, realizes it cannot afford to pass on elites (the drop-off in value for the next round is massive), and secures a much superior 2.87\% gap.
 
-In \textbf{N3}, \textit{single-position} creates a rigid, unforgiving draft. Even when mistakes are impossible to patch with utility players, OCG dominates Direct Greedy (0.94\% vs 5.11\%), proving that looking one pick ahead prevents catastrophic positional deficits.
+In \textbf{N3 (Positions Dist.)}, \textit{point-flexible} is the most forgiving environment (gap drops to 1.34\%) because top players can seamlessly plug holes in the roster. Conversely, \textit{single-position} creates a rigid, unforgiving draft. Even when mistakes are impossible to patch with utility players, OCG dominates Direct Greedy (0.94\% vs 5.11\%), proving that looking one pick ahead prevents catastrophic positional deficits later in the draft.
 
 \begin{table}[H]
 \centering
@@ -258,7 +264,9 @@ Scenario & Level & Direct Greedy & Opportunity Cost Greedy \\
 
 \subsection{N5: Market Volatility (ADP Uncertainty)}
 
-Table \ref{tab:n5} demonstrates performance under chaotic draft markets. When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), both algorithms perform well. However, as noise increases to $\sigma_{\text{adp}}=60$, the draft becomes unpredictable. Direct Greedy struggles significantly ($5.73\%$), whereas OCG remains robust ($2.43\%$). Because OCG bases its priority on the \textit{difference} between current and future availability, it naturally hedges against market volatility better than absolute value rankings.
+Table \ref{tab:n5} demonstrates performance under chaotic draft markets. When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opponent behavior is trivial, and both algorithms perform exceptionally well. 
+
+As noise increases to $\sigma_{\text{adp}}=60$, the draft becomes unpredictable. Direct Greedy struggles significantly (gap rises to $5.73\%$), whereas OCG remains highly robust ($2.43\%$). Because OCG bases its priority on the \textit{difference} (Opportunity Cost) between current and future availability, it inherently hedges against market volatility far better than relying on absolute value rankings.
 
 \begin{table}[H]
 \centering
@@ -278,9 +286,9 @@ Scenario & Level & Direct Greedy & Opportunity Cost Greedy \\
 
 \subsection{Scalability and Stress Testing (N4 \& N6)}
 
-This is the most critical argument for our front office pitch: \textbf{Scalability}. While the ILP finds perfect rosters in N1-N3, what happens when the scouting department dumps a universe of 180,000 eligible players into the database?
+This section presents the most critical argument for our front office pitch: \textbf{Scalability}. While the ILP finds perfect rosters in smaller instances, what happens when the scouting department dumps a universe of 180,000 eligible players into the database?
 
-Table \ref{tab:n4} shows N4 scaling under tight vs. loose supply. When supply is brutally tight (Demand Ratio = 1), Direct Greedy collapses (8.13\% gap), but OCG thrives (3.02\% gap). 
+Table \ref{tab:n4} highlights N4 scaling under tight vs. loose supply. When supply is brutally tight (Demand Ratio = 1, meaning almost every player must be drafted), Direct Greedy collapses (8.13\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 3.02\% gap.
 
 \begin{table}[H]
 \centering
@@ -297,9 +305,9 @@ Scale 3, Tight Supply (D=1) & $4.82\% \pm 0.40\%$ & $2.69\% \pm 0.55\%$ \\
 \end{tabular}
 \end{table}
 
-Table \ref{tab:n6_stress} showcases the \textbf{N6 Large-Scale Stress Test}. As we scale the roster size to 256 and the player pool to 184,320, the approximate variable count for the ILP reaches nearly 50 million. The exponential nature of the ILP causes runtime to explode from 4 seconds to 276 seconds, eventually triggering a \texttt{TIMEOUT\_ERROR} (exceeding 1800 seconds) in the largest target.
+Table \ref{tab:n6_stress} showcases the \textbf{N6 Large-Scale Stress Test}. As we scale the roster size to 256 and the player pool to 184,320, the approximate variable count for the ILP reaches nearly 50 million. The Branch-and-Bound tree of the ILP explores an exponentially growing search space. As a result, the ILP runtime explodes from 4 seconds to 276 seconds, eventually triggering a \texttt{TIMEOUT\_ERROR} (exceeding 1800 seconds) in the largest target.
 
-In stark contrast, confirming our $O(N \log N)$ complexity analysis, \textbf{Opportunity Cost Greedy processes the massive 50-million variable equivalent environment in just 23.286 seconds}.
+In stark contrast, confirming our $O(N \log N)$ complexity analysis, \textbf{Opportunity Cost Greedy processes the massive 50-million variable equivalent environment in just 23.286 seconds}, utilizing hyper-efficient lazy deletion on its priority queues.
 
 \begin{table}[H]
 \centering
