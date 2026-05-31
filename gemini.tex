@@ -172,12 +172,9 @@ Let $N$ be the total number of players in the draft pool, $R$ be the number of r
 
 \section{Data Collection and Generation}
 
-To rigorously test our algorithms and simulate the vast ecosystem of MLB draft-eligible players, we developed a highly customizable \textbf{Synthetic Data Generator}. While real data (2026 Yahoo/FanGraphs projections) is used for final validation, synthetic data is indispensable. It allows us to mathematically isolate specific operational variables (Factors)—such as talent distribution, positional versatility, and market efficiency—and stress-test the algorithms under controlled extreme conditions.
+To rigorously test our algorithms and simulate the vast ecosystem of MLB draft-eligible players, we developed a highly customizable \textbf{Synthetic Data Generator}. While real data (2026 Yahoo/FanGraphs projections) is used for final validation, synthetic data is indispensable. It allows us to mathematically isolate specific operational variables (Factors)—such as talent distribution, positional versatility, and market supply—and stress-test the algorithms under controlled extreme conditions.
 
-The total number of generated players is defined dynamically based on the league size ($T$), base roster slots ($R = 16$), roster scale multiplier ($S$), and player-demand ratio ($D$): 
-\[ N_{players} = S \times 16 \times T \times D \]
-
-Our experimental framework is divided into 6 distinct Scenarios (N1 to N6). We generate synthetic profiles encompassing three primary dimensions:
+Our experimental framework is divided into 6 Scenarios (N1 to N6). We generate synthetic profiles encompassing four primary factors:
 
 \subsection{Factor 1: Projected Points Distribution ($v_i$)}
 We designed three points distributions to simulate different talent pools, clipping all generated values to a realistic range of $[10.0, 800.0]$:
@@ -201,10 +198,22 @@ To generate ADP, we first sort all players by their true projected points in des
 \[ \text{ADP}_i = \text{TrueRank}_i + \mathcal{N}(0, \sigma_{\text{adp}}^2) \]
 \begin{itemize}[leftmargin=1.5em]
     \item $\sigma_{\text{adp}} = 0$ represents a perfectly efficient market where opponents draft strictly by objective value.
-    \item Higher $\sigma_{\text{adp}}$ introduces market chaos. Opponents may make unpredictable ``reaches'' (drafting a player too early) or leave bargains on the board. This tests how robust our algorithms are when future availability is highly uncertain.
+    \item Higher $\sigma_{\text{adp}}$ introduces market chaos. Opponents may make unpredictable ``reaches'' or leave bargains on the board. This tests how robust our algorithms are when future availability is uncertain.
 \end{itemize}
 
-Table \ref{tab:scenarios_setup} outlines the configuration for the 6 experiment sets, manipulating these factors systematically.
+\subsection{Factor 4: Scaling Growth and Market Supply (N4, N6)}
+To test computational limits and scarcity handling, we manipulate the sheer size of the problem using two multipliers. Let $T$ be the number of teams (league size) and $R=16$ be the base roster slots. The total number of generated players $N_{\text{players}}$ is strictly governed by:
+\[ N_{\text{players}} = S \times R \times T \times D \]
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Roster Scale ($S$)}: Multiplies the number of required slots for every position. $S=3$ creates a massive 48-man roster, exponentially increasing the number of ILP decision variables.
+    \item \textbf{Player Demand Ratio ($D$)}: Controls the supply-and-demand economics of the draft pool. It dictates the ratio of ``Available Players'' versus ``Total League Demand''.
+    \begin{itemize}
+        \item $D = 1$: \textbf{Extreme scarcity}. The league will draft almost every available player. One greedy mistake means replacing a starter with absolute zero value.
+        \item $D = 10$: \textbf{High abundance}. The player pool is a massive ocean of options, pushing the optimization algorithms to their computational limits.
+    \end{itemize}
+\end{itemize}
+
+Table \ref{tab:scenarios_setup} outlines the configuration for the 6 experiment sets, systematically manipulating these factors.
 
 \begin{table}[H]
 \centering
@@ -213,7 +222,7 @@ Table \ref{tab:scenarios_setup} outlines the configuration for the 6 experiment 
 \label{tab:scenarios_setup}
 \begin{tabular}{llcccc}
 \toprule
-Scenario & Goal & Points Dist. & Positions Dist. & Scale \& Demand & ADP Noise ($\sigma, \delta$) \\
+Factors & Goal & Points Dist. & Positions Dist. & Scale ($S$) \& Demand ($D$) & ADP ($\sigma, \delta$) \\
 \midrule
 \textbf{N1} & Baseline & normal & roster-ratio & S=1, D=3 & (30, 0) \\
 \textbf{N2} & Points Effect & \textbf{varied (3)} & roster-ratio & S=1, D=3 & (30, 0) \\
@@ -288,7 +297,7 @@ Scenario & Level & Direct Greedy & Opportunity Cost Greedy \\
 
 This section presents the most critical argument for our front office pitch: \textbf{Scalability}. While the ILP finds perfect rosters in smaller instances, what happens when the scouting department dumps a universe of 180,000 eligible players into the database?
 
-Table \ref{tab:n4} highlights N4 scaling under tight vs. loose supply. When supply is brutally tight (Demand Ratio = 1, meaning almost every player must be drafted), Direct Greedy collapses (8.13\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 3.02\% gap.
+Table \ref{tab:n4} highlights N4 scaling under tight vs. loose supply. When supply is brutally tight (Demand Ratio $D=1$, meaning almost every player must be drafted), Direct Greedy collapses (8.13\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 3.02\% gap.
 
 \begin{table}[H]
 \centering
