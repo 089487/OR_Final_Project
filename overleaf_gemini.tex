@@ -338,22 +338,24 @@ Scenario & Level & Direct Greedy & Opportunity Cost Greedy \\
 
 Table \ref{tab:n5} demonstrates performance under chaotic draft markets. We split N5 into two sweeps: N5-A (varying market noise $\sigma_{\text{adp}}$) and N5-B (varying availability tolerance $\delta$).
 
-When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opponent behavior is trivial, and both algorithms perform exceptionally well. As noise increases to $\sigma_{\text{adp}}=60$, the draft becomes unpredictable. Direct Greedy struggles significantly (gap over $5\%$), whereas OCG remains highly robust ($2.92\%$). Similarly, whether the availability tolerance ($\delta$) is incredibly strict ($-10$) or highly permissive ($10$), OCG consistently keeps the gap under $2\%$. Because OCG bases its priority on the \textit{relative difference} (Opportunity Cost) rather than absolute values, it inherently hedges against market volatility.
+When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opponent behavior is trivial, and both algorithms perform exceptionally well. As noise increases to $\sigma_{\text{adp}}=60$, the draft becomes unpredictable. Direct Greedy struggles significantly (gap over $5\%$), whereas OCG remains substantially more robust ($2.43\%$). Similarly, whether the availability tolerance ($\delta$) is strict ($-10$) or permissive ($10$), OCG consistently keeps the gap around or below $2\%$. Because OCG bases its priority on the \textit{relative difference} (Opportunity Cost) rather than absolute values, it inherently hedges against market volatility.
 
 \begin{table}[H]
 \centering
-\caption{N5 ADP Uncertainty results. N5-A tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=30$. N5-B tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$.}
+\caption{N5 ADP Uncertainty results. N5-A tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=0$. N5-B tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$.}
 \label{tab:n5}
 \begin{tabular}{llcc}
 \toprule
 Sweep & Level & Direct Greedy & Opportunity Cost Greedy \\
 \midrule
-\textbf{N5-A: Noise} & $\sigma_{\text{adp}}=0$ (Efficient) & $2.78\% \pm 1.33\%$ & $1.52\% \pm 1.15\%$ \\
- & $\sigma_{\text{adp}}=30$ (Moderate) & $5.79\% \pm 1.35\%$ & $2.72\% \pm 1.39\%$ \\
- & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.10\% \pm 1.29\%$ & $\mathbf{2.92\% \pm 1.75\%}$ \\
+\textbf{N5-A: Noise} & $\sigma_{\text{adp}}=0$ (Efficient) & $1.47\% \pm 0.48\%$ & $\mathbf{0.48\% \pm 0.23\%}$ \\
+ & $\sigma_{\text{adp}}=30$ (Moderate) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ \\
+ & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.56\% \pm 1.58\%$ & $2.43\% \pm 1.55\%$ \\
 \midrule
-\textbf{N5-B: Tolerance} & $\delta=-10$ (Strict) & $4.65\% \pm 1.32\%$ & $\mathbf{1.90\% \pm 0.77\%}$ \\
+\textbf{N5-B: Tolerance} & $\delta=-10$ (Strict) & $4.65\% \pm 1.32\%$ & $1.90\% \pm 0.77\%$ \\
+ & $\delta=-5$ & $4.90\% \pm 1.24\%$ & $1.83\% \pm 0.82\%$ \\
  & $\delta=0$ (Neutral) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ \\
+ & $\delta=5$ & $5.54\% \pm 1.57\%$ & $\mathbf{1.64\% \pm 0.75\%}$ \\
  & $\delta=10$ (Permissive) & $5.42\% \pm 1.21\%$ & $1.72\% \pm 0.95\%$ \\
 \bottomrule
 \end{tabular}

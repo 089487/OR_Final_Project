@@ -90,20 +90,23 @@ Fixed setting:
 - `player_demand_ratio = 3`
 - seeds = `0:10`
 
+Source:
+- Clean rerun under `experiments/synthetic/N5_clean_rerun/`; each listed setting regenerated its synthetic player instances via `generate_synthetic_players()`.
+
 Varied factors:
-- Sweep A: `delta = 30`, `sigma_adp = 0 / 30 / 60`
+- Sweep A: `delta = 0`, `sigma_adp = 0 / 30 / 60`
 - Sweep B: `sigma_adp = 30`, `delta = -10 / -5 / 0 / 5 / 10`
 
 ### N5-A: ADP noise sweep with fixed delta
 
 | sigma_adp | Direct Greedy optimal_gap_ratio (`mean ± std`) | Opportunity Cost Greedy optimal_gap_ratio (`mean ± std`) |
 |---|---:|---:|
-| 0 | `2.78% ± 1.33%` | `1.52% ± 1.15%` |
-| 30 | `5.79% ± 1.35%` | `2.72% ± 1.39%` |
-| 60 | `5.10% ± 1.29%` | `2.92% ± 1.75%` |
+| 0 | `1.47% ± 0.48%` | `0.48% ± 0.23%` |
+| 30 | `4.79% ± 1.18%` | `1.92% ± 0.57%` |
+| 60 | `5.56% ± 1.58%` | `2.43% ± 1.55%` |
 
 Fixed setting for N5-A:
-- `delta = 30`
+- `delta = 0`
 - seeds = `0:10`
 
 ### N5-B: ADP tolerance sweep with fixed noise
