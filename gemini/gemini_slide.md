@@ -3,6 +3,7 @@ marp: true
 theme: default
 paginate: true
 size: 16:9
+math: mathjax
 style: |
   section {
     font-family: 'Helvetica Neue', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
@@ -17,6 +18,11 @@ style: |
   .blue-text {
     color: #2563eb;
     font-weight: bold;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 ---
 
@@ -34,81 +40,85 @@ Spring 2026
 ## 報告大綱 (Outline)
 
 1. **Introduction**：大聯盟制服組的視角與挑戰
-2. **Problem Description**：蛇形選秀環境與規則
+2. **Problem Description**：蛇形選秀環境與大谷條款
 3. **Model Formulation**：整數線性規劃 (ILP) 建模
-4. **Algorithms**：機會成本貪婪演算法 (OCG)
-5. **Data Collection & Generation**：合成數據與四大市場變因
-6. **Performance Evaluation**：實驗結果與壓力測試
+4. **The Bottleneck**：為何傳統 ILP 遇到瓶頸？
+5. **Algorithms**：機會成本貪婪演算法 (OCG)
+6. **Data & Evaluation**：合成數據與壓力測試
 7. **Conclusions**：商業建議與未來展望
 
 ---
-
-<!-- 建議圖片：一張 MLB 選秀會現場 (Draft Room) 的照片，或是球探部門看著數據螢幕的照片 -->
-![bg right:40% drop-shadow](https://images.unsplash.com/photo-1508344928928-7137b29339b0?q=80&w=1000&auto=format&fit=crop)
 
 ## 1. Introduction: The Front Office Perspective
 
 **「當各隊的球探數據趨於一致時，優勢在哪裡？」**
 
-- **現代棒球的挑戰**：
-  - 各大聯盟 (MLB) 球隊的球探與數據模型（如 WAR、Fantasy Points）已高度收斂。
-  - 真正的競爭優勢從「評估球員能力」轉移到了「<span class="highlight">選秀策略與執行 (Draft Strategy)</span>」。
-- **核心決策困境**：
-  - 「我該現在選下這名頂級球員？還是該先補齊稀缺的守備位置？」
-- **我們的目標**：
-  - 將選秀決策轉化為嚴謹的**作業研究 (OR) 最佳化問題**，並開發能在實戰中「即時運算」的決策支援系統。
+<div class="grid-2">
+<div>
+
+### 現代棒球的挑戰
+- 各大聯盟 (MLB) 球隊的球探與數據投影模型（如 WAR、Fantasy Points）已高度收斂。
+- 真正的競爭優勢從「單純評估球員能力」轉移到了「<span class="highlight">選秀策略與市場時機 (Draft Strategy)</span>」。
+
+</div>
+<div>
+
+### 核心決策困境
+- **Myopic Trap (短視陷阱)**：「我該現在選下這名頂級巨星？還是該先補齊稀缺的守備位置？」
+- 我們的目標是將這個充滿互相依賴性的選秀決策，轉化為嚴謹的**作業研究最佳化問題**。
+
+</div>
+</div>
 
 <!-- 
 講者備註：
-各位教授、助教、同學們大家好。想像一下我們現在是大聯盟球隊的制服組 (Front Office)。在現代數據棒球的時代，各隊對球員的分數評估已經非常接近了。這代表什麼？這代表未來的「魔球」不在於你認不認識好球員，而在於你「什麼時候選他」。我們這組的專案，就是要用 OR 的方法，為球隊打造一套極致的選秀最佳化系統。
+各位教授、助教、同學們大家好。想像我們是大聯盟球隊的制服組 (Front Office)。在現代數據棒球時代，各隊對球員的分數評估非常接近。這代表未來的優勢不在於你認不認識好球員，而在於你「什麼時候選他」。我們這組的專案，就是要用 OR 的方法，為球隊打造一套極致的選秀最佳化系統。
 -->
 
 ---
 
-## 選秀模型：為什麼傳統 ILP 不夠用？
+## 2. Problem Description I：蛇形選秀 (Snake Draft)
 
-為了模擬公平且極度重視策略的環境，我們採用 **蛇形選秀 (Snake Draft)** 框架。
+現實中的 MLB 選秀是依據前一年的戰績（由爛到好）進行固定順位選秀。但為了純粹探討**「選秀策略的數學優勢」**，我們將情境抽象化為更公平的<span class="highlight">蛇形選秀</span>。
 
-- **理想狀況 (ILP)**：
-  - 只要設定好目標與限制，整數線性規劃 (ILP) 能給出**絕對完美的最佳解**。
-- **現實殘酷面 (The Scalability Problem)**：
-  - 棒球選秀與其他運動不同，符合年齡資格即可被選，母體池高達**數萬到數十萬人**。
-  - 當決策變數隨著球員池呈指數成長時，<span class="highlight">ILP 會在選秀中途直接當機或超時 (Timeout)</span>。
-- **解決方案**：
-  - 提出自我設計的 **Opportunity Cost Greedy (OCG)** 演算法，在極短時間內逼近最佳解。
+- **為什麼使用蛇形選秀？**
+  消除初始順位帶來的絕對優勢，讓所有玩家的整體選秀資源相近，藉此凸顯「選秀策略」本身的重要性。每輪的選秀順序會反轉。
+- **數學順位換算公式**：
+  假設共有 $M$ 位玩家，我們的初始順位為 $j$ ($1 \le j \le M$)。在第 $r$ 輪時，我們擁有的整體順位 $k$ 為：
+  - **奇數輪 (Forward)**：$k = (r - 1)M + j$
+  - **偶數輪 (Reverse)**：$k = rM - j + 1$
 
 <!-- 
 講者備註：
-我們一開始很自然地想用 ILP 解決問題。但棒球選秀的特性是，合資格的球員是海量的（高中生、大學生、國際球員）。當球員池稍微放大，ILP 的 Branch and Bound tree 就會爆炸。選秀是有時間壓力的，你不能讓總管在選秀室等電腦跑 30 分鐘。所以我們需要一個極度 Scalable (可擴展) 的演算法。
+為了做學術與策略上的探討，我們排除了戰績帶來的初始資源優勢，採用蛇形選秀。第一輪順位越後面的人，在第二輪就能越早選。順位的決定變成了一種可以被數學嚴格定義的序列，我們就是要在這個序列中找出利益最大化的路徑。
 -->
 
 ---
 
-## 2. Problem Description (問題描述)
+## Problem Description II：球員屬性與特殊簡化
 
-在蛇形選秀中，玩家 (Manager) 擁有固定的選秀順位，必須在有限的選擇中最大化球隊戰力。
+在選秀池中，每位球員擁有以下三大屬性：
+1. **Projected Value ($v_i$)**：賽季預期貢獻分數（目標函數的基礎）。
+2. **Eligible Positions ($E_i$)**：球員合法的守備位置。
+3. **Average Draft Position (ADP)**：市場預期平均被選順位（用來模擬對手行為）。
 
-**球員的三大屬性**：
-1. **Projected Value ($v_i$)**：賽季預期貢獻分數。
-2. **Eligible Positions ($E_i$)**：球員在現實中可守備的位置。
-3. **Average Draft Position, ADP**：市場預期被選走的平均順位。
-
-**核心規則與限制**：
-- 每個順位只能選 1 人。
-- 球員只能被放在他合法守備的位置上。
-- **市場耗損規則**：如果我們現在的順位已經大幅落後該球員的 ADP，則該球員視為「已被對手選走」，無法選擇。
+<span class="highlight">**⚠️ 特殊簡化：大谷翔平條款 (The Ohtani Rule)**</span>
+為了避免位置彈性上的邏輯過於複雜，我們在模型中**不考慮二刀流**。
+- 在合成數據 (Synthetic Data) 中，不生成同時具備打者與投手身份的球員。
+- 在真實的 2026 年 Yahoo/FanGraphs 數據中，大谷翔平 (Shohei Ohtani) 的「打者 (DH)」與「投手 (SP)」身份會被拆分視為**兩名獨立的球員**。
 
 ---
 
-## 我們的先發陣容需求 (Roster Requirements)
+## Problem Description III：先發陣容需求
 
+要完成一組有效的陣容，必須嚴格滿足以下的數量限制 (Roster Requirements)。
 我們使用標準的 16 人先發名單作為基礎架構：
 
 | 守備位置 (Position) | C | 1B | 2B | 3B | SS | OF | Util | SP | RP |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **需求人數 (Slots)** | 1 | 1 | 1 | 1 | 1 | 3 | 1 | 5 | 2 |
 
-*註：Util (Utility) 僅限打者，投手無法填補此空缺。*
+*註：Util (Utility) 僅限打者，投手無法填補此空缺。這將成為 ILP 限制式的重要基準。*
 
 <!--
 講者備註：
@@ -117,40 +127,55 @@ Spring 2026
 
 ---
 
-## 3. Model Formulation (數學建模 - ILP 基準)
+## 3. Model Formulation I：變數與目標函數
 
-我們將問題建構為 ADP-aware ILP，作為評估解答品質的**絕對基準 (Benchmark)**。
+我們將問題建構為 **ADP-aware Integer Linear Program (ILP)**。
+令 $I$ 為球員集合，$P$ 為守位集合，$K$ 為我們擁有的選秀籤集合。
 
-**決策變數**：
-- $y_i \in \{0,1\}$: 是否選入球員 $i$
-- $x_{ip} \in \{0,1\}$: 是否將球員 $i$ 放在守位 $p$
-- $z_{ik} \in \{0,1\}$: 是否在我們的第 $k$ 個順位選下球員 $i$
+**決策變數 (Decision Variables)**：
+- $y_i \in \{0,1\}$: 是否將球員 $i$ 選入最終陣容。
+- $x_{ip} \in \{0,1\}$: 是否將球員 $i$ 安排在守備位置 $p$。
+- $z_{ik} \in \{0,1\}$: 是否在我們的第 $k$ 個順位，選下球員 $i$。
 
-**目標函數** (最大化總預期分數)：
+**目標函數 (Objective Function)**：最大化先發名單的總預期分數。
 $$ \max \sum_{i \in I} v_i y_i $$
 
-<!-- 
+---
+
+## Model Formulation II：核心限制式 (Constraints)
+
+1. **選秀邏輯與名單限制**：
+   $$ \sum_{i \in I} z_{ik} = 1, \quad \forall k \in K \quad \text{(每個順位選一人)} $$
+   $$ \sum_{p \in P} x_{ip} = y_i, \quad \forall i \in I \quad \text{(選入必安排唯一守位)} $$
+   $$ \sum_{i \in I} x_{ip} = r_p, \quad \forall p \in P \quad \text{(滿足各守備位置規定人數)} $$
+
+2. <span class="blue-text">**市場可用性限制 (Market Availability Constraint)**</span>：
+   $$ z_{ik} = 0 \quad \text{if } S_k > \text{adp}_i + \delta, \quad \forall i \in I, k \in K $$
+   > *其中 $S_k$ 是該次選秀的整體順位，$\delta$ 是市場容錯緩衝值。如果我們的選秀順位已經晚於球員的 ADP+$\delta$，系統將強制我們無法選取該名球員。*
+
+---
+
+## 4. The Bottleneck: 為什麼傳統 ILP 不夠用？
+
+雖然 ADP-aware ILP 能給出**絕對完美的最佳解 (God's Eye View)**，但在現實中會面臨極大的挑戰。
+
+- **The Scalability Problem (可擴展性危機)**：
+  - 棒球選秀的母體池極其龐大，大聯盟三十支球隊加上無數的新秀，球員池高達數萬至十幾萬人。
+  - 我們設立的變數包含了 $I \times P$ 與 $I \times K$。當球員數 ($|I|$) 放下，ILP 的 Branch-and-Bound 搜尋空間會呈**指數爆炸**。
+- **實戰的致命傷**：
+  - 選秀是有**時間壓力 (Time Limit)** 的。總管不可能在選秀室等 Gurobi 跑半個小時。
+  - 在巨大規模下，<span class="highlight">ILP 會直接超時 (Timeout) 或記憶體耗盡</span>。
+
+<!--
 講者備註：
-這裡我們簡單帶過模型。核心精神是我們有三組二元變數，分別控制「選誰」、「放哪裡」以及「什麼時候選」。目標是最大化先發名單的總分數。
+ILP 的數學模型非常漂亮，但這就是所謂的學術與實務的落差。在球員數破十萬的資料庫裡，Gurobi 會直接當機。所以，我們不能只停在 ILP，我們需要一個速度極快、但品質又接近 ILP 的演算法。
 -->
 
 ---
 
-## Model Formulation (核心限制式)
+## 5. Algorithms：啟發式演算法設計 (Heuristics)
 
-- **基本邏輯限制**：每個順位選一人、每人只能選一次、選了就要安排合法守位。
-- **名單數量限制**：各守備位置 $p$ 的總人數必須等於規定人數 $r_p$。
-- <span class="blue-text">市場可用性限制 (Market Availability Constraint)</span>：
-
-$$ z_{ik} = 0 \quad \text{if } S_k > \text{adp}_i + \delta, \quad \forall i \in I, k \in K $$
-
-> *其中 $S_k$ 是第 $k$ 輪的整體順位，$\delta$ 是市場容錯緩衝值。如果我們的順位已經晚於球員預期被選走的順位加緩衝，系統強制不能選他。*
-
----
-
-## 4. Algorithms (演算法設計)
-
-由於 ILP 具備指數時間複雜度，我們設計了兩種啟發式演算法 (Heuristics) 來解決運算效能問題。
+為了解決 ILP 的效能瓶頸，我們設計了兩種啟發式演算法。
 
 ### Baseline: Direct Greedy (直接貪婪法)
 - **邏輯**：目光短淺 (Myopic)。每次輪到我選時，尋找目前「最缺人」的守位，並直接選下該守位目前分數最高的球員。
@@ -191,11 +216,11 @@ OCG 的精神就是「瞻前顧後」。如果我現在不選這個外野手，�
 - **複雜度表現**：
   - $N$ = 球員總數， $R$ = 名單人數， $P$ = 守備位置數。
   - **總時間複雜度**：$\mathcal{O}(N \log N + R \cdot P)$
-  - <span class="highlight">完美保證演算法能以接近線性的時間，處理十萬人等級的選秀池。</span>
+  - <span class="highlight">完美保證演算法能以接近線性的時間，處理數十萬人等級的選秀池。</span>
 
 ---
 
-## 5. Data Collection & Generation
+## 6. Data Collection & Generation
 
 為了全面測試演算法，我們同時使用了 **2026 Yahoo/FanGraphs 的真實投影數據**，以及高度客製化的 **合成數據生成器 (Synthetic Data Generator)**。
 
@@ -213,7 +238,7 @@ OCG 的精神就是「瞻前顧後」。如果我現在不選這個外野手，�
 
 ---
 
-## 6. Performance Evaluation (實驗評估指標)
+## 7. Performance Evaluation (實驗評估指標)
 
 我們使用 **Optimal Gap Ratio (最佳解落差比)** 作為核心指標：
 
@@ -221,7 +246,7 @@ $$ \text{Gap Ratio} = \frac{Z_{\text{ILP}} - Z_{\text{Heuristic}}}{Z_{\text{ILP}
 
 > *Gap 越接近 0% 越好，代表該演算法選出來的陣容總分，越接近 ILP 算出來的「完美上帝視角解答」。*
 
-接下來我們將展示 N1 到 N6 的實驗結果。
+接下來我們將展示實驗結果。
 
 ---
 
@@ -274,13 +299,13 @@ N2 實驗非常有意思。High-low 代表這個選秀池只有少數大物新�
 
 <!--
 講者備註：
-請看最後一列，這就是我們研究的價值所在。當 ILP 面臨 5000 萬個變數時，它在 30 分鐘內跑不出任何結果，直接宣告 TIMEOUT 崩潰。但我們的 OCG 演算法，憑藉 O(N log N) 的優秀架構，在 23 秒內就給出了接近完美的高品質解答。
+請看最後一列，這就是我們研究的價值所在。當 ILP 面臨將近 5000 萬個變數時，它在 30 分鐘內跑不出任何結果，直接宣告 TIMEOUT 崩潰。但我們的 OCG 演算法，憑藉 O(N log N) 的優秀架構，在 23 秒內就給出了高品質解答。
 -->
 
 ---
 
 <!-- 建議圖片：一張折線圖，X 軸是 Variable Count，Y 軸是 Runtime，顯示 ILP 指數上升，而 OCG 貼在地平線上呈現線性 -->
-![bg right:45% 90%](<!-- 可以在這裡放 runtime_by_variable_count.png 的相對路徑 -->)
+![bg right:45% 90%](../experiments/synthetic/scaling_summary/runtime_by_variable_count.png)
 
 ## N6 壓力測試圖表分析
 
@@ -310,7 +335,7 @@ N2 實驗非常有意思。High-low 代表這個選秀池只有少數大物新�
 
 ---
 
-## 7. Conclusions & Business Recommendations
+## 8. Conclusions & Business Recommendations
 
 **給球隊總管 (GM) 的最終建議：**
 
