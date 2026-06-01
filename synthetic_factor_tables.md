@@ -68,22 +68,17 @@ Fixed setting:
 - `sigma_adp = 30`
 - `delta = 0`
 - `num_teams = 12`
+- `roster_scale = 1`
+- seeds = `0:10`
 
 Varied factors:
-- `roster_scale = 1 / 2 / 3`
 - `player_demand_ratio = 1 / 3 / 10`
 
-| roster_scale | player_demand_ratio | Direct Greedy (baseline) | Opportunity Cost Greedy (our approach) |
-|---|---:|---:|---:|
-| 1 | 1 | `8.13% ± 1.64%` | `3.02% ± 0.95%` |
-| 1 | 3 | `5.54% ± 1.07%` | `1.97% ± 0.73%` |
-| 1 | 10 | `3.39% ± 0.96%` | `1.23% ± 0.38%` |
-| 2 | 1 | `6.65% ± 0.40%` | `2.46% ± 0.63%` |
-| 2 | 3 | `2.55% ± 0.69%` | `1.07% ± 0.44%` |
-| 2 | 10 | `2.34% ± 0.53%` | `0.81% ± 0.40%` |
-| 3 | 1 | `4.82% ± 0.40%` | `2.69% ± 0.55%` |
-| 3 | 3 | `2.30% ± 0.52%` | `0.89% ± 0.29%` |
-| 3 | 10 | `1.88% ± 0.22%` | `0.48% ± 0.17%` |
+| player_demand_ratio | Direct Greedy optimal_gap_ratio (`mean ± std`) | Opportunity Cost Greedy optimal_gap_ratio (`mean ± std`) |
+|---:|---:|---:|
+| 1 | `8.81% ± 2.19%` | `2.64% ± 1.23%` |
+| 3 | `4.79% ± 1.18%` | `1.92% ± 0.57%` |
+| 10 | `3.29% ± 0.85%` | `1.16% ± 0.51%` |
 
 ## N5 ADP Uncertainty
 
@@ -96,18 +91,34 @@ Fixed setting:
 - seeds = `0:10`
 
 Varied factors:
-- `sigma_adp = 0 / 10 / 30 / 60 / 100`
-- `delta = -10..10`
+- Sweep A: `delta = 30`, `sigma_adp = 0 / 30 / 60`
+- Sweep B: `sigma_adp = 30`, `delta = -10 / -5 / 0 / 5 / 10`
 
-For the table below, the reported value is averaged over all `delta` values.
+### N5-A: ADP noise sweep with fixed delta
 
-| sigma_adp | Direct Greedy (baseline) | Opportunity Cost Greedy (our approach) |
+| sigma_adp | Direct Greedy optimal_gap_ratio (`mean ± std`) | Opportunity Cost Greedy optimal_gap_ratio (`mean ± std`) |
 |---|---:|---:|
-| 0 | `1.72% ± 0.70%` | `0.42% ± 0.17%` |
-| 10 | `3.34% ± 0.91%` | `0.99% ± 0.45%` |
-| 30 | `5.03% ± 1.28%` | `1.80% ± 0.75%` |
-| 60 | `5.73% ± 1.35%` | `2.43% ± 1.38%` |
-| 100 | `4.50% ± 1.48%` | `2.15% ± 1.16%` |
+| 0 | `2.78% ± 1.33%` | `1.52% ± 1.15%` |
+| 30 | `5.79% ± 1.35%` | `2.72% ± 1.39%` |
+| 60 | `5.10% ± 1.29%` | `2.92% ± 1.75%` |
+
+Fixed setting for N5-A:
+- `delta = 30`
+- seeds = `0:10`
+
+### N5-B: ADP tolerance sweep with fixed noise
+
+| delta | Direct Greedy optimal_gap_ratio (`mean ± std`) | Opportunity Cost Greedy optimal_gap_ratio (`mean ± std`) |
+|---:|---:|---:|
+| -10 | `4.65% ± 1.32%` | `1.90% ± 0.77%` |
+| -5 | `4.90% ± 1.24%` | `1.83% ± 0.82%` |
+| 0 | `4.79% ± 1.18%` | `1.92% ± 0.57%` |
+| 5 | `5.54% ± 1.57%` | `1.64% ± 0.75%` |
+| 10 | `5.42% ± 1.21%` | `1.72% ± 0.95%` |
+
+Fixed setting for N5-B:
+- `sigma_adp = 30`
+- seeds = `0:10`
 
 ## N6 Large-Scale Stress
 
@@ -124,6 +135,17 @@ N6 is a stress-test family. Each instance now runs a single representative run o
 | stress_timeout_target | `17.760 s` | `23.286 s` | `1869.805 s / ERROR_TimeoutError` | complete | local dump from ws6 |
 
 ### N6 scaling summary
+
+Approximate single-team IP variable count:
+
+```text
+approx_variable_count = n * (1 + p + r)
+```
+
+where `n` is the number of available players, `p` is the number of roster
+positions, and `r` is the roster size. The terms correspond to player-selection
+variables, player-position assignment variables, and player-round availability
+variables in the ADP-aware ILP.
 
 | level | method | approx_variable_count | num_players | roster_size | runtime_display | status | cases | note |
 |---|---|---:|---:|---:|---|---|---:|---|
@@ -148,6 +170,6 @@ N6 is a stress-test family. Each instance now runs a single representative run o
 - `high_low` in N2 is the hardest points distribution.
 - `single_position` in N3 is the hardest position distribution.
 - N4 shows that larger player pools and larger rosters increase difficulty, but Opportunity Cost Greedy stays consistently closer to ILP.
-- N5 shows that larger `sigma_adp` generally makes the draft harder.
+- N5 shows that Opportunity Cost Greedy remains closer to the ADP-aware ILP than Direct Greedy under both the fixed-`delta` ADP-noise sweep and the fixed-`sigma_adp` delta sweep.
 - N6 shows the clear scalability gap: ILP runtime grows sharply, `stress_large` is still comfortably solvable, `stress_xlarge` remains solvable but slower, and `stress_timeout_target` is the first case that hits the wall-time limit.
 - In N6, each instance is a single representative run, so `cases = 1` means one measurement per instance rather than a seed average.

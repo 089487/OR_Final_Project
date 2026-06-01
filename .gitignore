@@ -42,3 +42,21 @@ reports/*.toc
 
 *.log
 *.tmp
+
+# LaTeX intermediate and build artifacts
+*.aux
+*.bbl
+*.blg
+*.brf
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+*.nav
+*.snm
+*.out
+*.toc
+*.log
+*.pdf
