@@ -5,35 +5,147 @@ paginate: true
 size: 16:9
 math: mathjax
 style: |
+  /* 導入高質感現代字體 */
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,800;1,400&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+
   section {
-    font-family: 'Helvetica Neue', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+    background-color: #f8fafc;
+    color: #334155;
+    font-size: 24px;
+    line-height: 1.6;
+    background-image: radial-gradient(circle at 100% 0%, rgba(219, 234, 254, 0.6) 0%, transparent 40%);
   }
-  h1, h2 {
-    color: #1f2937;
+
+  /* 標題設計 */
+  h1 {
+    color: #0f172a;
+    font-weight: 900;
+    font-size: 46px;
+    letter-spacing: -0.5px;
+    border: none;
+    margin-bottom: 0.2em;
   }
-  .highlight {
-    color: #b45309;
+  
+  h2 {
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 34px;
+    border-bottom: 4px solid #ea580c;
+    padding-bottom: 8px;
+    display: inline-block;
+    margin-bottom: 1.2em;
+  }
+
+  /* 封面與重點轉場頁 (Dark Mode) */
+  section.title-slide, section.impact-slide {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #f8fafc;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  section.title-slide h1, section.impact-slide h1 {
+    color: #ffffff;
+    font-size: 56px;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    border: none;
+    margin-bottom: 20px;
+  }
+  section.title-slide h2, section.impact-slide h2 {
+    color: #fb923c;
+    border: none;
+    font-weight: 500;
+  }
+  .author-block {
+    margin-top: 40px;
+    font-size: 20px;
+    color: #cbd5e1;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 20px;
+  }
+
+  /* 強調字色 */
+  .highlight { color: #ea580c; font-weight: bold; }
+  .blue-text { color: #2563eb; font-weight: bold; }
+  .green-text { color: #16a34a; font-weight: bold; }
+
+  /* 專業引言區塊 */
+  blockquote {
+    background: #eff6ff;
+    border-left: 6px solid #3b82f6;
+    padding: 16px 24px;
+    border-radius: 0 8px 8px 0;
+    font-style: normal;
+    color: #1e40af;
+    font-weight: 500;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+
+  /* 高質感資料表 (修復表頭消失問題) */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+    background: white;
+    margin-top: 10px;
+    display: table; /* 修復 Marp 表頭消失問題 */
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  }
+  th { 
+    background-color: #0f172a !important; /* 強制覆蓋 Marp 預設灰底 */
+    color: #ffffff !important;           /* 強制覆蓋文字為白色 */
+    font-weight: 600; 
+    padding: 14px 16px; 
+    text-align: center; 
+    border: 1px solid #0f172a !important;
+  }
+  td { 
+    padding: 12px 16px; 
+    text-align: center; 
+    border-bottom: 1px solid #e2e8f0; 
+    border-left: none;
+    border-right: none;
+  }
+  tbody tr:nth-child(even) td { background-color: #f8fafc !important; }
+  tbody tr:hover td { background-color: #eff6ff !important; }
+
+  /* UI 佈局工具 */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  
+  .card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    border-top: 5px solid #3b82f6;
+  }
+  .card-orange { border-top-color: #ea580c; }
+  
+  .tag {
+    display: inline-block;
+    background: #e2e8f0;
+    color: #334155;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 16px;
     font-weight: bold;
-  }
-  .blue-text {
-    color: #2563eb;
-    font-weight: bold;
-  }
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    margin-bottom: 10px;
   }
 ---
 
+<!-- _class: title-slide -->
+
 # Strategic Fantasy Baseball Draft Optimization
 ## 棒球制服組的決策支援系統：可擴展的選秀最佳化策略
-<br>
 
-**OR114-2 Final Project, Group 4**
-B13705051 周孟承 | B13902103 鄭宇宏 
-B13303153 詹舒宇 | B11705039 李盈盈
-Spring 2026
+<div class="author-block">
+  <strong>OR114-2 Final Project, Group 4</strong><br>
+  B13705051 周孟承 | B13902103 鄭宇宏 | B13303153 詹舒宇 | B11705039 李盈盈<br>
+  Spring 2026
+</div>
 
 ---
 
@@ -41,11 +153,12 @@ Spring 2026
 
 1. **Introduction**：棒球選秀介紹與現代制服組洞察
 2. **Problem Description**：蛇形選秀環境與大谷條款
-3. **Model Formulation**：整數線性規劃 (ILP) 建模
-4. **The Bottleneck**：為何傳統 ILP 遇到瓶頸？
-5. **Algorithms**：機會成本貪婪演算法 (OCG)
-6. **Data & Evaluation**：合成數據與壓力測試
-7. **Conclusions**：商業建議與未來展望
+3. **Real Data Collection**：基於 FantasyPros 的真實數據爬取
+4. **Model Formulation**：整數線性規劃 (ILP) 建模
+5. **The Bottleneck**：為何傳統 ILP 遇到效能瓶頸？
+6. **Algorithms**：機會成本貪婪演算法 (OCG)
+7. **Synthetic Data & Evaluation**：合成數據生成與壓力測試
+8. **Conclusions**：商業建議與未來展望
 
 ---
 
@@ -54,12 +167,12 @@ Spring 2026
 **對於一支職業棒球隊來說，最划算且最重要的補強方式就是「透過選秀」。**
 
 - **什麼是選秀 (The Draft)？**
-  - 在球季開始前，各球隊的總管 (GM) 會齊聚一堂，輪流從龐大的「業餘球員 / 自由球員池」中挑選潛力新秀入隊。
+  在球季開始前，各球隊的總管 (GM) 會齊聚一堂，輪流從龐大的「業餘球員 / 自由球員池」中挑選潛力新秀入隊。
 - **選秀的本質：零和博弈與資源分配**
   - 你面對的是一個<span class="highlight">「會不斷被對手消耗的公共資源池」</span>。
-  - 當你看中一名球員卻沒有立刻選他，下一次輪到你時，他可能已經被其他球隊挑走了。
+  - 當你看中一名球員卻沒有立刻選他，下一次輪到你時，他可能已經被對手搶走。
 - **決策的核心**：
-  - 在有限的選秀權 (Picks) 內，如何精準填補球隊陣容的各個守備位置，並將整體戰力最大化？
+  在有限的選秀權 (Picks) 內，如何精準填補球隊陣容的各個守備位置，並將整體戰力最大化？
 
 <!-- 
 講者備註：
@@ -70,34 +183,25 @@ Spring 2026
 
 ## Introduction: 現代制服組的挑戰與洞察
 
-過去的選秀仰賴老球探的「直覺」，但在大數據時代，我們觀察到兩個重要的 **Business Insights**：
+過去的選秀仰賴老球探的「直覺」，但在大數據時代，我們觀察到兩個重要的商業洞察：
 
 <div class="grid-2">
-<div>
-
-### 💡 Insight 1: 球探數據的收斂
-隨著科技演進，各隊球探對「同一名球員的評價」會越來越趨近相同。
-$\Rightarrow$ 這些被量化出來的戰力預測值，直接對應了我們數學模型中的 <span class="blue-text">**Projected Points (預期分數)**</span>。
-
-</div>
-<div>
-
-### 💡 Insight 2: 市場預期的博弈
-專業的選秀團隊不只評估實力，還會建立「落點推估」：知道在某個順位之後，就絕對選不到該球員。
-$\Rightarrow$ 這個市場的消耗時機，精準對應了模型中的 <span class="blue-text">**ADP (平均選秀順位)**</span>。
-
-</div>
+<div class="card">
+  <div class="tag">Insight 1</div>
+  <h3 style="margin-top:0;">球探數據的收斂</h3>
+  各隊對「同一名球員的評價」越來越趨近相同。<br><br>
+  👉 被量化出來的戰力預測值，直接對應了我們模型中的 <span class="blue-text">Projected Points (預期分數)</span>。
 </div>
 
-<br>
+<div class="card card-orange">
+  <div class="tag">Insight 2</div>
+  <h3 style="margin-top:0;">市場預期的博弈</h3>
+  專業團隊知道在某個順位之後，就絕對選不到該球員。<br><br>
+  👉 這個市場的消耗時機，精準對應了模型中的 <span class="highlight">ADP (平均選秀順位)</span>。
+</div>
+</div>
 
-> **「當各隊對球員的評價與落點預測都趨於一致時，優勢在哪裡？」**
-> $\Rightarrow$ 真正的優勢，在於能否執行一套**數學上最佳化的選秀策略 (Draft Strategy)**。
-
-<!-- 
-講者備註：
-在現代棒球中，大家的數據庫都很接近。我們把球隊對球員的評價轉換為模型裡的 Points，把各隊對落點的預測轉為 ADP。既然大家都知道誰是好球員，真正的勝負就不在於「你認不認識他」，而在於「你什麼時候出手選他」。這就是為什麼我們要把選秀變成一個嚴謹的 OR 最佳化問題。
--->
+> **「當各隊對球員的評價與落點預測都一致時，真正的優勢，在於能否執行一套數學上最佳化的選秀策略！」**
 
 ---
 
@@ -112,33 +216,29 @@ $\Rightarrow$ 這個市場的消耗時機，精準對應了模型中的 <span cl
   - **奇數輪 (Forward)**：$k = (r - 1)M + j$
   - **偶數輪 (Reverse)**：$k = rM - j + 1$
 
-<!-- 
-講者備註：
-為了解決純粹的策略問題，我們排除了爛隊有絕對高順位的機制，採用蛇形選秀。順位的決定變成了一種可以被數學嚴格定義的序列，我們就是要在這個有限且不連續的順序中，找出利益最大化的選人路徑。
--->
-
 ---
 
 ## Problem Description II：球員屬性與特殊簡化
 
-呼應前面的 Insights，在選秀池中，每位球員擁有以下三大屬性：
-1. **Projected Value ($v_i$)**：賽季預期貢獻分數（目標函數的基礎）。
+在選秀池中，每位球員擁有以下三大屬性：
+1. **Projected Value ($v_i$)**：賽季預期貢獻分數。
 2. **Eligible Positions ($E_i$)**：球員合法的守備位置。
-3. **Average Draft Position (ADP)**：市場預期平均被選順位（用來模擬對手行為）。
+3. **Average Draft Position (ADP)**：市場預期平均被選順位。
 
-<span class="highlight">**⚠️ 特殊簡化：大谷翔平條款 (The Ohtani Rule)**</span>
-為了避免位置彈性上的邏輯過於複雜，我們在模型中**不考慮二刀流**。
-- 在合成數據 (Synthetic Data) 中，不生成同時具備打者與投手身份的球員。
-- 在真實的 2026 年 Yahoo/FanGraphs 數據中，大谷翔平 (Shohei Ohtani) 的「打者 (DH)」與「投手 (SP)」身份會被拆分視為**兩名獨立的球員**。
+<div class="card" style="margin-top: 20px;">
+  <span class="highlight">⚠️ 特殊簡化：大谷翔平條款 (The Ohtani Rule)</span><br>
+  為了避免位置彈性上的邏輯過於複雜，我們在模型中<b>不考慮二刀流</b>。<br>
+  在後續的合成與真實數據中，大谷翔平 (Shohei Ohtani) 的「打者 (DH)」與「投手 (SP)」身份會被拆分視為<b>兩名獨立的球員</b>。
+</div>
 
 ---
 
 ## Problem Description III：先發陣容需求
 
 要完成一組有效的陣容，必須嚴格滿足以下的數量限制 (Roster Requirements)。
-我們使用標準的 16 人先發名單作為基礎架構：
+我們使用標準的 **16 人先發名單** 作為基礎架構：
 
-| 守備位置 (Position) | C | 1B | 2B | 3B | SS | OF | Util | SP | RP |
+| 守位 (Position) | C | 1B | 2B | 3B | SS | OF | Util | SP | RP |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **需求人數 (Slots)** | 1 | 1 | 1 | 1 | 1 | 3 | 1 | 5 | 2 |
 
@@ -151,9 +251,43 @@ $\Rightarrow$ 這個市場的消耗時機，精準對應了模型中的 <span cl
 
 ---
 
-## 3. Model Formulation I：變數與目標函數
+<!-- _class: impact-slide -->
 
-我們將問題建構為 **ADP-aware Integer Linear Program (ILP)**。
+# 3. Real Data Collection
+## 將真實世界的棒球市場數據化
+
+---
+
+## Real Data Collection: 來源與變數對應
+
+為確保我們的最佳化模型具備實戰意義，我們從權威的 Fantasy Sports 聚合網站 **FantasyPros** 擷取真實數據，將其轉換為模型的輸入參數。
+
+<div class="grid-2">
+<div class="card">
+  <div class="tag">球員預期分數 ($v_i$)</div>
+  <h3 style="margin-top:0;">MLB Projections</h3>
+  整合各家權威預測系統 (如 FanGraphs 的 ZiPS, Steamer) 的共識分數。<br>
+  <span style="font-size: 16px; word-wrap: break-word; color:#64748b;">Source: fantasypros.com/mlb/projections/hitters.php</span> 
+</div>
+
+<div class="card card-orange">
+  <div class="tag">市場可用性 ($\text{adp}_i$)</div>
+  <h3 style="margin-top:0;">Average Draft Position</h3>
+  彙整 Yahoo, ESPN, CBS 數萬場模擬選秀的平均順位，精準掌握對手選人時機。<br>
+  <span style="font-size: 16px; word-wrap: break-word; color:#64748b;">Source: fantasypros.com/mlb/adp/overall.php</span>
+</div>
+</div>
+
+<!-- 
+講者備註：
+在進入數學模型前，我們要先證明這些變數不是憑空捏造的。我們爬取了 FantasyPros 的資料。Projections 提供了模型需要的 Objective value (Vi)；而 ADP 則統合了 Yahoo、ESPN 等大平台的真實玩家行為，告訴我們球員會在第幾順位被選走。
+-->
+
+---
+
+## 4. Model Formulation I：變數與目標函數
+
+有了真實的 $v_i$ 與 $\text{adp}_i$ 後，我們將問題建構為 **ADP-aware Integer Linear Program (ILP)**。
 令 $I$ 為球員集合，$P$ 為守位集合，$K$ 為我們擁有的選秀籤集合。
 
 **決策變數 (Decision Variables)**：
@@ -169,40 +303,51 @@ $$ \max \sum_{i \in I} v_i y_i $$
 ## Model Formulation II：核心限制式 (Constraints)
 
 1. **選秀邏輯與名單限制**：
-   $$ \sum_{i \in I} z_{ik} = 1, \quad \forall k \in K \quad \text{(每個順位選一人)} $$
-   $$ \sum_{p \in P} x_{ip} = y_i, \quad \forall i \in I \quad \text{(選入必安排唯一守位)} $$
-   $$ \sum_{i \in I} x_{ip} = r_p, \quad \forall p \in P \quad \text{(滿足各守備位置規定人數)} $$
+   $$ \sum_{i \in I} z_{ik} = 1 \quad \text{(每個順位選一人)} $$
+   $$ \sum_{p \in P} x_{ip} = y_i \quad \text{(選入必安排唯一守位)} $$
+   $$ \sum_{i \in I} x_{ip} = r_p \quad \text{(滿足各守備位置規定人數)} $$
 
-2. <span class="blue-text">**市場可用性限制 (Market Availability Constraint)**</span>：
+2. **市場可用性限制 (Market Availability Constraint)**：
    $$ z_{ik} = 0 \quad \text{if } S_k > \text{adp}_i + \delta, \quad \forall i \in I, k \in K $$
-   > *其中 $S_k$ 是該次選秀的整體順位，$\delta$ 是市場容錯緩衝值。如果我們的選秀順位已經晚於球員的 ADP+$\delta$，系統將強制我們無法選取該名球員。*
+   > *如果我們的選秀順位 $S_k$ 已經晚於球員的 $\text{adp}_i + \delta$ (容錯值)，系統將強制無法選取該名球員。*
 
 ---
 
-## 4. The Bottleneck: 為什麼傳統 ILP 不夠用？
+<!-- _class: impact-slide -->
+
+# 5. The Bottleneck
+## 為什麼傳統 ILP 不夠用？
+當學術模型遇上現實世界的資料量
+
+---
+
+## 傳統 ILP 的實戰致命傷
 
 雖然 ADP-aware ILP 能給出**絕對完美的最佳解 (God's Eye View)**，但在現實中會面臨極大的挑戰。
 
-- **The Scalability Problem (可擴展性危機)**：
-  - 棒球選秀的母體池極其龐大，大聯盟三十支球隊加上無數的新秀，球員池高達數萬至十幾萬人。
-  - 我們設立的變數包含了 $I \times P$ 與 $I \times K$。當球員數 ($n$) 放下，ILP 的 Branch-and-Bound 搜尋空間會呈**指數爆炸**。
-- **實戰的致命傷**：
-  - 選秀是有**時間壓力 (Time Limit)** 的。總管不可能在選秀室等 Gurobi 跑半個小時。
-  - 在巨大規模下，<span class="highlight">ILP 會直接超時 (Timeout) 或記憶體耗盡</span>。
+<div class="grid-2">
+<div class="card">
+  <div class="tag">Scalability Crisis</div>
+  <h3 style="margin-top:0;">指數爆炸的可擴展性</h3>
+  棒球選秀的母體池極其龐大，大聯盟加上無數新秀，球員池高達十幾萬人。當球員數 ($n$) 放大，ILP 的 Branch-and-Bound 搜尋空間會呈<span class="highlight">指數爆炸</span>。
+</div>
 
-<!--
-講者備註：
-ILP 的數學模型非常漂亮，但這就是所謂的學術與實務的落差。在球員數破十萬的資料庫裡，Gurobi 會直接當機。所以，我們不能只停在 ILP，我們需要一個速度極快、但品質又接近 ILP 的演算法。
--->
+<div class="card card-orange">
+  <div class="tag">Real-time execution</div>
+  <h3 style="margin-top:0;">實戰的時間壓力</h3>
+  選秀是有時間限制的。總管不可能在選秀室等 Gurobi 跑半個小時。在巨大規模下，ILP 會直接<span class="highlight">超時 (Timeout) 或記憶體耗盡</span>。
+</div>
+</div>
 
 ---
 
-## 5. Algorithms：啟發式演算法設計 (Heuristics)
+## 6. Algorithms：啟發式演算法設計 (Heuristics)
 
-為了解決 ILP 的效能瓶頸，我們設計了兩種啟發式演算法。
+為了解決 ILP 的效能瓶頸，我們設計了兩種啟發式演算法 (Heuristics)。
 
-### Baseline: Direct Greedy (直接貪婪法)
-- **邏輯**：目光短淺 (Myopic)。每次輪到我選時，尋找目前「最缺人」的守位，並直接選下該守位目前分數最高的球員。
+### ❌ Baseline: Direct Greedy (直接貪婪法)
+- **邏輯**：目光短淺 (Myopic)。每次輪到我選時，計算各守位之「稀缺度」並選擇最大者，再選下該位最強球員。
+  - **公式指標**：$\max_{p} \left( \frac{\text{該守位待補人數}}{\text{市場剩餘可用球員}} \right)$
 - **缺點**：沒有考慮未來。可能會為了一個替補游擊手，而放掉一個千載難逢的超級巨星。
 
 <!--
@@ -218,15 +363,12 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 - **核心概念**：計算「等待的代價 (Delay-Cost)」。
 - **決策流程**：
   1. 檢視目前所有缺人的守位。
-  2. 找出該守位**現在能選到**的最強球員 ($V_{now}$)。
-  3. 預測到**我們下一輪選秀時**，該守位還剩下的最強球員 ($V_{next}$)。
-  4. 計算**機會成本**： $\text{Score} = V_{now} - V_{next}$
+  2. 找出該守位**現在能選到**的最強球員 ($V_{\text{now}}$)。
+  3. 預測到**我們下一輪選秀時**，該守位還剩下的最強球員 ($V_{\text{next}}$)。
+  4. 計算**機會成本**： $\text{Score} = V_{\text{now}} - V_{\text{next}}$
   5. 優先選擇機會成本（損失）最大的守位與球員。
 
-<!--
-講者備註：
-OCG 的精神就是「瞻前顧後」。如果我現在不選這個外野手，下一輪剩下的外野手分數會掉 50 分；但我如果不選捕手，下一輪剩下的捕手分數只會掉 5 分。那麼 OCG 就會聰明地優先把外野手選下來。
--->
+> OCG 完美捕捉了 ILP 「瞻前顧後」的戰略精髓！
 
 ---
 
@@ -234,43 +376,67 @@ OCG 的精神就是「瞻前顧後」。如果我現在不選這個外野手，�
 
 要在實戰中即時運算，資料結構的選擇至關重要。
 
-- **實作方式**：
-  - 我們為每個守備位置維護一個 **Max-Heap (優先佇列)**。
-  - 使用 **Lazy Deletion**：當球員被對手選走，或被我們選走時，不立刻重整 Heap，而是等到 pop 時再檢查有效性。
+- **實作方式 (Data Structure)**：
+  - 為每個守備位置維護一個 **Max-Heap (優先佇列)**。
+  - 採用 **Lazy Deletion (延遲刪除)**：當球員被對手選走時不立刻重整 Heap，而是等到 pop 時再檢查有效性。
 - **複雜度表現**：
-  - $n$ = 球員總數， $r$ = 名單人數， $p$ = 守備位置數。
-  - **總時間複雜度**：$\mathcal{O}(n \log n + r \cdot p)$
-  - <span class="highlight">完美保證演算法能以接近線性的時間，處理數十萬人等級的選秀池。</span>
+  - 假設 $n$ = 球員總數， $r$ = 名單人數， $p$ = 守備位置數。
+  - **總時間複雜度**：$\mathcal{O}(n \log n + r \cdot p)$ (和Direct Greedy 相同)
+
+<div class="card" style="text-align:center; margin-top:20px; color:#1e40af; font-weight:bold;">
+  數學保證 OCG 能以接近線性的時間，瞬間處理數十萬人等級的選秀池。
+</div>
 
 ---
 
-## 6. Data Collection & Generation
+## ：Real-Data Validation
 
-為了全面測試演算法，我們同時使用了 **2026 Yahoo/FanGraphs 的真實投影數據**，以及高度客製化的 **合成數據生成器 (Synthetic Data Generator)**。
+| 數據來源 (2026) | 演算法 | **Optimal Gap Ratio** |
+| :--- | :--- | :--- |
+| **Yahoo** | **OCG (我們的)** | <span class="blue-text">**0.92%**</span> |
+| | Direct Greedy | 2.69% |
+| **FanGraphs** | **OCG (我們的)** | <span class="blue-text">**2.32%**</span> |
+| | Direct Greedy | 4.18% |
 
-為什麼需要合成數據？因為我們需要分離並壓力測試四大市場變因 (Factors)：
 
-1. **Points Distribution (天賦分佈)**：常態分佈 vs. 巨星集中 (High-Low)
-2. **Positions Distribution (守位彈性)**：工具人氾濫 vs. 單一守位死綁
-3. **Market Volatility (ADP 雜訊)**：市場效率 ($\sigma$) 與 容錯空間 ($\delta$) 的變化
-4. **Scale & Demand (規模與稀缺度)**：測試極度缺人的市場與海量資料池
+---
+
+<!-- _class: impact-slide -->
+
+# 7. Synthetic Data & Evaluation
+## 我們如何證明演算法在極端環境下依然有效？
+
+---
+
+## 為什麼有了真實數據，還需要 Synthetic Data？
+
+真實數據 (如 FantasyPros) 只能證明演算法在「目前的環境」下可行。但為了驗證演算法的**強健度與極限**，我們建構了合成數據生成器，對四大變因進行**壓力測試 (Stress Testing)**：
+
+<div class="grid-2" style="gap:15px; margin-top:15px;">
+<div class="card" style="padding:15px;">
+  <strong>1. Points Distribution (天賦分佈)</strong><br>
+  常態分佈 vs. 巨星集中 (High-Low)
+</div>
+<div class="card" style="padding:15px;">
+  <strong>2. Positions Distribution (守位彈性)</strong><br>
+  工具人氾濫 vs. 單一守位死綁
+</div>
+<div class="card" style="padding:15px;">
+  <strong>3. Market Volatility (ADP 雜訊)</strong><br>
+  市場效率 ($\sigma$) 與 容錯空間 ($\delta$)
+</div>
+<div class="card" style="padding:15px;">
+  <strong>4. Scale & Demand (規模與供需)</strong><br>
+  極度缺人的市場與海量資料池
+</div>
+</div>
+
+> **實驗指標 (Optimal Gap Ratio)**：$\frac{Z_{\text{ILP}} - Z_{\text{Heuristic}}}{Z_{\text{ILP}}} \times 100\%$ （越低越好）
 
 <!--
 講者備註：
-真實數據可以驗證演算法的實用性，但合成數據才能讓我們做「壓力測試」。在接下來的實驗中，我們會看看這四大變因如何影響選秀難度，以及我們的 OCG 演算法是否能撐住考驗。
+雖然我們有了前面抓下來的真實數據，但現實數據只有一種長相。如果要證明我們的 OCG 演算法是無懈可擊的，我們必須創造出各種極端平形宇宙：例如完全沒有工具人的世界、或者巨星價值極度不平均的世界，這就是 Synthetic Data 的價值。
 -->
-
----
-
-## 7. Performance Evaluation (實驗評估指標)
-
-我們使用 **Optimal Gap Ratio (最佳解落差比)** 作為核心指標：
-
-$$ \text{Gap Ratio} = \frac{Z_{\text{ILP}} - Z_{\text{Heuristic}}}{Z_{\text{ILP}}} \times 100\% $$
-
-> *Gap 越接近 0% 越好，代表該演算法選出來的陣容總分，越接近 ILP 算出來的「完美上帝視角解答」。*
-
-接下來我們將展示實驗結果。
 
 ---
 
@@ -279,17 +445,12 @@ $$ \text{Gap Ratio} = \frac{Z_{\text{ILP}} - Z_{\text{Heuristic}}}{Z_{\text{ILP}
 | 情境 (Scenario) | 參數設定 (Level) | Direct Greedy | **Opportunity Cost Greedy** |
 | :--- | :--- | :---: | :---: |
 | **N1: Baseline** | 基準線 (Normal) | $4.79\%$ | **$1.92\%$** |
-| **N2: Points Dist.** | 巨星集中 (High-Low) | $8.39\%$ | <span class="highlight">**$2.87\%$**</span> |
-| **N3: Pos Dist.** | 無工具人 (Single-Pos) | $5.11\%$ | <span class="highlight">**$0.94\%$**</span> |
+| **N2: Points Dist.** | <span class="highlight">巨星集中 (High-Low)</span> | $8.39\%$ | <span class="highlight">**$2.87\%$**</span> |
+| **N3: Pos Dist.** | 無工具人 (Single-Pos) | $5.11\%$ | <span class="blue-text">**$0.94\%$**</span> |
 
 - **商業洞察**：
-  - 在 **High-Low** (只有 10% 是超級巨星) 且不容錯的環境下，Direct Greedy 表現崩盤 (8.39%)，因為它會為補洞而錯過巨星。
-  - **OCG 幾乎不受影響**，依然將損失控制在 1~3% 左右。
-
-<!--
-講者備註：
-N2 實驗非常有意思。High-low 代表這個選秀池只有少數大物新秀，其他都是雜魚。Direct Greedy 這種只看眼前缺口的演算法，很容易為了解決捕手荒，放掉外野的大物。但 OCG 因為會計算未來落差，成功保住了巨星，Gap 只有 2.87%。
--->
+  - 在 **High-Low** (僅 10% 是超級巨星) 的環境下，Direct Greedy 表現崩盤 (8.39%)，因為它會為了填補洞口而錯失巨星。
+  - **OCG** 預判到巨星失去後的價值斷層，成功保住菁英，將損失控制在 2.87%。
 
 ---
 
@@ -301,36 +462,26 @@ N2 實驗非常有意思。High-low 代表這個選秀池只有少數大物新�
 | :--- | :--- | :---: | :---: |
 | **$D = 1$** | <span class="highlight">極度稀缺 (Scarcity)</span> | $8.81\%$ | **$2.64\%$** |
 | **$D = 3$** | 基準線 (Baseline) | $4.79\%$ | **$1.92\%$** |
-| **$D = 10$** | 資源氾濫 (Abundance) | $3.29\%$ | <span class="highlight">**$1.16\%$**</span> |
+| **$D = 10$** | 資源氾濫 (Abundance) | $3.29\%$ | <span class="green-text">**$1.16\%$**</span> |
 
 - **商業洞察**：
-  - 在**極度稀缺**的市場 ($D=1$)，也就是每一個選秀失誤都會直接換來「零分替補」時，Direct Greedy 盲目填補洞口的策略會導致崩盤 (8.81%)。
-  - OCG 由於具備「預判稀缺性」的能力，能成功將落差控制在 2.64%。
+  - 在**極度稀缺**的市場 ($D=1$)，每一個選秀失誤都會直接換來「零分替補」，Direct Greedy 盲目填補洞口的策略導致崩盤 (8.81%)。
+  - OCG 意識到未來的枯竭，提早佈局，成功將落差控制在 2.64%。
 
 ---
 
 ## 實驗 N5：市場波動 ($\sigma$) 與 容錯空間 ($\delta$)
 
-當對手的行為無法預測時，誰能活下來？我們拆分兩種測試：
+當對手行為無法預測 (ADP 充滿雜訊) 時，誰能活下來？我們拆分兩種測試：
 
 | 測試維度 | 參數設定 | Direct Greedy | **Opportunity Cost Greedy** |
 | :--- | :--- | :---: | :---: |
-| **N5-A: 雜訊** <br> (固定 $\delta=0$) | $\sigma=0$ (效率市場) | $1.47\% \pm 0.48\%$ | **$0.48\% \pm 0.23\%$** |
-| | $\sigma=30$ (中度雜訊) | $4.79\% \pm 1.18\%$ | **$1.92\% \pm 0.57\%$** |
-| | $\sigma=60$ (高度混亂) | $5.56\% \pm 1.58\%$ | <span class="highlight">**$2.43\% \pm 1.55\%$**</span> |
+| **N5-A: 雜訊** <br> (固定 $\delta=0$) | $\sigma=0$ (效率市場) | $1.47\%$ | **$0.48\%$** |
+| | <span class="highlight">$\sigma=60$ (高度混亂)</span> | $5.56\%$ | <span class="highlight">**$2.43\%$**</span> |
+| **N5-B: 容錯** <br> (固定 $\sigma=30$) | $\delta=-10$ (嚴格限制) | $4.65\%$ | **$1.90\%$** |
+| | $\delta=10$ (寬鬆限制) | $5.42\%$ | **$1.72\%$** |
 
----
-
-## 實驗 N5：市場波動 ($\sigma$) 與 容錯空間 ($\delta$)
-當對手的行為無法預測時，誰能活下來？我們拆分兩種測試：
-
-| 測試維度 | 參數設定 | Direct Greedy | **Opportunity Cost Greedy** |
-| :--- | :--- | :---: | :---: |
-| **N5-B: 容錯** <br> (固定 $\sigma=30$) | $\delta=-10$ (嚴格限制) | $4.65\% \pm 1.32\%$ | **$1.90\% \pm 0.77\%$** |
-| | $\delta=0$ (中性) | $4.79\% \pm 1.18\%$ | **$1.92\% \pm 0.57\%$** |
-| | $\delta=10$ (寬鬆限制) | $5.42\% \pm 1.21\%$ | **$1.72\% \pm 0.95\%$** |
-
-- **結論**：無論是面對極度混亂的市場，還是嚴格的可用性限制，OCG 都能將落差控制在極低水準，展現強大的抗衝擊能力。
+- **結論**：無論面對極度混亂的市場或嚴格的可用性限制，OCG 都能將落差穩穩控制，展現強大抗衝擊能力。
 
 ---
 
@@ -347,14 +498,9 @@ ILP 近似變數估算公式：$\text{Vars} \approx n \times (1 + p + r)$
 | `stress_large` | 2,289,600 | 54.26 秒 (最佳解) | **2.34 秒** |
 | `timeout_target` | <span class="highlight">49,029,120</span> | <span class="highlight">**1869.8 秒 (TIMEOUT 崩潰)**</span> | <span class="blue-text">**23.28 秒**</span> |
 
-<!--
-講者備註：
-請看最後一列，這就是我們研究的價值所在。當 ILP 面臨將近 5000 萬個變數時，它在 30 分鐘內跑不出任何結果，直接宣告 TIMEOUT 崩潰。但我們的 OCG 演算法，憑藉 O(n log n) 的優秀架構，在 23 秒內就給出了高品質解答。
--->
-
 ---
 
-<!-- 建議圖片：一張折線圖，X 軸是 Variable Count，Y 軸是 Runtime，顯示 ILP 指數上升，而 OCG 貼在地平線上呈現線性 -->
+<!-- 建議圖片：將 runtime_by_variable_count.png 放進來 -->
 ![bg right:45% 90%](../experiments/synthetic/scaling_summary/runtime_by_variable_count.png)
 
 ## N6 壓力測試圖表分析
@@ -368,38 +514,16 @@ ILP 近似變數估算公式：$\text{Vars} \approx n \times (1 + p + r)$
 
 ---
 
-## Real-Data Validation (真實數據驗證)
-
-為確保即將到來的賽季可用，我們在 **2026 年 Yahoo 與 FanGraphs** 投影數據上進行了驗證（測試 252 種選秀情境）。
-
-| 數據來源 (2026) | 演算法 | 平均獲得分數 | 損失分數 (Gap) |
-| :--- | :--- | :--- | :--- |
-| **Yahoo** | ILP (神之視角) | 7917.2 | 0 |
-| | **OCG (我們的)** | 7767.7 | <span class="blue-text">**-149.4**</span> |
-| | Direct Greedy | 7662.8 | -254.3 |
-| **FanGraphs** | ILP (神之視角) | 14642.9 | 0 |
-| | **OCG (我們的)** | 14320.1 | <span class="blue-text">**-322.7**</span> |
-| | Direct Greedy | 14097.3 | -545.5 |
-
-*OCG 在真實世界中，同樣成功為球隊挽回了可觀的預期分數。*
-
----
-
 ## 8. Conclusions & Business Recommendations
 
 **給球隊總管 (GM) 的最終建議：**
 
-1. **傳統的「選最好球員」策略已經過時**：
-   在極端天賦分佈與缺乏工具人的選秀年中，不考慮機會成本的貪婪選秀會讓球隊流失極大的預期戰力。
+1. **傳統的「選最好球員 (BPA)」策略已經過時**：
+   在巨星價值高度集中或缺乏工具人的選秀年中，不考慮機會成本的貪婪選秀會讓球隊流失極大的預期戰力。
 2. **完美最佳化 (ILP) 不具備實戰操作性**：
-   選秀是有時間限制的。當考量全聯盟農場與潛力新秀時，指數爆炸的 ILP 無法作為 Real-time 的輔助工具。
+   選秀有時間限制。當考量全聯盟農場與潛力新秀時，指數爆炸的 ILP 無法作為 Real-time 的輔助工具。
 3. **導入 Opportunity Cost Greedy (OCG) 系統**：
-   OCG 成功捕捉了 ILP 的策略精髓（預判未來），將最佳化落差控制在極小範圍，且擁有應付千萬級變數的即時運算能力。
-
-<!--
-講者備註：
-總結來說，我們不該再憑感覺選秀，也不能依賴跑不動的絕對數學模型。OCG 就是介於兩者之間的完美橋樑：它具備數學的嚴謹度，又擁有極快的運算速度，是真正能搬進選秀室 (Draft Room) 的戰略武器。
--->
+   OCG 成功捕捉了 ILP 的策略精髓（預判未來），將最佳化落差控制在極小範圍，且擁有應付五千萬級變數的即時運算能力。
 
 ---
 
@@ -408,17 +532,17 @@ ILP 近似變數估算公式：$\text{Vars} \approx n \times (1 + p + r)$
 我們未來的系統升級方向：
 
 - **對手行為的機率模型 (Probabilistic Opponent Modeling)**：
-  - 目前 ADP 只是一個確定性指標 (Deterministic)。未來可加入對手偏好（如：傾向選本土球員）的機率分佈。
+  - 目前 ADP 只是一個確定性指標 (Deterministic)。未來可加入對手偏好（如：傾向選本土球員、特定球隊迷）的機率分佈。
 - **結合蒙地卡羅模擬 (Monte Carlo Simulations)**：
   - 球員的預測分數帶有變異數（如受傷風險、低潮風險）。未來目標是將 OCG 升級為能處理變異數風險的 AI 決策系統。
 
 ---
 
+<!-- _class: title-slide -->
 # Thank You for Listening!
 ## Q&A Session
 
-**OR114-2 Final Project, Group 4**
-B13705051 周孟承 | B13902103 鄭宇宏 
-B13303153 詹舒宇 | B11705039 李盈盈
-
----
+<div class="author-block">
+  <strong>OR114-2 Final Project, Group 4</strong><br>
+  B13705051 周孟承 | B13902103 鄭宇宏 | B13303153 詹舒宇 | B11705039 李盈盈<br>
+</div>
