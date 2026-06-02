@@ -260,30 +260,44 @@ style: |
 
 ## Real Data Collection: 來源與變數對應
 
-為確保我們的最佳化模型具備實戰意義，我們從權威的 Fantasy Sports 聚合網站 **FantasyPros** 擷取真實數據，將其轉換為模型的輸入參數。
+- Player projected points $v_i$
+  - 從 **FantasyPros** 網站下載 2026 球員預測成績數據
+  - 採計了 yahoo, fantasy pros 兩種計分方式
+- ADP $\text{adp}_i$
+  - 從 **FantasyPros** 網站下載
+
+---
+
+#### Player projected points 取得
+- 從 **FantasyPros** 網站下載 2026 球員預測成績數據![alt text](image.png)
+- 分別套用 Yahoo, FanGraphs 兩種計分方式如下表：
 
 <div class="grid-2">
 <div class="card">
-  <div class="tag">球員預期分數 ($v_i$)</div>
-  <h3 style="margin-top:0;">MLB Projections</h3>
-  整合各家權威預測系統 (如 FanGraphs 的 ZiPS, Steamer) 的共識分數。<br>
-  <span style="font-size: 16px; word-wrap: break-word; color:#64748b;">Source: fantasypros.com/mlb/projections/hitters.php</span> 
+  <div class="tag">Yahoo Scoring</div>
+  <ul>
+    <li><b>打者</b>：(1B, 2B, 3B, HR, R, RBI, BB, HBP, SB, SO) = (1, 2, 3, 4, 1, 1, 1, 1, 1, -0.5)</li>
+    <li><b>投手</b>：(IP, SO, W, L, SV, ER) = (3, 1, 5, -5, 5, -2)</li>
+  </ul>
 </div>
 
 <div class="card card-orange">
-  <div class="tag">市場可用性 ($\text{adp}_i$)</div>
-  <h3 style="margin-top:0;">Average Draft Position</h3>
-  彙整 Yahoo, ESPN, CBS 數萬場模擬選秀的平均順位，精準掌握對手選人時機。<br>
-  <span style="font-size: 16px; word-wrap: break-word; color:#64748b;">Source: fantasypros.com/mlb/adp/overall.php</span>
+  <div class="tag">FanGraphs Scoring</div>
+  <ul>
+    <li><b>打者</b>：(1B, 2B, 3B, HR, BB, HBP, SB, CS, SO) = (5.6, 2.9, 5.7, 9.4, 3, 3, 1.9, -2.8, -1)</li>
+    <li><b>投手</b>：(IP, SO, BB, HBP, HR, SV, HLD) = (5, 2, -3, -3, -13, 5, 4)</li>
+  </ul>
 </div>
 </div>
-
-<!-- 
-講者備註：
-在進入數學模型前，我們要先證明這些變數不是憑空捏造的。我們爬取了 FantasyPros 的資料。Projections 提供了模型需要的 Objective value (Vi)；而 ADP 則統合了 Yahoo、ESPN 等大平台的真實玩家行為，告訴我們球員會在第幾順位被選走。
--->
 
 ---
+
+#### Average Draft Position (ADP) 取得
+- 從 **FantasyPros** 網站下載 2026 球員 ADP 數據包括各大平台 (Yahoo, ESPN, CBS) 的平均選秀順位
+![alt text](image-1.png)
+
+---
+
 
 ## 4. Model Formulation I：變數與目標函數
 
