@@ -39,24 +39,13 @@ reports/*.aux
 reports/*.log
 reports/*.out
 reports/*.toc
+reports/*.fdb_latexmk
+reports/*.fls
+reports/*.nav
+reports/*.snm
+reports/*.synctex.gz
+reports/*.xdv
 
 *.log
 *.tmp
 
-# LaTeX intermediate and build artifacts
-*.aux
-*.bbl
-*.blg
-*.brf
-*.lof
-*.lot
-*.fls
-*.fdb_latexmk
-*.synctex.gz
-*.xdv
-*.nav
-*.snm
-*.out
-*.toc
-*.log
-*.pdf
