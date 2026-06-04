@@ -469,13 +469,15 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 
 ---
 
-## 實驗 N1 ~ N3：天賦分佈與守備彈性
+## Factor A: 天賦分佈 (Points Distribution)
 
-| 情境 (Scenario) | 參數設定 (Level) | Direct Greedy | **Opportunity Cost Greedy** |
-| :--- | :--- | :---: | :---: |
-| **N1: Baseline** | 基準線 (Normal) | $4.79\%$ | **$1.92\%$** |
-| **N2: Points Dist.** | <span class="highlight">巨星集中 (High-Low)</span> | $8.39\%$ | <span class="highlight">**$2.87\%$**</span> |
-| **N3: Pos Dist.** | 無工具人 (Single-Pos) | $5.11\%$ | <span class="blue-text">**$0.94\%$**</span> |
+探討當球員的天賦分佈改變時，演算法的適應能力。
+
+| 參數設定 (Level) | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
+| :--- | :---: | :---: | :---: |
+| 基準線 (Normal) | $4.79\%$ | **$1.92\%$** | $3.02\%$ |
+| 均勻分佈 (Uniform) | $3.24\%$ | **$1.44\%$** | $1.87\%$ |
+| <span class="highlight">巨星集中 (High-Low)</span> | $8.39\%$ | **$2.87\%$** | <span class="highlight">**$6.10\%$**</span> |
 
 - **商業洞察**：
   - 在 **High-Low** (僅 10% 是超級巨星) 的環境下，Direct Greedy 表現崩盤 (8.39%)，因為它會為了填補洞口而錯失巨星。
@@ -483,56 +485,88 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 
 ---
 
-## 實驗 N4：市場供需比例 (Scale & Demand)
+## Factor B: 守備彈性 (Position Eligibility)
+
+探討當球員擁有多重守位（工具人）或被嚴格限制守位時，對選秀佈局的影響。
+
+| 參數設定 (Level) | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
+| :--- | :---: | :---: | :---: |
+| 基準線 (Roster-Ratio) | $4.79\%$ | **$1.92\%$** | $3.02\%$ |
+| 高度彈性 (Point-Flexible) | $5.36\%$ | **$1.34\%$** | $4.27\%$ |
+| <span class="blue-text">無工具人 (Single-Position)</span> | $5.11\%$ | **$0.94\%$** | <span class="blue-text">**$4.42\%$**</span> |
+
+- **商業洞察**：
+  - 當所有球員都只能守單一位置（**Single-Position**），早期的貪婪錯誤將無法用工具人來彌補。
+  - OCG 的「機會成本預判」能避免後期守位枯竭，展現高達 4.42% 的戰力挽救。
+
+---
+
+## Factor C: 市場波動與雜訊 (Market Volatility)
+
+當對手行為無法預測 (ADP 充滿雜訊) 時，誰能活下來？我們拆分兩種測試：
+
+| 測試維度 | 參數設定 | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
+| :--- | :--- | :---: | :---: | :---: |
+| **雜訊** <br> ($\delta=30$) | $\sigma=0$ (效率市場) | $2.78\%$ | **$1.52\%$** | $1.00\%$ |
+| | <span class="highlight">$\sigma=60$ (高度混亂)</span> | $5.10\%$ | **$2.92\%$** | <span class="highlight">**$3.33\%$**</span> |
+| **容錯** <br> ($\sigma=30$) | $\delta=-10$ (嚴格限制) | $4.65\%$ | **$1.90\%$** | $2.91\%$ |
+| | $\delta=10$ (寬鬆限制) | $5.42\%$ | **$1.72\%$** | <span class="blue-text">**$3.92\%$**</span> |
+
+- **商業洞察**：
+  - 無論面對極度混亂的市場或嚴格的可用性限制，OCG 都能穩穩維持差距。這證明「以相對機會成本進行決策」能自然避險 (Hedge against volatility)。
+
+---
+
+## Factor D: 市場供需比例 (Player Demand Ratio)
 
 當球員池的「可用人數」與「聯盟總需求」比例 ($D$) 改變時：
 
-| 供需比例 (Demand Ratio) | 市場狀態 | Direct Greedy | **Opportunity Cost Greedy** |
-| :--- | :--- | :---: | :---: |
-| **$D = 1$** | <span class="highlight">極度稀缺 (Scarcity)</span> | $8.81\%$ | **$2.64\%$** |
-| **$D = 3$** | 基準線 (Baseline) | $4.79\%$ | **$1.92\%$** |
-| **$D = 10$** | 資源氾濫 (Abundance) | $3.29\%$ | <span class="green-text">**$1.16\%$**</span> |
+| 供需比例 (Demand Ratio) | 狀態 | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
+| :--- | :--- | :---: | :---: | :---: |
+| **$D = 1$** | <span class="highlight">極度稀缺</span> | $8.81\%$ | **$2.64\%$** | <span class="highlight">**$6.82\%$**</span> |
+| **$D = 3$** | 基準線 | $4.79\%$ | **$1.92\%$** | $3.02\%$ |
+| **$D = 10$** | 資源氾濫 | $3.29\%$ | **$1.16\%$** | $2.20\%$ |
 
 - **商業洞察**：
-  - 在**極度稀缺**的市場 ($D=1$)，每一個選秀失誤都會直接換來「零分替補」，Direct Greedy 盲目填補洞口的策略導致崩盤 (8.81%)。
+  - 在**極度稀缺**的市場 ($D=1$)，每一個選秀失誤都會直接換來「零分替補」，Direct Greedy 盲目填補洞口導致崩盤 (8.81%)。
   - OCG 意識到未來的枯竭，提早佈局，成功將落差控制在 2.64%。
 
 ---
 
-## 實驗 N5：市場波動 ($\sigma$) 與 容錯空間 ($\delta$)
+## Strategic Insights: 關鍵戰略優勢總結
 
-當對手行為無法預測 (ADP 充滿雜訊) 時，誰能活下來？我們拆分兩種測試：
+從四大因素的壓力測試中，我們可以總結出 OCG 演算法最能發揮巨大價值的極端情境：
 
-| 測試維度 | 參數設定 | Direct Greedy | **Opportunity Cost Greedy** |
-| :--- | :--- | :---: | :---: |
-| **N5-A: 雜訊** <br> (固定 $\delta=0$) | $\sigma=0$ (效率市場) | $1.47\%$ | **$0.48\%$** |
-| | <span class="highlight">$\sigma=60$ (高度混亂)</span> | $5.56\%$ | <span class="highlight">**$2.43\%$**</span> |
-| **N5-B: 容錯** <br> (固定 $\sigma=30$) | $\delta=-10$ (嚴格限制) | $4.65\%$ | **$1.90\%$** |
-| | $\delta=10$ (寬鬆限制) | $5.42\%$ | **$1.72\%$** |
+| 影響因子 (Factor) | 關鍵極端情境 (Scenario) | 提升幅度 (Improvement) |
+| :--- | :--- | :---: |
+| **Factor A (天賦分佈)** | Star-Heavy (巨星高度集中) | <span class="highlight">**+6.10%**</span> |
+| **Factor B (守備彈性)** | Single-Position (全聯盟無工具人) | <span class="blue-text">**+4.42%**</span> |
+| **Factor C (市場雜訊)** | Chaotic Market (市場混亂 / 容錯寬鬆) | <span class="highlight">**+3.92%**</span> |
+| **Factor D (市場供需)** | Extreme Scarcity (可用之兵極度稀缺) | <span class="highlight">**+6.82%**</span> |
 
-- **結論**：無論面對極度混亂的市場或嚴格的可用性限制，OCG 都能將落差穩穩控制，展現強大抗衝擊能力。
+> **結論**：環境越嚴苛、容錯率越低，OCG 透過計算「Delay-Cost (等待代價)」所帶來的競爭優勢就越具統治力。
 
 ---
 
-## 實驗 N6：Scalability 終極壓力測試
+## Large-Scale Stress Testing: 終極壓力測試
 
 這是向制服組提案的最核心關鍵：**當球員池無限放大時，誰能不當機？**
 
 IP 近似變數估算公式：$\text{Vars} \approx n \times (1 + p + r)$
 *(球員總數 $\times$ (選取變數 + 守位分配變數 + 輪次可用性變數))*
 
-| 測試等級 | 近似變數數量 | IP 運算時間 (狀態) | **OCG 運算時間** |
+| 測試等級 | 近似變數數量 | IP 運算時間 (狀態) | OCG 運算時間 |
 | :--- | ---: | :--- | :--- |
-| `stress_small` | 334,080 | 4.23 秒 (最佳解) | **0.85 秒** |
-| `stress_large` | 2,289,600 | 54.26 秒 (最佳解) | **2.34 秒** |
-| `timeout_target` | <span class="highlight">49,029,120</span> | <span class="highlight">**1869.8 秒 (TIMEOUT 崩潰)**</span> | <span class="blue-text">**23.28 秒**</span> |
+| `stress_small` | 334,080 | 4.23 秒 (最佳解) | 0.85 秒 |
+| `stress_large` | 2,289,600 | 54.26 秒 (最佳解) | 2.34 秒 |
+| `timeout_target` | 49,029,120 | <span class="highlight">**1869.8 秒 (TIMEOUT 崩潰)**</span> | <span class="blue-text">23.28 秒</span> |
 
 ---
 
 <!-- 建議圖片：將 runtime_by_variable_count.png 放進來 -->
 ![bg right:45% 90%](../experiments/synthetic/scaling_summary/runtime_by_variable_count.png)
 
-## N6 壓力測試圖表分析
+## 壓力測試圖表分析 (Scalability Analysis)
 
 從圖表可以看出兩種演算法本質上的差異：
 
