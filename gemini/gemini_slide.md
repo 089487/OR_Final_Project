@@ -437,154 +437,94 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 
 ---
 
-## 為什麼有了真實數據，還需要 Synthetic Data？
+## Synthetic Data 的四大變因
 
-真實數據 (如 FantasyPros) 只能證明演算法在「目前的環境」下可行，但為了驗證演算法的**強健度與極限**，我們建構了合成數據生成器，對四大變因進行**壓力測試 (Stress Testing)**：
+真實數據只能證明「當下」有效。合成數據讓我們檢驗更多極端情境，並在策略設計上找到最具差異性的測試維度
 
-<div class="grid-2" style="gap:15px; margin-top:15px;">
-<div class="card" style="padding:15px;">
-  <strong>1. Points Distribution (天賦分佈)</strong><br>
-  常態分佈 vs. 巨星集中 (High-Low)
+<div class="grid-2" style="gap:20px; margin-top:15px;">
+<div class="card" style="padding:20px;">
+  <div class="tag">Factor 1</div>
+  <strong>Points Distribution</strong><br>
+  從平均型到巨星集中，觀察價值曲線的影響。
 </div>
-<div class="card" style="padding:15px;">
-  <strong>2. Positions Distribution (守位彈性)</strong><br>
-  工具人氾濫 vs. 單一守位死綁
+<div class="card" style="padding:20px;">
+  <div class="tag">Factor 2</div>
+  <strong>Positions Distribution</strong><br>
+  從高彈性工具人到嚴格單一守位。
 </div>
-<div class="card" style="padding:15px;">
-  <strong>3. Market Volatility (ADP 雜訊)</strong><br>
-  市場效率 ($\sigma$) 與 容錯空間 ($\delta$)
+<div class="card" style="padding:20px;">
+  <div class="tag">Factor 3</div>
+  <strong>Market Volatility</strong><br>
+  測試 ADP 噪音與容錯空間的穩定度。
 </div>
-<div class="card" style="padding:15px;">
-  <strong>4. Scale & Demand (規模與供需)</strong><br>
-  極度缺人的市場與海量資料池
+<div class="card" style="padding:20px;">
+  <div class="tag">Factor 4</div>
+  <strong>Scale & Demand</strong><br>
+  檢驗稀缺市場與供給過多對策略的影響。
 </div>
 </div>
 
-> **實驗指標 (Optimal Gap Ratio)**：$\frac{Z_{\text{IP}} - Z_{\text{Heuristic}}}{Z_{\text{IP}}} \times 100\%$ （越低越好）
+> **實驗指標**：Optimal Gap Ratio = $\frac{Z_{\text{IP}} - Z_{\text{Heuristic}}}{Z_{\text{IP}}} \times 100\%$。
 
-<!--
-講者備註：
-雖然我們有了前面抓下來的真實數據，但現實數據只有一種長相。如果要證明我們的 OCG 演算法是無懈可擊的，我們必須創造出各種極端平形宇宙：例如完全沒有工具人的世界、或者巨星價值極度不平均的世界，這就是 Synthetic Data 的價值。
--->
+---
+| ID | Main Factor | Ratio (N:D) | Value Dist. | Pos. Dist. | ADP Noise ($\delta,\sigma$) |
+| :--- | :--- | :---: | :--- | :--- | :--- |
+| S1 | Baseline | 1:1 | Normal | Roster-Ratio | (0, 30) |
+| S2 | Load (Ultra-Low) | 10:1 | Normal | Roster-Ratio | (0, 30) |
+| S3 | Load (Low) | 3:1 | Normal | Roster-Ratio | (0, 30) |
+| S4 | Load (High) | 1:1 | Normal | Roster-Ratio | (0, 30) |
+| S5 | Value: Uniform | 1:1 | Uniform | Roster-Ratio | (0, 30) |
+| S6 | Value: Star-Heavy | 1:1 | 1:9 Skewed | Roster-Ratio | (0, 30) |
+| S7 | Pos: Random | 1:1 | Normal | Uniform (Rand) | (0, 30) |
+| S8 | Pos: Versatile | 1:1 | Normal | Value-Corr. | (0, 30) |
+| S9 | Pos: Rigid | 1:1 | Normal | 1:1 (Single) | (0, 30) |
+| S10 | Market: Rigid | 1:1 | Normal | Roster-Ratio | (0, 0) |
+| S11 | Market: Mild Noise | 1:1 | Normal | Roster-Ratio | (0, 60) |
+| S12, 13 | Market: Chaotic | 1:1 | Normal | Roster-Ratio | (±5, 30) |
+| S14, 15 | Market: Chaotic | 1:1 | Normal | Roster-Ratio | (±10, 30) |
 
 ---
 
-## Factor A: 天賦分佈 (Points Distribution)
+## Strategic Insights: OCG 的最大獲益場景
 
-探討當球員的天賦分佈改變時，演算法的適應能力。
+OCG 對以下幾種極端場景的改善最明顯：
 
-| 參數設定 (Level) | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
-| :--- | :---: | :---: | :---: |
-| 基準線 (Normal) | $4.79\%$ | **$1.92\%$** | $3.02\%$ |
-| 均勻分佈 (Uniform) | $3.24\%$ | **$1.44\%$** | $1.87\%$ |
-| <span class="highlight">巨星集中 (High-Low)</span> | $8.39\%$ | **$2.87\%$** | <span class="highlight">**$6.10\%$**</span> |
+- **S6 / High-Low**：價值曲線高度不平衡，DG 會錯失關鍵巨星；OCG 將 gap 由 8.39% 降到 2.87%。
+- **S9 / Single-Position**：由於球員守位限制，OCG 能避免早期選秀錯誤被後線放大。
+- **S4 / D=1 (極度稀缺)**：市場供給緊繃時，OCG 仍能提早佈局，保住整體陣容價值。
+- **S11-S15 / Chaotic Market**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
 
-- **商業洞察**：
-  - 在 **High-Low** (僅 10% 是超級巨星) 的環境下，Direct Greedy 表現崩盤 (8.39%)，因為它會為了填補洞口而錯失巨星。
-  - **OCG** 預判到巨星失去後的價值斷層，成功保住菁英，將損失控制在 2.87%。
-
----
-
-## Factor B: 守備彈性 (Position Eligibility)
-
-探討當球員擁有多重守位（工具人）或被嚴格限制守位時，對選秀佈局的影響。
-
-| 參數設定 (Level) | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
-| :--- | :---: | :---: | :---: |
-| 基準線 (Roster-Ratio) | $4.79\%$ | **$1.92\%$** | $3.02\%$ |
-| 高度彈性 (Point-Flexible) | $5.36\%$ | **$1.34\%$** | $4.27\%$ |
-| <span class="blue-text">無工具人 (Single-Position)</span> | $5.11\%$ | **$0.94\%$** | <span class="blue-text">**$4.42\%$**</span> |
-
-- **商業洞察**：
-  - 當所有球員都只能守單一位置（**Single-Position**），早期的貪婪錯誤將無法用工具人來彌補。
-  - OCG 的「機會成本預判」能避免後期守位枯竭，展現高達 4.42% 的戰力挽救。
+| Scenario | DG Gap | OCG Gap | Key Benefit |
+| :--- | :---: | :---: | :--- |
+| High-Low | 8.39% | 2.87% | 穩住頂級球員 |
+| Single-Position | 5.11% | 0.94% | 避免守位枯竭 |
+| D=1 | 8.81% | 2.64% | 極度稀缺下仍可預判 |
+| Chaotic Market | 5.56% / 5.42% | 2.43% / 1.72% | 高不確定性下更穩定 |
 
 ---
 
-## Factor C: 市場波動與雜訊 (Market Volatility)
+<!-- Marp slide -->
 
-當對手行為無法預測 (ADP 充滿雜訊) 時，誰能活下來？我們拆分兩種測試：
+## Stress Testing: Runtime Comparison
+| Stress Level | Approx. Vars | IP Runtime | OCG Runtime |
+| :--- | ---: | :--- | :---: |
+| small | 334,080 | 4.23 s (optimal) | 0.85 s |
+| large | 2,289,600 | 54.26 s (optimal) | 2.34 s |
+| timeout | 49,029,120 | 1869.8 s (timeout) | 23.28 s |
 
-| 測試維度 | 參數設定 | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
-| :--- | :--- | :---: | :---: | :---: |
-| **雜訊** <br> ($\delta=30$) | $\sigma=0$ (效率市場) | $2.78\%$ | **$1.52\%$** | $1.00\%$ |
-| | <span class="highlight">$\sigma=60$ (高度混亂)</span> | $5.10\%$ | **$2.92\%$** | <span class="highlight">**$3.33\%$**</span> |
-| **容錯** <br> ($\sigma=30$) | $\delta=-10$ (嚴格限制) | $4.65\%$ | **$1.90\%$** | $2.91\%$ |
-| | $\delta=10$ (寬鬆限制) | $5.42\%$ | **$1.72\%$** | <span class="blue-text">**$3.92\%$**</span> |
+![bg right:55% 90%](../experiments/synthetic/scaling_summary/runtime_by_variable_count.png)
 
-- **商業洞察**：
-  - 無論面對極度混亂的市場或嚴格的可用性限制，OCG 都能穩穩維持差距。這證明「以相對機會成本進行決策」能自然避險 (Hedge against volatility)。
-
----
-
-## Factor D: 市場供需比例 (Player Demand Ratio)
-
-當球員池的「可用人數」與「聯盟總需求」比例 ($D$) 改變時：
-
-| 供需比例 (Demand Ratio) | 狀態 | DG Gap | **OCG Gap** | 提升幅度 (Improvement) |
-| :--- | :--- | :---: | :---: | :---: |
-| **$D = 1$** | <span class="highlight">極度稀缺</span> | $8.81\%$ | **$2.64\%$** | <span class="highlight">**$6.82\%$**</span> |
-| **$D = 3$** | 基準線 | $4.79\%$ | **$1.92\%$** | $3.02\%$ |
-| **$D = 10$** | 資源氾濫 | $3.29\%$ | **$1.16\%$** | $2.20\%$ |
-
-- **商業洞察**：
-  - 在**極度稀缺**的市場 ($D=1$)，每一個選秀失誤都會直接換來「零分替補」，Direct Greedy 盲目填補洞口導致崩盤 (8.81%)。
-  - OCG 意識到未來的枯竭，提早佈局，成功將落差控制在 2.64%。
+**結論**：在運算量增大，造成 IP 超時的情況下，我們設計的OCG演算法之運算時間仍趨近線性成長，在高維度之選秀市場中更有其實用性。
 
 ---
-
-## Strategic Insights: 關鍵戰略優勢總結
-
-從四大因素的壓力測試中，我們可以總結出 OCG 演算法最能發揮巨大價值的極端情境：
-
-| 影響因子 (Factor) | 關鍵極端情境 (Scenario) | 提升幅度 (Improvement) |
-| :--- | :--- | :---: |
-| **Factor A (天賦分佈)** | Star-Heavy (巨星高度集中) | <span class="highlight">**+6.10%**</span> |
-| **Factor B (守備彈性)** | Single-Position (全聯盟無工具人) | <span class="blue-text">**+4.42%**</span> |
-| **Factor C (市場雜訊)** | Chaotic Market (市場混亂 / 容錯寬鬆) | <span class="highlight">**+3.92%**</span> |
-| **Factor D (市場供需)** | Extreme Scarcity (可用之兵極度稀缺) | <span class="highlight">**+6.82%**</span> |
-
-> **結論**：環境越嚴苛、容錯率越低，OCG 透過計算「Delay-Cost (等待代價)」所帶來的競爭優勢就越具統治力。
-
----
-
-## Large-Scale Stress Testing: 終極壓力測試
-
-這是向制服組提案的最核心關鍵：**當球員池無限放大時，誰能不當機？**
-
-IP 近似變數估算公式：$\text{Vars} \approx n \times (1 + p + r)$
-*(球員總數 $\times$ (選取變數 + 守位分配變數 + 輪次可用性變數))*
-
-| 測試等級 | 近似變數數量 | IP 運算時間 (狀態) | OCG 運算時間 |
-| :--- | ---: | :--- | :--- |
-| `stress_small` | 334,080 | 4.23 秒 (最佳解) | 0.85 秒 |
-| `stress_large` | 2,289,600 | 54.26 秒 (最佳解) | 2.34 秒 |
-| `timeout_target` | 49,029,120 | <span class="highlight">**1869.8 秒 (TIMEOUT 崩潰)**</span> | <span class="blue-text">23.28 秒</span> |
-
----
-
-<!-- 建議圖片：將 runtime_by_variable_count.png 放進來 -->
-![bg right:45% 90%](../experiments/synthetic/scaling_summary/runtime_by_variable_count.png)
-
-## 壓力測試圖表分析 (Scalability Analysis)
-
-從圖表可以看出兩種演算法本質上的差異：
-
-- **紅線/藍線 (IP)**：
-  隨著問題規模變大，Branch-and-Bound 的搜尋空間呈**指數型 (Exponential) 爆炸**。
-- **綠線 (OCG Heuristic)**：
-  呈現完美的**線性成長 (Linear)**。無論球探部門丟入多少萬筆農場數據，系統都能在幾十秒內給出決策。
-
----
-
 ## 8. Conclusions & Business Recommendations
 
 **給球隊總管 (GM) 的最終建議：**
 
 1. **傳統的「選最好球員 (BPA)」策略已經過時**：
-   在巨星價值高度集中或缺乏工具人的選秀年中，不考慮機會成本的貪婪選秀會讓球隊流失極大的預期戰力。
+   不考慮機會成本的貪婪選秀可能會讓球隊流失極大的預期戰力。
 2. **完美最佳化 (IP) 不具備實戰操作性**：
-   選秀有時間限制。當考量全聯盟農場與潛力新秀時，指數爆炸的 IP 無法作為 Real-time 的輔助工具。
+   選秀有時間限制。當考量全聯盟農場與潛力新秀時，指數爆炸的 IP 較難作為 Real-time 輔助工具。
 3. **導入 Opportunity Cost Greedy (OCG) 系統**：
    OCG 成功捕捉了 IP 的策略精髓（預判未來），將最佳化落差控制在極小範圍，且擁有應付五千萬級變數的即時運算能力。
 
