@@ -35,16 +35,16 @@ logs/
 results/
 results_*/
 mock_results*/
-reports/*.aux
-reports/*.log
-reports/*.out
-reports/*.toc
-reports/*.fdb_latexmk
-reports/*.fls
-reports/*.nav
-reports/*.snm
-reports/*.synctex.gz
-reports/*.xdv
+*.aux
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+*.synctex.gz
+*.xdv
 
 *.log
 *.tmp
