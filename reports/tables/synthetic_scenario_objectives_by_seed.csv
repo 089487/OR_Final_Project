@@ -1,0 +1,151 @@
+scenario,description,seed,objective_DG,objective_OCG,improve_gap_ratio_pct,source_path,delta_filter
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",0,8665.29,9018.77,4.079263359910627,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",1,8479.189999999999,8878.15,4.705166413301282,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",2,8767.36,9227.43,5.247531754142634,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",3,8908.869999999999,9122.01,2.3924470780245,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",4,8805.25,9026.21,2.509411998523598,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",5,8780.060000000001,9051.16,3.0876782163219674,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",6,9032.72,9289.89,2.847093677209081,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",7,8450.98,8606.61,1.8415615703740988,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",8,9168.9,9238.69,0.7611600082888992,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S1,"Baseline (Normal / Roster-Ratio / 3:1 / (0,30))",9,8810.689999999999,9054.14,2.7631207090477674,experiments/synthetic/N1_baseline/summary/benchmark_results.csv,
+S2,Value: Uniform,0,11221.96,11481.48,2.3126084926340895,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,1,11074.28,11293.0,1.9750268188992812,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,2,10961.39,11216.16,2.3242490231622126,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,3,11018.87,11184.33,1.5016058815468294,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,4,11340.41,11379.02,0.3404638809355269,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,5,11027.740000000002,11187.240000000002,1.4463525618123023,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,6,11259.88,11549.85,2.5752494697989783,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,7,11012.24,11229.0,1.9683552120186285,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,8,10751.91,11006.75,2.3701835301820804,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S2,Value: Uniform,9,11024.43,11229.56,1.8606857678809625,experiments/synthetic/N2_points_distribution/uniform/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,0,8335.14,8828.35,5.917237142987412,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,1,8672.82,9079.87,4.69339845632679,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,2,8849.66,8866.189999999999,0.1867868370084143,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,3,8457.6,8658.2,2.3718312523647413,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,4,7908.02,8547.02,8.08040445016578,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,5,8447.53,9318.010000000002,10.30455056093321,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,6,8356.9,9054.2,8.344003159066174,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,7,8238.26,9017.47,9.458429328523245,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,8,8122.94,8348.97,2.782613191775389,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S3,Value: Star-Heavy / High-Low,9,8306.289999999999,9044.75,8.890371032073297,experiments/synthetic/N2_points_distribution/high_low/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,0,8584.71,8937.61,4.110796986735736,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,1,8657.79,9069.51,4.755486099801443,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,2,8529.72,8945.9,4.879175400833794,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,3,8637.5,9081.25,5.137481910274964,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,4,8928.279999999999,9205.79,3.1082134520870994,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,5,8714.130000000001,8966.400000000001,2.8949533688388907,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,6,8808.8,9212.25,4.580079011897202,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,7,8206.07,8501.39,3.598799425303461,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,8,8750.08,9014.97,3.0272866076652947,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S4,Pos: Random / Uniform-by-Type,9,8850.91,9210.27,4.060147487659468,experiments/synthetic/N3_position_distribution/uniform_by_type/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,0,8638.93,9040.12,4.643977900040867,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,1,8492.84,8914.8,4.968420457703184,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,2,8574.29,9007.81,5.05604545682498,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,3,8875.29,9252.51,4.250227316515847,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,4,8813.92,8981.45,1.900743369579037,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,5,8741.630000000001,8910.8,1.9352226072254057,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,6,8739.18,9099.03,4.117663213253421,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,7,8311.36,8497.43,2.2387431178531516,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,8,8569.349999999999,9201.53,7.377222309743472,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S5,Pos: Versatile / Value-Correlation,9,8721.0,9267.02,6.2609792454993745,experiments/synthetic/N3_position_distribution/point_flexible/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,0,8596.39,8884.82,3.3552456321781623,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,1,8211.64,8952.119999999999,9.017443531377406,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,2,8581.57,8919.710000000001,3.940304629572459,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,3,8703.17,9131.6,4.92268908914798,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,4,8763.71,9243.12,5.47040009311127,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,5,8667.84,8970.75,3.4946422638165893,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,6,8851.79,9053.28,2.2762627671917177,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,7,8124.95,8531.58,5.004707721278287,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,8,8684.18,8881.7,2.2744807224170898,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S6,Pos: Rigid / Single-Position,9,8895.87,9289.48,4.42463750032317,experiments/synthetic/N3_position_distribution/single_position/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",0,8320.37,8436.36,1.3940485819741162,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",1,8188.549999999999,8248.66,0.7340737981694022,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",2,8271.11,8373.140000000001,1.2335708266484262,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",3,8488.759999999998,8493.7,0.058194600860459356,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",4,8421.42,8496.52,0.8917735963768624,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",5,8207.240000000002,8340.51,1.6238101968505683,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",6,8362.64,8429.44,0.7987908124707161,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",7,7907.299999999999,8000.929999999999,1.1840957090283677,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",8,8362.68,8494.689999999999,1.5785609397944007,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S7,"Market: Rigid / (0,0)",9,8468.18,8508.98,0.4818036461199369,experiments/synthetic/N5_clean_rerun/sigma0_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",0,9383.509999999998,9585.740000000002,2.1551636860833874,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",1,8993.34,9220.2,2.522533341339264,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",2,9021.259999999998,9453.79,4.794563065469819,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",3,9300.98,9747.8,4.804009900032036,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",4,9075.8,9525.55,4.95548601776152,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",5,9190.55,9629.06,4.771314012763113,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",6,9439.71,9655.2,2.2828031793349757,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",7,8712.33,9021.24,3.5456645925946315,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",8,9523.740000000002,9617.27,0.9820721691268223,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S8,"Market: Mild Noise / (0,60)",9,9268.94,9499.98,2.492625909758819,experiments/synthetic/N5_clean_rerun/sigma60_delta0/summary/benchmark_results.csv,
+S9,"Market: Chaotic / (-5,30)",0,8646.960000000001,8982.64,3.882057971818979,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",1,8328.439999999999,8757.46,5.151264822703898,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",2,8752.5,9121.18,4.212282205084264,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",3,8764.41,9132.9,4.204390255590505,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",4,8795.54,9071.09,3.1328377791471502,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",5,8809.77,8997.94,2.1359240933645265,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",6,8816.619999999999,9059.57,2.7555911449058796,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",7,8349.77,8564.560000000001,2.572406186038668,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",8,9106.49,9127.71,0.2330206259491785,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S9,"Market: Chaotic / (-5,30)",9,8642.74,8995.800000000001,4.085047103117777,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-5.0
+S10,"Market: Chaotic / (+5,30)",0,8785.29,9365.42,6.603424588146767,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",1,8479.189999999999,8910.11,5.082089208992864,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",2,8783.48,9340.48,6.341450085842968,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",3,9093.85,9424.49,3.6358637980613207,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",4,8866.02,9300.95,4.905583339536796,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",5,8904.74,9172.52,3.0071624775119843,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",6,9059.43,9358.5,3.30120106894142,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",7,8458.31,8700.810000000001,2.867002982865393,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",8,9237.78,9444.88,2.2418806249986307,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S10,"Market: Chaotic / (+5,30)",9,8891.330000000002,9208.69,3.569319775556623,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,5.0
+S11,"Market: Chaotic / (-10,30)",0,8575.1,8929.83,4.136744760994036,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",1,8284.86,8764.39,5.788027800107652,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",2,8624.93,8914.310000000001,3.355157665047728,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",3,8657.52,8869.39,2.4472366220349357,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",4,8747.03,8983.990000000002,2.7090338091901014,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",5,8706.510000000002,8863.18,1.7994581066351296,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",6,8810.26,9111.97,3.424530036570988,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",7,8291.0,8413.86,1.4818477867567312,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",8,9084.09,9052.61,-0.34653993960869567,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S11,"Market: Chaotic / (-10,30)",9,8589.29,8957.16,4.282891833900112,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,-10.0
+S12,"Market: Chaotic / (+10,30)",0,8886.64,9284.14,4.473006670687684,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",1,8660.130000000001,9142.93,5.5749740477336855,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",2,8879.57,9241.36,4.074409008544342,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",3,9222.31,9442.55,2.388121847996866,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",4,8866.02,9295.69,4.846255704363402,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",5,8924.4,9208.32,3.1813903455694508,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",6,9117.07,9427.14,3.4009829912460883,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",7,8517.630000000001,8909.970000000001,4.606210882604669,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",8,9280.16,9515.0,2.5305598179341753,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S12,"Market: Chaotic / (+10,30)",9,8891.330000000002,9261.82,4.166868173827739,experiments/synthetic/N5_clean_rerun/sigma30_delta_grid/summary/benchmark_results.csv,10.0
+S13,"Load (High, 1:1)",0,7228.52,7387.13,2.1942250972536517,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",1,6798.08,7305.59,7.465490256072306,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",2,6941.11,7347.84,5.8597256058469105,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",3,7238.11,7733.040000000001,6.837834738626538,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",4,7074.41,7472.209999999999,5.6230837624621595,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",5,6675.9,7314.27,9.562306205904834,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",6,6858.2,7805.45,13.811933160304454,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",7,6226.9400000000005,6644.23,6.701365357623472,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",8,7431.35,7877.31,6.001063063911672,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S13,"Load (High, 1:1)",9,7218.21,7520.360000000001,4.185940835747375,experiments/synthetic/N4_custom/s1_ratio1/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",0,8665.29,9018.77,4.079263359910627,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",1,8479.189999999999,8878.15,4.705166413301282,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",2,8767.36,9227.43,5.247531754142634,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",3,8908.869999999999,9122.01,2.3924470780245,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",4,8805.25,9026.21,2.509411998523598,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",5,8780.060000000001,9051.16,3.0876782163219674,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",6,9032.72,9289.89,2.847093677209081,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",7,8450.98,8606.61,1.8415615703740988,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",8,9168.9,9238.69,0.7611600082888992,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S14,"Load (Low, 3:1)",9,8810.689999999999,9054.14,2.7631207090477674,experiments/synthetic/N4_custom/s1_ratio3/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",0,9811.48,10023.73,2.163282195958204,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",1,9965.34,10169.86,2.0523133179600537,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",2,9902.62,10229.95,3.305488850425442,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",3,9913.15,10039.79,1.2774950444611575,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",4,9988.08,10228.83,2.4103731648124564,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",5,9912.4,10230.68,3.210927726887541,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",6,10202.11,10275.66,0.7209292979589444,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",7,10100.54,10259.84,1.5771434002538405,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",8,10034.25,10316.96,2.8174502329521305,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
+S15,"Load (Ultra-Low, 10:1)",9,9840.259999999998,10084.1,2.4779833053191886,experiments/synthetic/N4_custom/s1_ratio10/summary/benchmark_results.csv,
