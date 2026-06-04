@@ -234,7 +234,7 @@ The total number of generated players in the synthetic environment is defined dy
 
 Our experimental framework generates synthetic profiles encompassing four primary operational factors:
 
-\subsection{Factor A: Projected Points Distribution (\texorpdfstring{$v_i$}{vi})}
+\subsection{Factor A: Points Distribution (\texorpdfstring{$v_i$}{vi})}
 We designed three points distributions to simulate different talent pools, clipping all generated values to a realistic range of $[10.0, 800.0]$ according to the real data we collected above:
 \begin{itemize}[leftmargin=1.5em]
     \item \textbf{Normal (Baseline)}: Values follow a normal distribution $v_i \sim \mathcal{N}(400, 120^2)$. This represents an average draft class where the majority of players are solid, mid-tier contributors.
@@ -278,21 +278,21 @@ We developed 15 distinct scenarios to isolate the impact of each factor. As show
 \small
 \begin{tabular}{clcccc}
 \toprule
-\textbf{ID} & \textbf{Main Factor} & \textbf{Ratio ($N:D$)} & \textbf{Value Dist. ($v_i$)} & \textbf{Pos. Dist. ($E_i$)} & \textbf{ADP Noise ($\delta, \sigma$)} \\ \midrule
-S1 & \textbf{Baseline} & 3:1 & Normal & Roster-Ratio & (0, 30) \\ 
-S2 & Value: Uniform & 3:1 & \textbf{Uniform} & Roster-Ratio & (0, 30) \\
-S3 & Value: Star-Heavy & 3:1 & \textbf{1:9 Skewed} & Roster-Ratio & (0, 30) \\ \midrule
-S4 & Pos: Random & 3:1 & Normal & \textbf{Uniform (Rand)} & (0, 30) \\
-S5 & Pos: Versatile & 3:1 & Normal & \textbf{Value-Corr.} & (0, 30) \\
-S6 & Pos: Rigid & 3:1 & Normal & \textbf{1:1 (Single)} & (0, 30) \\\midrule
-S7 & Market: Efficient & 3:1 & Normal & Roster-Ratio & \textbf{(0, 0)} \\
-S8 & Market: Mild Noise & 3:1 & Normal & Roster-Ratio & \textbf{(0, 60)} \\
+\textbf{ID} & \textbf{Main Factor} & \textbf{Demand Ratio ($D$)} & \textbf{Points Dist. ($v_i$)} & \textbf{Pos. Dist. ($E_i$)} & \textbf{ADP Noise ($\delta, \sigma$)} \\ \midrule
+S1 & \textbf{Baseline} & 3 & Normal & Roster-Ratio & (0, 30) \\ 
+S2 & Points: Uniform & 3 & \textbf{Uniform} & Roster-Ratio & (0, 30) \\
+S3 & Points: Star-Heavy & 3 & \textbf{High-Low} & Roster-Ratio & (0, 30) \\ \midrule
+S4 & Pos: Uniform-by-Type & 3 & Normal & \textbf{Uniform-by-Type} & (0, 30) \\
+S5 & Pos: Point-Flexible & 3 & Normal & \textbf{Point-Flexible} & (0, 30) \\
+S6 & Pos: Single-Position & 3 & Normal & \textbf{Single-Position} & (0, 30) \\\midrule
+S7 & Market: Efficient & 3 & Normal & Roster-Ratio & \textbf{(0, 0)} \\
+S8 & Market: Mild Noise & 3 & Normal & Roster-Ratio & \textbf{(0, 60)} \\
 \midrule
-S9, 10 & Market: Chaotic & 3:1 & Normal & Roster-Ratio & \textbf{($\pm$5, 30)} \\
-S11, 12 & Market: Chaotic & 3:1 & Normal & Roster-Ratio & \textbf{($\pm$10, 30)} \\ \midrule
-S13 & Load (High) & \textbf{1:1} & Normal & Roster-Ratio & (0, 30) \\
-S14 & Load (Low) & \textbf{3:1} & Normal & Roster-Ratio & (0, 30) \\
-S15 & Load (Ultra-Low) & \textbf{10:1} & Normal & Roster-Ratio & (0, 30) \\
+S9, 10 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{($\pm$5, 30)} \\
+S11, 12 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{($\pm$10, 30)} \\ \midrule
+S13 & Load (High) & \textbf{1} & Normal & Roster-Ratio & (0, 30) \\
+S14 & Load (Low) & \textbf{3} & Normal & Roster-Ratio & (0, 30) \\
+S15 & Load (Ultra-Low) & \textbf{10} & Normal & Roster-Ratio & (0, 30) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -303,17 +303,12 @@ To evaluate the absolute computational limits of our algorithms relative to the 
 
 \section{Performance Evaluation}
 
-Algorithms are evaluated primarily using the \textbf{Optimal Gap Ratio} relative to the ADP-aware ILP benchmark:
-\[
-\text{Gap Ratio} = \frac{Z_{\text{ILP}} - Z_{\text{Heuristic}}}{Z_{\text{ILP}}} \times 100\%
-\]
-where $Z$ is the total projected points. A smaller gap indicates superior performance. 
-
-To directly quantify how much the proposed OCG heuristic improves upon the naive Direct Greedy baseline, we also report the \textbf{Improve Ratio}:
-\[
-\text{Improve Ratio} = \frac{Z_{\text{OCG}} - Z_{\text{DG}}}{Z_{\text{DG}}} \times 100\%
-\]
-where $Z_{\text{OCG}}$ and $Z_{\text{DG}}$ are the raw objective values of OCG and Direct Greedy on the same synthetic instance. This metric is computed per random seed and reported as $\mu \pm \sigma$ across seeds.
+Algorithms are evaluated using two primary metrics across 30 random seeds for each scenario:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Optimal Gap Ratio (\%)}: The distance from the ILP benchmark, defined as $\frac{Z_{\text{ILP}} - Z_{\text{Heuristic}}}{Z_{\text{ILP}}} \times 100\%$. A lower value indicates higher accuracy.
+    \item \textbf{Improvement (\%)}: The direct gain of OCG over the DG baseline, calculated per seed as $\frac{Z_{\text{OCG}} - Z_{\text{DG}}}{Z_{\text{DG}}} \times 100\%$ and reported as $\mu \pm \sigma$.
+\end{itemize}
+Unless otherwise noted, all synthetic results are reported as Mean $\pm$ Standard Deviation.
 
 \subsection{Real-Data Validation}
 
@@ -336,23 +331,21 @@ FanGraphs 2026 & Opportunity Cost Greedy & \textbf{1.24\%} \\
 \end{tabular}
 \end{table}
 
-\subsection{Factor A: Projected Points Distribution}
+\subsection{Factor A: Points Distribution}
 
-Table \ref{tab:factor_1} summarizes the impact of the talent value distribution. Under the \textbf{Baseline (Normal)} distribution, our proposed Opportunity Cost Greedy (OCG) achieves a tight gap of 1.92\%, reducing the error of the naive Direct Greedy baseline (4.79\%) by more than half.
-
-The true strategic value of OCG is revealed when the draft class shifts to \textit{high-low} (star-heavy). Here, Direct Greedy's gap balloons to 8.39\%. Direct Greedy myopically drafts for immediate positional needs, allowing elite superstars to slip away to opponents. OCG explicitly calculates the delay-cost, realizes it cannot afford to pass on elites (the drop-off in value for the next round is massive), and secures a much superior 2.87\% gap.
+Table \ref{tab:factor_1} summarizes the impact of the talent distribution. Under the \textbf{Baseline (Normal)} distribution, OCG achieves a tight gap of 1.92\%, reducing the error of the DG baseline by more than half. The advantage is most pronounced in \textbf{Star-Heavy} markets (S3), where OCG prevents elite talent from being snatched by opponents, yielding a \textbf{6.10\%} average improvement in total roster value.
 
 \begin{table}[H]
 \centering
-\caption{Results for Factor A: Projected Points Distribution. Gap values are optimal gap ratio ($\% \pm \text{std}$); Improve is computed from raw objectives as $\mu \pm \sigma$.}
+\caption{Results for Factor A: Points Distribution. Gap values are optimal gap ratio ($\% \pm \text{std}$).}
 \label{tab:factor_1}
 \begin{tabular}{lccc}
 \toprule
-Level & Direct Greedy & Opportunity Cost Greedy & Improve \\
+Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
 Normal (Baseline) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ & $3.02\% \pm 1.34\%$ \\
 Uniform & $3.24\% \pm 0.77\%$ & $1.44\% \pm 0.59\%$ & $1.87\% \pm 0.65\%$ \\
-High-Low (1:9 Skewed) & $8.39\% \pm 2.40\%$ & $\mathbf{2.87\% \pm 1.32\%}$ & $\mathbf{6.10\% \pm 3.46\%}$ \\
+High-Low (Star-Heavy) & $8.39\% \pm 2.40\%$ & $\mathbf{2.87\% \pm 1.32\%}$ & $\mathbf{6.10\% \pm 3.46\%}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -363,15 +356,15 @@ Table \ref{tab:factor_2} illustrates performance across different positional fle
 
 \begin{table}[H]
 \centering
-\caption{Results for Factor B: Position Eligibility Distribution. Gap values are optimal gap ratio ($\% \pm \text{std}$); Improve is computed from raw objectives as $\mu \pm \sigma$.}
+\caption{Results for Factor B: Position Eligibility Distribution. Gap values are optimal gap ratio ($\% \pm \text{std}$).}
 \label{tab:factor_2}
 \begin{tabular}{lccc}
 \toprule
-Level & Direct Greedy & Opportunity Cost Greedy & Improve \\
+Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
 Roster-Ratio (Baseline) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ & $3.02\% \pm 1.34\%$ \\
-Uniform (Rand) & $4.89\% \pm 0.62\%$ & $1.07\% \pm 0.43\%$ & $4.02\% \pm 0.82\%$ \\
-Value-Correlated & $5.36\% \pm 1.66\%$ & $1.34\% \pm 0.68\%$ & $4.27\% \pm 1.83\%$ \\
+Uniform-by-Type & $4.89\% \pm 0.62\%$ & $1.07\% \pm 0.43\%$ & $4.02\% \pm 0.82\%$ \\
+Point-Flexible & $5.36\% \pm 1.66\%$ & $1.34\% \pm 0.68\%$ & $4.27\% \pm 1.83\%$ \\
 Single-Position & $5.11\% \pm 1.48\%$ & $\mathbf{0.94\% \pm 0.65\%}$ & $\mathbf{4.42\% \pm 1.95\%}$ \\
 \bottomrule
 \end{tabular}
@@ -385,11 +378,11 @@ When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opp
 
 \begin{table}[H]
 \centering
-\caption{Factor C: ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=30$. The second tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$. Improve is computed from raw objectives as $\mu \pm \sigma$.}
+\caption{Factor C: ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=30$. The second tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$.}
 \label{tab:factor_3}
 \begin{tabular}{llccc}
 \toprule
-Sweep & Level & Direct Greedy & Opportunity Cost Greedy & Improve \\
+Sweep & Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
 \textbf{Noise} & $\sigma_{\text{adp}}=0$ (Efficient) & $2.78\% \pm 1.33\%$ & $1.52\% \pm 1.15\%$ & $1.00\% \pm 0.50\%$ \\
  & $\sigma_{\text{adp}}=30$ (Moderate) & $5.79\% \pm 1.35\%$ & $2.72\% \pm 1.39\%$ & $3.02\% \pm 1.34\%$ \\
@@ -408,11 +401,11 @@ Table \ref{tab:factor_4} highlights scaling under tight vs. loose supply (Player
 
 \begin{table}[H]
 \centering
-\caption{Factor D: Player Demand Ratio results (Fixed Roster Scale = 1). Gap values are optimal gap ratio ($\% \pm \text{std}$); Improve is computed from raw objectives as $\mu \pm \sigma$.}
+\caption{Factor D: Player Demand Ratio results (Fixed Roster Scale = 1). Gap values are optimal gap ratio ($\% \pm \text{std}$).}
 \label{tab:factor_4}
 \begin{tabular}{lccc}
 \toprule
-Environment (Demand Ratio) & Direct Greedy & Opportunity Cost Greedy & Improve \\
+Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
 D = 1 (Extreme Scarcity) & $8.81\% \pm 2.19\%$ & $\mathbf{2.64\% \pm 1.23\%}$ & $\mathbf{6.82\% \pm 3.13\%}$ \\
 D = 3 (Baseline Supply) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ & $3.02\% \pm 1.34\%$ \\
@@ -429,7 +422,7 @@ Table \ref{tab:stress_time} showcases the \textbf{Large-Scale Stress Test}. To u
 \[ \text{Approx. Variables} = n \times (1 + p + r) \]
 This formula encompasses the player-selection variables ($y_i$), player-position assignment variables ($x_{ip}$), and player-round availability variables ($z_{ik}$). As we scale the roster size to 256 and the player pool to 184,320, the approximate variable count reaches nearly 50 million.
 
-The Branch-and-Bound tree of the ILP explores an exponentially growing space. As a result, the ILP runtime explodes from 4 seconds to 276 seconds, eventually triggering a \texttt{TIMEOUT\_ERROR} (exceeding 1800 seconds) in the largest target. In stark contrast, confirming our $O(n \log n)$ complexity analysis, \textbf{Opportunity Cost Greedy processes the massive 50-million variable equivalent environment in just 23.286 seconds}.
+The Branch-and-Bound tree of the ILP explores an exponentially growing space. As a result, the ILP runtime explodes from 4 seconds to 276 seconds, and eventually hits our predefined 30-minute (1800 seconds) solver time limit for the largest target, triggering a \texttt{TIMEOUT\_ERROR}. In stark contrast, confirming our $O(n \log n)$ complexity analysis, \textbf{Opportunity Cost Greedy processes the massive 50-million variable equivalent environment in just 23.286 seconds}.
 
 
 \begin{table}[H]
@@ -487,7 +480,7 @@ After evaluating the algorithm across 15 distinct scenarios, we identify the con
 \textbf{Factor} & \textbf{Scenario ID} & \textbf{Environment Condition} & \textbf{Improvement (\%)} \\
 \midrule
 \textbf{Load/Scarcity} & S13 & Extreme Scarcity ($D=1$) & \textbf{+6.82\%} \\
-\textbf{Value Dist.} & S3 & Star-Heavy Market & \textbf{+6.10\%} \\
+\textbf{Points Dist.} & S3 & Star-Heavy Market & \textbf{+6.10\%} \\
 \textbf{Positional} & S6 & Rigid/Single-Position & \textbf{+4.42\%} \\
 \textbf{Market Noise} & S10 & Chaotic Market ($\delta=+5$) & \textbf{+4.16\%} \\
 \bottomrule
