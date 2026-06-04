@@ -232,11 +232,7 @@ While real data confirms practical viability, the most important and further val
 The total number of generated players in the synthetic environment is defined dynamically based on the league size ($T$), base roster slots ($R = 16$), roster scale multiplier ($S$), and player-demand ratio ($D$): 
 \[ N_{\text{players}} = S \times 16 \times T \times D \]
 
-<<<<<<< Updated upstream
-We then generate synthetic profiles encompassing four primary factors:
-=======
 Our experimental framework generates synthetic profiles encompassing four primary operational factors:
->>>>>>> Stashed changes
 
 \subsection{Factor A: Projected Points Distribution (\texorpdfstring{$v_i$}{vi})}
 We designed three points distributions to simulate different talent pools, clipping all generated values to a realistic range of $[10.0, 800.0]$ according to the real data we collected above:
@@ -273,7 +269,7 @@ To test the algorithms under varying levels of scarcity, we manipulate the Playe
 
 \subsection{Scenario Matrix}
 
-We developed 14 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. For every scenario, we generate \textbf{30 random instances} to calculate the mean ($\mu=0$) and standard deviation ($\sigma$) of the performance metrics.
+We developed 15 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. The remaining scenarios follow the factor order introduced above: projected points distribution, position eligibility distribution, market volatility, and player demand ratio. For every scenario, we generate \textbf{30 random instances} to calculate the mean ($\mu=0$) and standard deviation ($\sigma$) of the performance metrics.
 
 \begin{table}[htbp]
 \centering
@@ -284,19 +280,19 @@ We developed 14 distinct scenarios to isolate the impact of each factor. As show
 \toprule
 \textbf{ID} & \textbf{Main Factor} & \textbf{Ratio ($N:D$)} & \textbf{Value Dist. ($v_i$)} & \textbf{Pos. Dist. ($E_i$)} & \textbf{ADP Noise ($\delta, \sigma$)} \\ \midrule
 S1 & \textbf{Baseline} & 3:1 & Normal & Roster-Ratio & (0, 30) \\ 
-S2 & Load (Ultra-Low) & \textbf{10:1} & Normal & Roster-Ratio & (0, 30) \\
-S3 & Load (Low) & \textbf{3:1} & Normal & Roster-Ratio & (0, 30) \\
-S4 & Load (High) & \textbf{1:1} & Normal & Roster-Ratio & (0, 30) \\ \midrule
-S5 & Value: Uniform & 3:1 & \textbf{Uniform} & Roster-Ratio & (0, 30) \\
-S6 & Value: Star-Heavy & 3:1 & \textbf{1:9 Skewed} & Roster-Ratio & (0, 30) \\ \midrule
-S7 & Pos: Random & 3:1 & Normal & \textbf{Uniform (Rand)} & (0, 30) \\
-S8 & Pos: Versatile & 3:1 & Normal & \textbf{Value-Corr.} & (0, 30) \\
-S9 & Pos: Rigid & 3:1 & Normal & \textbf{1:1 (Single)} & (0, 30) \\\midrule
-S10 & Market: Efficient & 3:1 & Normal & Roster-Ratio & \textbf{(0, 0)} \\
-S11 & Market: Mild Noise & 3:1 & Normal & Roster-Ratio & \textbf{(0, 60)} \\
+S2 & Value: Uniform & 3:1 & \textbf{Uniform} & Roster-Ratio & (0, 30) \\
+S3 & Value: Star-Heavy & 3:1 & \textbf{1:9 Skewed} & Roster-Ratio & (0, 30) \\ \midrule
+S4 & Pos: Random & 3:1 & Normal & \textbf{Uniform (Rand)} & (0, 30) \\
+S5 & Pos: Versatile & 3:1 & Normal & \textbf{Value-Corr.} & (0, 30) \\
+S6 & Pos: Rigid & 3:1 & Normal & \textbf{1:1 (Single)} & (0, 30) \\\midrule
+S7 & Market: Efficient & 3:1 & Normal & Roster-Ratio & \textbf{(0, 0)} \\
+S8 & Market: Mild Noise & 3:1 & Normal & Roster-Ratio & \textbf{(0, 60)} \\
 \midrule
-S12, 13 & Market: Chaotic & 3:1 & Normal & Roster-Ratio & \textbf{($\pm$5, 30)} \\
-S14, 15 & Market: Chaotic & 3:1 & Normal & Roster-Ratio & \textbf{($\pm$10, 30)} \\
+S9, 10 & Market: Chaotic & 3:1 & Normal & Roster-Ratio & \textbf{($\pm$5, 30)} \\
+S11, 12 & Market: Chaotic & 3:1 & Normal & Roster-Ratio & \textbf{($\pm$10, 30)} \\ \midrule
+S13 & Load (High) & \textbf{1:1} & Normal & Roster-Ratio & (0, 30) \\
+S14 & Load (Low) & \textbf{3:1} & Normal & Roster-Ratio & (0, 30) \\
+S15 & Load (Ultra-Low) & \textbf{10:1} & Normal & Roster-Ratio & (0, 30) \\
 \bottomrule
 \end{tabular}
 \end{table}
