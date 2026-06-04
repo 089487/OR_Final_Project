@@ -134,6 +134,17 @@ style: |
     font-weight: bold;
     margin-bottom: 10px;
   }
+  /* 強制圖片置右的工具類 */
+  .img-right {
+    display: flex;
+    justify-content: flex-end; /* 水平靠右 */
+    width: 100%;
+  }
+  
+  /* 確保圖片不會被預設樣式限制大小 */
+  .img-right img {
+    max-width: none !important; 
+  }
 ---
 
 <!-- _class: title-slide -->
@@ -169,7 +180,9 @@ style: |
 - **什麼是選秀 (The Draft)？**
   在球季開始前，各球隊的總管 (GM) 會齊聚一堂，輪流從龐大的「業餘球員 / 自由球員池」中挑選潛力新秀入隊 — 如何在有限的選秀權 (Picks) 內，精準填補球隊陣容的各個守備位置，並將整體戰力最大化？就是球隊脫穎而出的關鍵。
 
-<img src="image-2.jpeg" alt="Intro image" style="width:120%; display:block;">
+<div class="img-right">
+  <img src="image-2.jpeg" width="500">
+</div>
   
 <!-- 
 講者備註：
@@ -191,19 +204,29 @@ style: |
 在選秀池中，每位球員擁有以下三大屬性：
 
 
-<div class="grid-2" style="margin-top: 30px;">
-<div class="card">
-  <div class="tag">1. Projected Value ($v_i$) 賽季預期貢獻分數 </div>
+<div class="grid-2" style="margin-top: 15px;">
+<div>
+
+**1. Projected Value ($v_i$)**：賽季預期貢獻分數  
+<br>
+
+<div class="card" style="margin-top: 15px;">
   <h3 style="margin-top:0;">球探數據的收斂</h3>
   各隊對「同一名球員的評價」越來越趨近相同。<br><br>
   👉 被量化出來的戰力預測值，直接對應了我們模型中的 <span class="blue-text">Projected Points (預期分數)</span>。
 </div>
 
-<div class="card card-orange">
-  <div class="tag">2. Average Draft Position (ADP) 市場預期平均被選順位</div>
+</div>
+<div>
+
+**2. Average Draft Position (ADP)**：市場預期平均被選順位
+
+<div class="card card-orange" style="margin-top: 15px;">
   <h3 style="margin-top:0;">市場預期的博弈</h3>
   專業團隊知道在某個順位之後，就絕對選不到該球員。<br><br>
   👉 這個市場的消耗時機，精準對應了模型中的 <span class="highlight">ADP (平均選秀順位)</span>。
+</div>
+
 </div>
 </div>
 
