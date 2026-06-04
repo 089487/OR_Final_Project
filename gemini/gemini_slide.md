@@ -269,23 +269,23 @@ style: |
 ---
 
 #### Player projected points 取得
-- 從 **FantasyPros** 網站下載 2026 球員預測成績數據![alt text](image.png)
+- 從 **FantasyPros** 網站下載 2026 球員預測成績數據 <img src="image.png" height="150" style="vertical-align: middle; margin-left: 10px;">
 - 分別套用 Yahoo, FanGraphs 兩種計分方式如下表：
 
 <div class="grid-2">
 <div class="card">
   <div class="tag">Yahoo Scoring</div>
   <ul>
-    <li><b>打者</b>：(1B, 2B, 3B, HR, R, RBI, BB, HBP, SB, SO) = (1, 2, 3, 4, 1, 1, 1, 1, 1, -0.5)</li>
-    <li><b>投手</b>：(IP, SO, W, L, SV, ER) = (3, 1, 5, -5, 5, -2)</li>
+    <li><b>打者</b>：(1B, 2B, 3B, HR, R, RBI, BB, SB, HBP) = (2.6, 5.2, 7.8, 10.4, 1.9, 1.9, 2.6, 4.2, 2.6)</li>
+    <li><b>投手</b>：(IP, W, SV, K, H, BB, HBP, ER) = (3, 8, 8, 3, -1.3, -1.3, -1.3, -3)</li>
   </ul>
 </div>
 
 <div class="card card-orange">
   <div class="tag">FanGraphs Scoring</div>
   <ul>
-    <li><b>打者</b>：(1B, 2B, 3B, HR, BB, HBP, SB, CS, SO) = (5.6, 2.9, 5.7, 9.4, 3, 3, 1.9, -2.8, -1)</li>
-    <li><b>投手</b>：(IP, SO, BB, HBP, HR, SV, HLD) = (5, 2, -3, -3, -13, 5, 4)</li>
+    <li><b>打者</b>：(H, 2B, 3B, HR, BB, HBP, SB, CS, AB) = (5.6, 2.9, 5.7, 9.4, 3, 3, 1.9, -2.8, -1)</li>
+    <li><b>投手</b>：(IP, K, SV, HLD, H, BB, HBP, HR) = (7.4, 2, 5, 4, -2.6, -3, -3, -12.3)</li>
   </ul>
 </div>
 </div>
