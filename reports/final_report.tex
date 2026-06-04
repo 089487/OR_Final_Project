@@ -479,19 +479,20 @@ After evaluating the algorithm across 15 distinct scenarios, we identify the con
 \toprule
 \textbf{Factor} & \textbf{Scenario ID} & \textbf{Environment Condition} & \textbf{Improvement (\%)} \\
 \midrule
-\textbf{Load/Scarcity} & S13 & Extreme Scarcity ($D=1$) & \textbf{+6.82\%} \\
 \textbf{Points Dist.} & S3 & Star-Heavy Market & \textbf{+6.10\%} \\
 \textbf{Positional} & S6 & Rigid/Single-Position & \textbf{+4.42\%} \\
 \textbf{Market Noise} & S10 & Chaotic Market ($\delta=+5$) & \textbf{+4.16\%} \\
+\textbf{Load/Scarcity} & S13 & Extreme Scarcity ($D=1$) & \textbf{+6.82\%} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \noindent \textbf{Analysis of the Competitive Edge:}
 \begin{itemize}
-    \item \textbf{Navigation of Scarcity (S13):} In environments where almost every player is drafted ($D=1$), DG often suffers from "positional blindness," leading to a 6.82\% loss in roster value. OCG's foresight prevents these late-draft collapses.
     \item \textbf{Securing Elite Talent (S3):} In star-heavy drafts, the "cost of waiting" for one more turn is mathematically massive. OCG quantifies this cost, ensuring elite assets are secured before the value "cliff" occurs.
+    \item \textbf{Managing Rigid Rosters (S6):} When positional flexibility is eliminated, early greedy mistakes are impossible to patch. OCG's foresight prevents these catastrophic positional deficits, maintaining high optimality.
     \item \textbf{Resilience to Market Noise (S10):} Even when opponents' behavior is unpredictable, OCG maintains a robust lead, proving its delay-cost heuristic acts as a natural hedge against market volatility.
+    \item \textbf{Navigation of Scarcity (S13):} In environments where almost every player is drafted ($D=1$), DG often suffers from "positional blindness," leading to a 6.82\% loss in roster value. OCG's foresight prevents these late-draft collapses.
 \end{itemize}
 
 \section{Conclusions and Business Recommendations}
