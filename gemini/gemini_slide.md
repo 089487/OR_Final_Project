@@ -167,13 +167,10 @@ style: |
 **對於一支職業棒球隊來說，最划算且最重要的補強方式就是「透過選秀」。**
 
 - **什麼是選秀 (The Draft)？**
-  在球季開始前，各球隊的總管 (GM) 會齊聚一堂，輪流從龐大的「業餘球員 / 自由球員池」中挑選潛力新秀入隊。
-- **選秀的本質：零和博弈與資源分配**
-  - 你面對的是一個<span class="highlight">「會不斷被對手消耗的公共資源池」</span>。
-  - 當你看中一名球員卻沒有立刻選他，下一次輪到你時，他可能已經被對手搶走。
-- **決策的核心**：
-  在有限的選秀權 (Picks) 內，如何精準填補球隊陣容的各個守備位置，並將整體戰力最大化？
+  在球季開始前，各球隊的總管 (GM) 會齊聚一堂，輪流從龐大的「業餘球員 / 自由球員池」中挑選潛力新秀入隊 — 如何在有限的選秀權 (Picks) 內，精準填補球隊陣容的各個守備位置，並將整體戰力最大化？就是球隊脫穎而出的關鍵。
 
+<img src="image-2.jpeg" alt="Intro image" style="width:120%; display:block;">
+  
 <!-- 
 講者備註：
 各位教授、助教、同學們大家好。想像我們現在是大聯盟球隊的制服組 (Front Office)。對於球隊來說，要在聯盟中保持長期競爭力，最核心的任務就是「選秀」。選秀就像是一場搶物資的遊戲，池子裡的頂級新秀數量有限，當你猶豫不決時，對手就會把人搶走。
@@ -181,33 +178,50 @@ style: |
 
 ---
 
-## Introduction: 現代制服組的挑戰與洞察
 
-過去的選秀仰賴老球探的「直覺」，但在大數據時代，我們觀察到兩個重要的商業洞察：
 
-<div class="grid-2">
+<!-- _class: impact-slide -->
+
+# 2. Problem Settings
+
+---
+
+## Problem Description I：球員屬性
+
+在選秀池中，每位球員擁有以下三大屬性：
+
+
+<div class="grid-2" style="margin-top: 30px;">
 <div class="card">
-  <div class="tag">Insight 1</div>
+  <div class="tag">1. Projected Value ($v_i$) 賽季預期貢獻分數 </div>
   <h3 style="margin-top:0;">球探數據的收斂</h3>
   各隊對「同一名球員的評價」越來越趨近相同。<br><br>
   👉 被量化出來的戰力預測值，直接對應了我們模型中的 <span class="blue-text">Projected Points (預期分數)</span>。
 </div>
 
 <div class="card card-orange">
-  <div class="tag">Insight 2</div>
+  <div class="tag">2. Average Draft Position (ADP) 市場預期平均被選順位</div>
   <h3 style="margin-top:0;">市場預期的博弈</h3>
   專業團隊知道在某個順位之後，就絕對選不到該球員。<br><br>
   👉 這個市場的消耗時機，精準對應了模型中的 <span class="highlight">ADP (平均選秀順位)</span>。
 </div>
 </div>
 
+**3. Eligible Positions ($E_i$)**：球員合法的守備位置。
+
+
+<!--
 > **「當各隊對球員的評價與落點預測都一致時，真正的優勢，在於能否執行一套數學上最佳化的選秀策略！」**
+-->
 
 ---
 
-## 2. Problem Description I：蛇形選秀 (Snake Draft)
 
-現實中的 MLB 選秀是依據前一年的戰績（由爛到好）進行固定順位選秀。但為了純粹探討**「選秀策略的數學優勢」**，我們將情境抽象化為更公平的<span class="highlight">蛇形選秀</span>。
+
+
+## 2. Problem Description II：蛇形選秀 (Snake Draft)
+
+現實中的 MLB 選秀是依據前一年的戰績（由爛到好）進行固定順位選秀。但為了純粹探討 **「選秀策略的數學優勢」**，我們將情境抽象化為更公平的<span class="highlight">蛇形選秀</span>。
 
 - **為什麼使用蛇形選秀？**
   消除初始戰績帶來的絕對資源優勢。在蛇形選秀中，每一輪的選秀順序會反轉（第一輪最後選的人，第二輪第一個選），藉此凸顯「策略分配」本身的重要性。
@@ -215,21 +229,6 @@ style: |
   假設共有 $M$ 位玩家，我們的初始順位為 $j$ ($1 \le j \le M$)。在第 $r$ 輪時，我們擁有的整體順位 $k$ 為：
   - **奇數輪 (Forward)**：$k = (r - 1)M + j$
   - **偶數輪 (Reverse)**：$k = rM - j + 1$
-
----
-
-## Problem Description II：球員屬性與特殊簡化
-
-在選秀池中，每位球員擁有以下三大屬性：
-1. **Projected Value ($v_i$)**：賽季預期貢獻分數。
-2. **Eligible Positions ($E_i$)**：球員合法的守備位置。
-3. **Average Draft Position (ADP)**：市場預期平均被選順位。
-
-<div class="card" style="margin-top: 20px;">
-  <span class="highlight">⚠️ 特殊簡化：大谷翔平條款 (The Ohtani Rule)</span><br>
-  為了避免位置彈性上的邏輯過於複雜，我們在模型中<b>不考慮二刀流</b>。<br>
-  在後續的合成與真實數據中，大谷翔平 (Shohei Ohtani) 的「打者 (DH)」與「投手 (SP)」身份會被拆分視為<b>兩名獨立的球員</b>。
-</div>
 
 ---
 
@@ -297,7 +296,6 @@ style: |
 ![alt text](image-1.png)
 
 ---
-
 
 ## 4. Model Formulation I：變數與目標函數
 
@@ -394,7 +392,7 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
   - 為每個守備位置維護一個 **Max-Heap (優先佇列)**。
   - 採用 **Lazy Deletion (延遲刪除)**：當球員被對手選走時不立刻重整 Heap，而是等到 pop 時再檢查有效性。
 - **複雜度表現**：
-  - 假設 $n$ = 球員總數， $r$ = 名單人數， $p$ = 守備位置數。
+  - 假設 $n$ = 球員總數， $r$ = 名單人數， it $p$ = 守備位置數。
   - **總時間複雜度**：$\mathcal{O}(n \log n + r \cdot p)$ (和Direct Greedy 相同)
 
 <div class="card" style="text-align:center; margin-top:20px; color:#1e40af; font-weight:bold;">
