@@ -281,7 +281,7 @@ style: |
 ---
 
 #### 1. Player projected points $v_i$ 取得
-- 從 **FantasyPros** 網站下載 2026 球員預測成績數據 <img src="image.png" height="150" style="vertical-align: middle; margin-left: 10px;">
+- 從 **FantasyPros** 網站下載 2026 球員預測成績數據 <img src="image.png" height="180" style="vertical-align: middle; margin-left: 10px;">
 - 分別套用 Yahoo, FanGraphs 兩種計分方式如下表：
 
 <div class="grid-2">
