@@ -314,7 +314,7 @@ We identify the following four dimensions of complexity that define the Fantasy 
 
 \subsection{Scenario Matrix}
 
-We developed 14 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. For every scenario, we generate \textbf{30 random instances} to calculate the mean ($\mu$) and standard deviation ($\sigma$) of the performance metrics.
+We developed 14 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. For every scenario, we generate \textbf{30 random instances} to calculate the mean ($\mu=0$) and standard deviation ($\sigma$) of the performance metrics.
 
 \begin{table}[htbp]
 \centering
@@ -323,21 +323,22 @@ We developed 14 distinct scenarios to isolate the impact of each factor. As show
 \small
 \begin{tabular}{clcccc}
 \toprule
-\textbf{ID} & \textbf{Main Factor} & \textbf{Ratio ($N:D$)} & \textbf{Value Dist. ($v_i$)} & \textbf{Pos. Dist. ($E_i$)} & \textbf{ADP Noise ($\sigma$)} \\ \midrule
-S1 & \textbf{Baseline} & 1:1 & Normal & Roster-Ratio & 15 \\ 
-S2 & Load (Ultra-Low) & \textbf{10:1} & Normal & Roster-Ratio & 15 \\
-S3 & Load (Low) & \textbf{3:1} & Normal & Roster-Ratio & 15 \\
-S4 & Load (High) & \textbf{1:1} & Normal & Roster-Ratio & 15 \\ \midrule
-S5 & Value: Normal & 1:1 & \textbf{Normal} & Roster-Ratio & 15 \\
-S6 & Value: Uniform & 1:1 & \textbf{Uniform} & Roster-Ratio & 15 \\
-S7 & Value: Star-Heavy & 1:1 & \textbf{1:9 Skewed} & Roster-Ratio & 15 \\ \midrule
-S8 & Pos: Random & 1:1 & Normal & \textbf{Uniform (Rand)} & 15 \\
-S9 & Pos: Versatile & 1:1 & Normal & \textbf{Value-Corr.} & 15 \\
-S10 & Pos: Rigid & 1:1 & Normal & \textbf{1:1 (Single)} & 15 \\
-S11 & Pos: Scaled & 1:1 & Normal & \textbf{By Demand} & 15 \\ \midrule
-S12 & Market: Efficient & 1:1 & Normal & Roster-Ratio & \textbf{0} \\
-S13 & Market: Mild Noise & 1:1 & Normal & Roster-Ratio & \textbf{5} \\
-S14 & Market: Chaotic & 1:1 & Normal & Roster-Ratio & \textbf{30} \\ \bottomrule
+\textbf{ID} & \textbf{Main Factor} & \textbf{Ratio ($N:D$)} & \textbf{Value Dist. ($v_i$)} & \textbf{Pos. Dist. ($E_i$)} & \textbf{ADP Noise ($\delta, \sigma$)} \\ \midrule
+S1 & \textbf{Baseline} & 1:1 & Normal & Roster-Ratio & (0, 30) \\ 
+S2 & Load (Ultra-Low) & \textbf{10:1} & Normal & Roster-Ratio & (0, 30) \\
+S3 & Load (Low) & \textbf{3:1} & Normal & Roster-Ratio & (0, 30) \\
+S4 & Load (High) & \textbf{1:1} & Normal & Roster-Ratio & (0, 30) \\ \midrule
+S5 & Value: Uniform & 1:1 & \textbf{Uniform} & Roster-Ratio & (0, 30) \\
+S6 & Value: Star-Heavy & 1:1 & \textbf{1:9 Skewed} & Roster-Ratio & (0, 30) \\ \midrule
+S7 & Pos: Random & 1:1 & Normal & \textbf{Uniform (Rand)} & (0, 30) \\
+S8 & Pos: Versatile & 1:1 & Normal & \textbf{Value-Corr.} & (0, 30) \\
+S9 & Pos: Rigid & 1:1 & Normal & \textbf{1:1 (Single)} & (0, 30) \\\midrule
+S10 & Market: Efficient & 1:1 & Normal & Roster-Ratio & \textbf{(0, 0)} \\
+S11 & Market: Mild Noise & 1:1 & Normal & Roster-Ratio & \textbf{(0, 60)} \\
+\midrule
+S12, 13 & Market: Chaotic & 1:1 & Normal & Roster-Ratio & \textbf{($\pm$5, 30)} \\
+S14, 15 & Market: Chaotic & 1:1 & Normal & Roster-Ratio & \textbf{($\pm$10, 30)} \\
+\bottomrule
 \end{tabular}
 \end{table}
 
