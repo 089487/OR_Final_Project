@@ -276,6 +276,7 @@ We developed 15 distinct scenarios to isolate the impact of each factor. As show
 \caption{Experimental Scenario Matrix for Draft Optimization}
 \label{tab:scenario_matrix}
 \small
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{clcccc}
 \toprule
 \textbf{ID} & \textbf{Main Factor} & \textbf{Demand Ratio ($D$)} & \textbf{Points Dist. ($v_i$)} & \textbf{Pos. Dist. ($E_i$)} & \textbf{ADP Noise ($\delta, \sigma$)} \\ \midrule
@@ -294,7 +295,8 @@ S13 & Load (High) & \textbf{1} & Normal & Roster-Ratio & (0, 30) \\
 S14 & Load (Low) & \textbf{3} & Normal & Roster-Ratio & (0, 30) \\
 S15 & Load (Ultra-Low) & \textbf{10} & Normal & Roster-Ratio & (0, 30) \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \subsection{Stress Testing Design}
@@ -343,8 +345,8 @@ Table \ref{tab:factor_1} summarizes the impact of the talent distribution. Under
 \toprule
 Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
-Normal (Baseline) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ & $3.02\% \pm 1.34\%$ \\
-Uniform & $3.24\% \pm 0.77\%$ & $1.44\% \pm 0.59\%$ & $1.87\% \pm 0.65\%$ \\
+Normal (Baseline) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
+Uniform & $3.24\% \pm 0.77\%$ & $\mathbf{1.44\% \pm 0.59\%}$ & $1.87\% \pm 0.65\%$ \\
 High-Low (Star-Heavy) & $8.39\% \pm 2.40\%$ & $\mathbf{2.87\% \pm 1.32\%}$ & $\mathbf{6.10\% \pm 3.46\%}$ \\
 \bottomrule
 \end{tabular}
@@ -362,9 +364,9 @@ Table \ref{tab:factor_2} illustrates performance across different positional fle
 \toprule
 Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
-Roster-Ratio (Baseline) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ & $3.02\% \pm 1.34\%$ \\
-Uniform-by-Type & $4.89\% \pm 0.62\%$ & $1.07\% \pm 0.43\%$ & $4.02\% \pm 0.82\%$ \\
-Point-Flexible & $5.36\% \pm 1.66\%$ & $1.34\% \pm 0.68\%$ & $4.27\% \pm 1.83\%$ \\
+Roster-Ratio (Baseline) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
+Uniform-by-Type & $4.89\% \pm 0.62\%$ & $\mathbf{1.07\% \pm 0.43\%}$ & $4.02\% \pm 0.82\%$ \\
+Point-Flexible & $5.36\% \pm 1.66\%$ & $\mathbf{1.34\% \pm 0.68\%}$ & $4.27\% \pm 1.83\%$ \\
 Single-Position & $5.11\% \pm 1.48\%$ & $\mathbf{0.94\% \pm 0.65\%}$ & $\mathbf{4.42\% \pm 1.95\%}$ \\
 \bottomrule
 \end{tabular}
@@ -384,13 +386,13 @@ When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opp
 \toprule
 Sweep & Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
-\textbf{Noise} & $\sigma_{\text{adp}}=0$ (Efficient) & $2.78\% \pm 1.33\%$ & $1.52\% \pm 1.15\%$ & $1.00\% \pm 0.50\%$ \\
- & $\sigma_{\text{adp}}=30$ (Moderate) & $5.79\% \pm 1.35\%$ & $2.72\% \pm 1.39\%$ & $3.02\% \pm 1.34\%$ \\
- & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.10\% \pm 1.29\%$ & $\mathbf{2.92\% \pm 1.75\%}$ & $3.33\% \pm 1.43\%$ \\
+\textbf{Noise} & $\sigma_{\text{adp}}=0$ (Efficient) & $2.78\% \pm 1.33\%$ & $\mathbf{1.52\% \pm 1.15\%}$ & $1.00\% \pm 0.50\%$ \\
+ & $\sigma_{\text{adp}}=30$ (Moderate) & $5.79\% \pm 1.35\%$ & $\mathbf{2.72\% \pm 1.39\%}$ & $3.02\% \pm 1.34\%$ \\
+ & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.10\% \pm 1.29\%$ & $\mathbf{2.92\% \pm 1.75\%}$ & $\mathbf{3.33\% \pm 1.43\%}$ \\
 \midrule
 \textbf{Tolerance} & $\delta=-10$ (Strict) & $4.65\% \pm 1.32\%$ & $\mathbf{1.90\% \pm 0.77\%}$ & $2.91\% \pm 1.71\%$ \\
- & $\delta=0$ (Neutral) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ & $3.02\% \pm 1.34\%$ \\
- & $\delta=10$ (Permissive) & $5.42\% \pm 1.21\%$ & $1.72\% \pm 0.95\%$ & $3.92\% \pm 1.03\%$ \\
+ & $\delta=0$ (Neutral) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
+ & $\delta=10$ (Permissive) & $5.42\% \pm 1.21\%$ & $\mathbf{1.72\% \pm 0.95\%}$ & $\mathbf{3.92\% \pm 1.03\%}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -408,7 +410,7 @@ Table \ref{tab:factor_4} highlights scaling under tight vs. loose supply (Player
 Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
 D = 1 (Extreme Scarcity) & $8.81\% \pm 2.19\%$ & $\mathbf{2.64\% \pm 1.23\%}$ & $\mathbf{6.82\% \pm 3.13\%}$ \\
-D = 3 (Baseline Supply) & $4.79\% \pm 1.18\%$ & $1.92\% \pm 0.57\%$ & $3.02\% \pm 1.34\%$ \\
+D = 3 (Baseline Supply) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
 D = 10 (High Abundance) & $3.29\% \pm 0.85\%$ & $\mathbf{1.16\% \pm 0.51\%}$ & $2.20\% \pm 0.83\%$ \\
 \bottomrule
 \end{tabular}
@@ -438,7 +440,7 @@ stress\_small  & 5,760 & 0.790 & 0.852 & 4.235 & OPTIMAL \\
 stress\_medium & 9,600 & 0.951 & 1.144 & 12.230 & OPTIMAL \\
 stress\_large  & 21,600 & 1.981 & 2.344 & 54.267 & OPTIMAL \\
 stress\_xlarge & 64,000 & 6.172 & 10.360 & 276.895 & OPTIMAL \\
-\textbf{timeout\_target} & \textbf{184,320} & \textbf{17.760} & \textbf{23.286} & \textbf{1869.805} & \textbf{TIMEOUT} \\
+timeout\_target & 184,320 & 17.760 & 23.286 & \textbf{1869.805} & \textbf{TIMEOUT} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -452,11 +454,11 @@ stress\_xlarge & 64,000 & 6.172 & 10.360 & 276.895 & OPTIMAL \\
 \toprule
 Instance Level  & DG Gap (\%) & OCG Gap (\%) \\
 \midrule
-stress\_small  & 2.430\% & 1.098\% \\
-stress\_medium & 1.771\% & 0.646\% \\
-stress\_large  & 0.940\% & 0.407\% \\
-stress\_xlarge & 0.270\% & 0.137\% \\
-\textbf{timeout\_target} & \textbf{--} & \textbf{--} \\
+stress\_small  & 2.430\% & \textbf{1.098\%} \\
+stress\_medium & 1.771\% & \textbf{0.646\%} \\
+stress\_large  & 0.940\% & \textbf{0.407\%} \\
+stress\_xlarge & 0.270\% & \textbf{0.137\%} \\
+timeout\_target & -- & -- \\
 \bottomrule
 \end{tabular}
 \end{table}
