@@ -194,7 +194,7 @@ Real data validation serves as our first step of validation. We constructed our 
   \label{fig:player_adp}
 \end{figure}
 
-Player values are calculated using two distinct scoring benchmarks defined in \texttt{scoring/yahoo\_scoring.json} and \texttt{scoring/fangraph\_scoring.json}. The detailed scoring weights for both batters and pitchers are outlined in Table \ref{tab:scoring_weights}.
+Player values are calculated using two distinct standard scoring benchmarks: Yahoo (which focuses on traditional counting stats) and FanGraphs (which incorporates more advanced player metrics based on linear weights). The detailed scoring weights for both batters and pitchers are outlined in Table \ref{tab:scoring_weights}.
 
 \begin{table}[H]
 \centering
@@ -214,14 +214,14 @@ R         & 1.9 & --  & ER  & -3.0& --  \\
 RBI       & 1.9 & --  & BB  & -1.3& -3.0\\
 BB        & 2.6 & 3.0 & H   & -1.3& -2.6\\
 SB        & 4.2 & 1.9 & HBP & -1.3& -3.0\\
-HBP       & 2.6 & 3.0 & HR  & --  &-12.3\\
+HBP       & 0 (2.6) & 0 (3.0) & HR  & --  &-12.3\\
 AB        & --  &-1.0 & HLD & --  & 4.0 \\
-CS        & --  &-2.8 &     &     &     \\
+CS        & --  &0 (-2.8) &     &     &     \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Slight modifications were made to the original projected stats to align with these scoring categories. For example, since the projected stats lack Hit By Pitch (HBP) and Caught Stealing (CS) for batters, we set these metrics to zero. Furthermore, since outs are required for pitching calculations, we compute them as Innings Pitched (IP) $\times$ 3. 
+Slight modifications were made to the original projected stats to align with these scoring categories. For example, since the projected stats lack Hit By Pitch (HBP) and Caught Stealing (CS) for batters, we effectively set their scoring weights to zero (original standard weights are shown in parentheses in the table). Furthermore, since outs are required for pitching calculations, we compute them as Innings Pitched (IP) $\times$ 3. 
 
 Additionally, across all experiments (both real and synthetic data), the manager's initial draft position is standardized to the middle of the draft order (e.g., the 6th pick in a 12-team league, or the 12th pick in a 24-team league) to maintain a consistent evaluation baseline.
 
