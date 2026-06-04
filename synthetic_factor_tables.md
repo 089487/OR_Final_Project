@@ -56,7 +56,7 @@ Varied factor:
 | position_scenario | Direct Greedy (baseline) | Opportunity Cost Greedy (our approach) |
 |---|---:|---:|
 | uniform_by_type | `4.89% ± 0.62%` | `1.07% ± 0.43%` |
-| point_flexible | `5.36% ± 1.66%` | `1.34% ± 0.68%` |
+| val_correlation | `5.36% ± 1.66%` | `1.34% ± 0.68%` |
 | single_position | `5.11% ± 1.48%` | `0.94% ± 0.65%` |
 | roster_ratio | `4.79% ± 1.18%` | `1.92% ± 0.57%` |
 
