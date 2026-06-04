@@ -503,7 +503,6 @@ OCG 對以下幾種極端場景的改善最明顯：
 
 ---
 
-<!-- Marp slide -->
 
 ## Stress Testing: Runtime Comparison
 | Stress Level | Approx. Vars | IP Runtime | OCG Runtime |
@@ -516,6 +515,7 @@ OCG 對以下幾種極端場景的改善最明顯：
 
 **結論**：在運算量增大，造成 IP 超時的情況下，我們設計的OCG演算法之運算時間仍趨近線性成長，在高維度之選秀市場中更有其實用性。
 
+<!-- i don't know why but 他的排版有點醜。 -->
 ---
 ## 8. Conclusions & Business Recommendations
 
