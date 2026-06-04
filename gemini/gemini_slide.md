@@ -407,10 +407,10 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 
 | 數據來源 (2026) | 演算法 | **Optimal Gap Ratio** |
 | :--- | :--- | :--- |
-| **Yahoo** | **OCG (我們的)** | <span class="blue-text">**0.92%**</span> |
-| | Direct Greedy | 2.69% |
-| **FanGraphs** | **OCG (我們的)** | <span class="blue-text">**2.32%**</span> |
-| | Direct Greedy | 4.18% |
+| **Yahoo** | **OCG (我們的)** | <span class="blue-text">**0.50%**</span> |
+| | Direct Greedy | 3.24% |
+| **FanGraphs** | **OCG (我們的)** | <span class="blue-text">**1.24%**</span> |
+| | Direct Greedy | 3.36% |
 
 
 ---
