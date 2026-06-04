@@ -1,24 +1,32 @@
 {
   "source": "yahoo",
-  "description": "Yahoo Fantasy Baseball scoring weights (打者/投手)",
+  "system": "yahoo_points",
+  "platform": "yahoo_fantasy_baseball",
+  "description": "Yahoo Fantasy Baseball default Head-to-Head Points scoring",
+  "link": "https://ottoneu.fangraphs.com/support",
+  "note" : "more focus on traditional stats",
+
   "batters": {
-    "1B": 1.0,
-    "2B": 2.0,
-    "3B": 3.0,
-    "HR": 4.0,
-    "R": 1.0,
-    "RBI": 1.0,
-    "BB": 1.0,
-    "HBP": 1.0,
-    "SB": 1.0,
-    "SO": -0.5
+    "1B": 2.6,
+    "2B": 5.2,
+    "3B": 7.8,
+    "HR": 10.4,
+    "R": 1.9,
+    "RBI": 1.9,
+    "BB": 2.6,
+    "SB": 4.2,
+    "HBP": 2.6
   },
+
   "pitchers": {
+    "SV": 8.0,
+    "W": 8.0,
+    "K": 3.0,
+    "ER": -3.0,
     "IP": 3.0,
-    "SO": 1.0,
-    "W": 5.0,
-    "L": -5.0,
-    "SV": 5.0,
-    "ER": -2.0
+    "BB": -1.3,
+    "H": -1.3,
+    "HBP": -1.3
   }
+
 }

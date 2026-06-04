@@ -174,9 +174,62 @@ Let $n$ be the total number of players in the draft pool, $r$ be the number of r
 
 \section{Data Collection and Generation}
 
-To rigorously test our algorithms and simulate the vast ecosystem of MLB draft-eligible players, we developed a highly customizable \textbf{Synthetic Data Generator}. While real data (2026 Yahoo/FanGraphs projections) is used for final validation, synthetic data is indispensable. It allows us to mathematically isolate specific operational variables (Factors)—such as talent distribution, positional versatility, and market supply—and stress-test the algorithms under controlled extreme conditions.
+To evaluate our algorithms, we utilize both real-world data and a highly customizable \textbf{Synthetic Data Generator}.
 
-The total number of generated players is defined dynamically based on the league size ($T$), base roster slots ($R = 16$), roster scale multiplier ($S$), and player-demand ratio ($D$): 
+\subsection{Real Data Collection}
+
+Real data validation serves as our first step of validation. We constructed our real dataset by downloading the Average Draft Position (ADP) and 2026 player projected batting and pitching statistics from FantasyPros. Figures \ref{fig:projected_data} and \ref{fig:player_adp} display examples of the projected data and ADP metrics collected.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.55\linewidth]{./image.png}
+  \caption{Example of 2026 player projected batting and pitching statistics.}
+  \label{fig:projected_data}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.55\linewidth]{./image-1.png}
+  \caption{Example of player Average Draft Position (ADP).}
+  \label{fig:player_adp}
+\end{figure}
+
+Player values are calculated using two distinct scoring benchmarks defined in \texttt{scoring/yahoo\_scoring.json} and \texttt{scoring/fangraph\_scoring.json}. The detailed scoring weights for both batters and pitchers are outlined in Table \ref{tab:scoring_weights}.
+
+\begin{table}[H]
+\centering
+\caption{Scoring weights for Yahoo and FanGraphs formats.}
+\label{tab:scoring_weights}
+\small
+\begin{tabular}{l c c | l c c}
+\toprule
+\multicolumn{3}{c|}{\textbf{Batters}} & \multicolumn{3}{c}{\textbf{Pitchers}} \\
+\textbf{Metric} & \textbf{Yahoo} & \textbf{FanGraphs} & \textbf{Metric} & \textbf{Yahoo} & \textbf{FanGraphs} \\
+\midrule
+1B (or H) & 2.6 & 5.6 & IP  & 3.0 & 7.4 \\
+2B        & 5.2 & 2.9 & K   & 3.0 & 2.0 \\
+3B        & 7.8 & 5.7 & W   & 8.0 & --  \\
+HR        & 10.4& 9.4 & SV  & 8.0 & 5.0 \\
+R         & 1.9 & --  & ER  & -3.0& --  \\
+RBI       & 1.9 & --  & BB  & -1.3& -3.0\\
+BB        & 2.6 & 3.0 & H   & -1.3& -2.6\\
+SB        & 4.2 & 1.9 & HBP & -1.3& -3.0\\
+HBP       & 2.6 & 3.0 & HR  & --  &-12.3\\
+AB        & --  &-1.0 & HLD & --  & 4.0 \\
+CS        & --  &-2.8 &     &     &     \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Slight modifications were made to the original projected stats to align with these scoring categories. For example, since the projected stats lack Hit By Pitch (HBP) and Caught Stealing (CS) for batters, we set these metrics to zero. Furthermore, since outs are required for pitching calculations, we compute them as Innings Pitched (IP) $\times$ 3. 
+
+Additionally, across all experiments (both real and synthetic data), the manager's initial draft position is standardized to the middle of the draft order (e.g., the 6th pick in a 12-team league, or the 12th pick in a 24-team league) to maintain a consistent evaluation baseline.
+
+\subsection{Synthetic Data Generation}
+
+While real data confirms practical viability, the most important and further validation is performed on synthetic data. Synthetic data is indispensable as it allows us to mathematically isolate specific operational variables (Factors)—such as talent distribution, positional versatility, and market supply—and stress-test the algorithms under controlled extreme conditions. 
+
+The total number of generated players in the synthetic environment is defined dynamically based on the league size ($T$), base roster slots ($R = 16$), roster scale multiplier ($S$), and player-demand ratio ($D$): 
 \[ N_{\text{players}} = S \times 16 \times T \times D \]
 
 Our experimental framework is divided into 6 Scenarios (N1 to N6). We generate synthetic profiles encompassing four primary factors:
@@ -306,6 +359,27 @@ Algorithms are evaluated primarily using the \textbf{Optimal Gap Ratio} relative
 \]
 where $Z$ is the total projected points. A smaller gap indicates superior performance. 
 
+\subsection{Real-Data Validation}
+
+As the first step of validation, we ran the algorithms on the real-world 2026 Yahoo and FanGraphs projections. As seen in Table \ref{tab:real_data}, OCG successfully trims the point loss caused by naive greedy drafting, confirming its practical viability on real MLB data structures before proceeding to the more comprehensive synthetic validations.
+
+\begin{table}[H]
+\centering
+\caption{Real-data validation (Gap measured in optimal gap ratio versus ILP).}
+\label{tab:real_data}
+\begin{tabular}{llc}
+\toprule
+Scoring Method & Method & Optimal Gap Ratio \\
+\midrule
+Yahoo 2026 & Opportunity Cost Greedy & \textbf{0.92\%} \\
+ & Direct Greedy & 2.69\% \\
+\midrule
+FanGraphs 2026 & Opportunity Cost Greedy & \textbf{2.32\%} \\
+ & Direct Greedy & 4.18\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{N1 to N3: Base, Points, and Positional Flexibility}
 
 Table \ref{tab:n1_n3} summarizes the results for the fundamental scenarios. In the \textbf{N1 Baseline}, our proposed Opportunity Cost Greedy (OCG) achieves a tight gap of 1.92\%, reducing the error of the naive Direct Greedy baseline (4.79\%) by more than half.
@@ -409,27 +483,7 @@ stress\_xlarge & 10,880,000 & 64,000 & 6.172 & 10.360 & 276.895 / OPTIMAL \\
   \caption{Runtime comparison for N6. ILP scales exponentially, while heuristics scale linearly.}
 \end{figure}
 
-\subsection{Real-Data Validation}
-To ensure practical viability for the upcoming season, we ran the algorithms on 2026 Yahoo and FanGraphs projections. As seen in Table \ref{tab:real_data}, OCG successfully trims the point loss caused by naive greedy drafting, confirming that synthetic insights hold true in real MLB data structures.
 
-\begin{table}[H]
-\centering
-\caption{Real-data validation (Gap measured in absolute projected points lost vs ILP).}
-\label{tab:real_data}
-\begin{tabular}{llrrr}
-\toprule
-Dataset & Method & Mean Obj. Points & Mean Gap & Max Gap \\
-\midrule
-Yahoo 2026 & ADP-aware ILP & 7917.209 & 0.000 & 0.000 \\
- & Opportunity Cost Greedy & 7767.732 & \textbf{149.477} & 255.700 \\
- & Direct Greedy & 7662.866 & 254.343 & 373.000 \\
-\midrule
-FanGraphs 2026 & ADP-aware ILP & 14642.927 & 0.000 & 0.000 \\
- & Opportunity Cost Greedy & 14320.135 & \textbf{322.792} & 508.000 \\
- & Direct Greedy & 14097.337 & 545.590 & 644.500 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \section{Conclusions and Business Recommendations}
 

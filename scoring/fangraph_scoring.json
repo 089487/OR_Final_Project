@@ -1,23 +1,29 @@
 {
   "source": "fangraphs",
   "description": "Fangraphs scoring weights (v_i calculation)",
+  "note" : "Points based on Linear Weights. Based on work by Justin Merry.",
+  "link": "https://ottoneu.fangraphs.com/support",
+  "name": "FanGraphs Points",
+
   "batters": {
-    "1B": 5.6,
+    "AB": -1.0,
+    "H": 5.6,
     "2B": 2.9,
     "3B": 5.7,
     "HR": 9.4,
     "BB": 3.0,
     "HBP": 3.0,
     "SB": 1.9,
-    "CS": -2.8,
-    "SO": -1.0
+    "CS": -2.8
   },
+
   "pitchers": {
-    "IP": 5.0,
-    "SO": 2.0,
+    "IP": 7.4,
+    "K": 2.0,
+    "H": -2.6,
     "BB": -3.0,
     "HBP": -3.0,
-    "HR": -13.0,
+    "HR": -12.3,
     "SV": 5.0,
     "HLD": 4.0
   }
