@@ -507,9 +507,9 @@ OCG 對以下幾種極端場景的改善最明顯：
 ## Stress Testing: Runtime Comparison
 | Stress Level | Approx. Vars | IP Runtime | OCG Runtime |
 | :--- | ---: | :--- | :---: |
-| small | 334,080 | 4.23 s (optimal) | 0.85 s |
-| large | 2,289,600 | 54.26 s (optimal) | 2.34 s |
-| timeout | 49,029,120 | 1869.8 s (timeout) | 23.28 s |
+| small | 334,080 | 4.23 s  | 0.85 s |
+| large | 2,289,600 | 54.26 s  | 2.34 s |
+| timeout | 49,029,120 | 30 mins timeout | 23.28 s |
 
 ![bg right:55% 90%](../experiments/synthetic/scaling_summary/runtime_by_variable_count.png)
 
@@ -543,7 +543,6 @@ OCG 對以下幾種極端場景的改善最明顯：
 
 <!-- _class: title-slide -->
 # Thank You for Listening!
-## Q&A Session
 
 <div class="author-block">
   <strong>OR114-2 Final Project, Group 4</strong><br>
