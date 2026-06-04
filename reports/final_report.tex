@@ -238,7 +238,7 @@ We then generate synthetic profiles encompassing four primary factors:
 Our experimental framework generates synthetic profiles encompassing four primary operational factors:
 >>>>>>> Stashed changes
 
-\subsection{Factor 1: Projected Points Distribution ($v_i$)}
+\subsection{Factor A: Projected Points Distribution (\texorpdfstring{$v_i$}{vi})}
 We designed three points distributions to simulate different talent pools, clipping all generated values to a realistic range of $[10.0, 800.0]$ according to the real data we collected above:
 \begin{itemize}[leftmargin=1.5em]
     \item \textbf{Normal (Baseline)}: Values follow a normal distribution $v_i \sim \mathcal{N}(400, 120^2)$. This represents an average draft class where the majority of players are solid, mid-tier contributors.
@@ -246,7 +246,7 @@ We designed three points distributions to simulate different talent pools, clipp
     \item \textbf{High-Low (Star-Heavy)}: Simulates a highly skewed draft class. Only $10\%$ of players are classified as elites, with values drawn from $\mathcal{U}(500, 800)$. The remaining $90\%$ fall into $\mathcal{U}(10, 500)$. In this scenario, missing out on top-tier talent is severely punished in the objective function.
 \end{itemize}
 
-\subsection{Factor 2: Position Eligibility Distribution ($E_i$)}
+\subsection{Factor B: Position Eligibility Distribution (\texorpdfstring{$E_i$}{Ei})}
 We control how versatile the player pool is using four distinct generation logics:
 \begin{itemize}[leftmargin=1.5em]
     \item \textbf{Roster-Ratio (Baseline)}: Players are assigned exactly one position, but the probability of generating a specific position aligns precisely with roster demand (e.g., more OF and SP players are generated).
@@ -255,7 +255,7 @@ We control how versatile the player pool is using four distinct generation logic
     \item \textbf{Single-Position}: Every player possesses exactly one eligible position. This eliminates all flexibility, representing the ultimate test of scarcity and making early greedy mistakes almost impossible to repair.
 \end{itemize}
 
-\subsection{Factor 3: Market Volatility and ADP Noise ($\sigma_{\text{adp}}$)}
+\subsection{Factor C: Market Volatility and ADP Noise ($\sigma_{\text{adp}}$)}
 To generate ADP, we first sort all players by their true projected points in descending order to establish a ``True Rank''. We then simulate market noise by adding a Gaussian error term:
 \[ \text{ADP}_i = \text{TrueRank}_i + \mathcal{N}(0, \sigma_{\text{adp}}^2) \]
 \begin{itemize}[leftmargin=1.5em]
@@ -263,34 +263,13 @@ To generate ADP, we first sort all players by their true projected points in des
     \item Higher $\sigma_{\text{adp}}$ introduces market chaos. Opponents may make unpredictable ``reaches'' or leave bargains on the board. This tests how robust our algorithms are when future availability is uncertain.
 \end{itemize}
 
-\subsection{Factor 4: Player Demand Ratio ($D$)}
+\subsection{Factor D: Player Demand Ratio ($D$)}
 To test the algorithms under varying levels of scarcity, we manipulate the Player Demand Ratio ($D$). This factor controls the supply-and-demand economics of the draft pool by dictating the ratio of ``Available Players'' versus ``Total League Demand''. Let $T$ be the number of teams and $R=16$ be the base roster slots. The total number of generated players is strictly governed by $N_{\text{players}} = R \times T \times D$.
 \begin{itemize}[leftmargin=1.5em]
     \item \textbf{$D = 1$ (Extreme Scarcity)}: The league will draft almost every available player. One greedy mistake means replacing a starter with absolute zero value.
     \item \textbf{$D = 3$ (Baseline Supply)}: Represents standard fantasy draft conditions with a typical buffer of undrafted free agents.
     \item \textbf{$D = 10$ (High Abundance)}: The player pool is a massive ocean of options.
 \end{itemize}
-
-Table \ref{tab:scenarios_setup} outlines the configuration for the experiment sets, systematically manipulating these factors.
-
-\begin{table}[H]
-\centering
-\small
-\caption{Synthetic Experiment Design. Bold text highlights the varied factor in each scenario block.}
-\label{tab:scenarios_setup}
-\begin{tabular}{llcccc}
-\toprule
-Factors & Goal & Points Dist. & Positions Dist. & Scale ($S$) \& Demand ($D$) & ADP ($\sigma, \delta$) \\
-\midrule
-\textbf{N1} & Baseline & normal & roster-ratio & S=1, D=3 & (30, 0) \\
-\textbf{N2} & Points Effect & \textbf{varied (3)} & roster-ratio & S=1, D=3 & (30, 0) \\
-\textbf{N3} & Positions Effect & normal & \textbf{varied (4)} & S=1, D=3 & (30, 0) \\
-\textbf{N5} & Market Volatility & normal & roster-ratio & S=1, D=3 & \textbf{varied $\sigma$, $\delta$} \\
-\textbf{N4} & Scaling Growth & normal & roster-ratio & \textbf{S=1-3, D=1-10} & (30, 0) \\
-\textbf{N6} & Stress Test & high-low & single-position & \textbf{Massive Scale} & high noise \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \subsection{Scenario Matrix}
 
@@ -355,7 +334,7 @@ FanGraphs 2026 & Opportunity Cost Greedy & \textbf{1.24\%} \\
 \end{tabular}
 \end{table}
 
-\subsection{Factor 1: Projected Points Distribution}
+\subsection{Factor A: Projected Points Distribution}
 
 Table \ref{tab:factor_1} summarizes the impact of the talent value distribution. Under the \textbf{Baseline (Normal)} distribution, our proposed Opportunity Cost Greedy (OCG) achieves a tight gap of 1.92\%, reducing the error of the naive Direct Greedy baseline (4.79\%) by more than half.
 
@@ -363,7 +342,7 @@ The true strategic value of OCG is revealed when the draft class shifts to \text
 
 \begin{table}[H]
 \centering
-\caption{Results for Factor 1: Projected Points Distribution. Values represent optimal gap ratio ($\% \pm \text{std}$).}
+\caption{Results for Factor A: Projected Points Distribution. Values represent optimal gap ratio ($\% \pm \text{std}$).}
 \label{tab:factor_1}
 \begin{tabular}{lcc}
 \toprule
@@ -376,13 +355,13 @@ High-Low (1:9 Skewed) & $8.39\% \pm 2.40\%$ & $\mathbf{2.87\% \pm 1.32\%}$ \\
 \end{tabular}
 \end{table}
 
-\subsection{Factor 2: Position Eligibility Distribution}
+\subsection{Factor B: Position Eligibility Distribution}
 
 Table \ref{tab:factor_2} illustrates performance across different positional flexibility environments. Compared to the \textbf{Baseline (Roster-Ratio)}, \textit{point-flexible} is the most forgiving environment (gap drops to 1.34\%) because top players can seamlessly plug holes in the roster. Conversely, \textit{single-position} creates a rigid, unforgiving draft. Even when mistakes are impossible to patch with utility players, OCG dominates Direct Greedy (0.94\% vs 5.11\%), proving that looking one pick ahead prevents catastrophic positional deficits later in the draft.
 
 \begin{table}[H]
 \centering
-\caption{Results for Factor 2: Position Eligibility Distribution. Values represent optimal gap ratio ($\% \pm \text{std}$).}
+\caption{Results for Factor B: Position Eligibility Distribution. Values represent optimal gap ratio ($\% \pm \text{std}$).}
 \label{tab:factor_2}
 \begin{tabular}{lcc}
 \toprule
@@ -396,7 +375,7 @@ Single-Position & $5.11\% \pm 1.48\%$ & $\mathbf{0.94\% \pm 0.65\%}$ \\
 \end{tabular}
 \end{table}
 
-\subsection{Factor 3: Market Volatility and ADP Noise}
+\subsection{Factor C: Market Volatility and ADP Noise}
 
 Table \ref{tab:factor_3} demonstrates performance under chaotic draft markets. We split the analysis into two sweeps: varying market noise ($\sigma_{\text{adp}}$) and varying availability tolerance ($\delta$).
 
@@ -404,7 +383,7 @@ When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opp
 
 \begin{table}[H]
 \centering
-\caption{Factor 3: ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=30$. The second tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$.}
+\caption{Factor C: ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=30$. The second tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$.}
 \label{tab:factor_3}
 \begin{tabular}{llcc}
 \toprule
@@ -421,7 +400,7 @@ Sweep & Level & Direct Greedy & Opportunity Cost Greedy \\
 \end{tabular}
 \end{table}
 
-\subsection{Factor 4: Player Demand Ratio}
+\subsection{Factor D: Player Demand Ratio}
 
 Table \ref{tab:factor_4} highlights scaling under tight vs. loose supply (Player Demand Ratio $D$). When supply is brutally tight ($D=1$, meaning almost every player must be drafted), Direct Greedy collapses (8.81\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 2.64\% gap. In a high-abundance scenario ($D=10$), OCG drops the error rate to a mere $1.16\%$.
 
