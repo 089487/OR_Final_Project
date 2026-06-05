@@ -58,6 +58,12 @@ style: |
   周孟承 | 鄭宇宏 | 詹舒宇 | 李盈盈<br>
 </div>
 
+
+---
+<!-- _class: impact-slide -->
+
+# 01. Introduction
+
 ---
 
 ## 01. Introduction: The Analytics Revolution
@@ -71,6 +77,12 @@ style: |
 <div class="card">
   <strong>Key Question:</strong> Which player must I draft <u>now</u> because market timing and positional scarcity will make equivalent options disappear by my next turn?
 </div>
+
+
+---
+<!-- _class: impact-slide -->
+
+# 02. Problem Definition
 
 ---
 
@@ -112,6 +124,7 @@ We validated our system using projected data for the **2026 MLB Season** from **
   This creates a high-fidelity environment where we can test our algorithms against actual MLB player distributions.
 </div>
 
+
 ---
 
 ## 05. Model Formulation: Integer Programming (IP)
@@ -127,6 +140,12 @@ We first formulate the exact ADP-aware Integer Linear Program (ILP) as our bench
 *   **Vital Constraint (Market Availability)**:
     $z_{ik} = 0 \quad \text{if } S_k > \text{adp}_i + \delta$
     *(A player cannot be drafted if the current pick is later than their expected depletion point).*
+
+
+---
+<!-- _class: impact-slide -->
+
+# 03. The Bottleneck
 
 ---
 
@@ -171,6 +190,11 @@ Our flagship algorithm, **Opportunity Cost Greedy (OCG)**, looks ahead to the **
 **Data Structure**: Uses Max-Heaps with <u>Lazy Deletion</u> to maintain $\mathcal{O}(n \log n)$ efficiency.
 
 </div>
+---
+<!-- _class: impact-slide -->
+
+---
+# 04. Methodology
 
 ---
 
@@ -201,6 +225,60 @@ Comparison of **Optimality Gap** (Distance from perfect IP solution):
 | | Direct Greedy | 3.36% | - |
 
 *   **Finding**: OCG consistently reduces the error of the Greedy baseline by **more than half**, staying within **1.3%** of the mathematical optimum.
+
+---
+
+## Synthetic Data: Scenario Matrix
+
+| ID | Main Factor | Demand Ratio (D) | Points Dist. (v_i) | Pos. Dist. (E_i) | ADP Noise (δ, σ) |
+| :--- | :--- | :---: | :--- | :--- | :--- |
+| S1 | Baseline | 3 | Normal | Roster-Ratio | (0, 30) |
+| S2 | Points: Uniform | 3 | Uniform | Roster-Ratio | (0, 30) |
+| S3 | Points: Star-Heavy | 3 | High-Low | Roster-Ratio | (0, 30) |
+| S4 | Pos: Uniform-by-Type | 3 | Normal | Uniform-by-Type | (0, 30) |
+| S5 | Pos: Point-Flexible | 3 | Normal | Point-Flexible | (0, 30) |
+| S6 | Pos: Single-Position | 3 | Normal | Single-Position | (0, 30) |
+| S7 | Market: Efficient | 3 | Normal | Roster-Ratio | (0, 0) |
+| S8 | Market: Mild Noise | 3 | Normal | Roster-Ratio | (0, 60) |
+| S9,10 | Market: Chaotic | 3 | Normal | Roster-Ratio | (±5, 30) |
+| S11,12 | Market: Chaotic | 3 | Normal | Roster-Ratio | (±10, 30) |
+| S13 | Load (High) | 1 | Normal | Roster-Ratio | (0, 30) |
+| S14 | Load (Ultra-Low) | 10 | Normal | Roster-Ratio | (0, 30) |
+
+---
+
+| Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio |
+|---|---|---:|---:|
+| S1 | Baseline (Normal / Roster-Ratio / 3:1 / (0,30)) | <span class="table-num">4.79%</span> ± <span class="table-num">1.18%</span> | <span class="green">1.92%</span> ± 0.57% |
+| S2 | Points: Uniform | <span class="table-num">3.24%</span> ± <span class="table-num">0.77%</span> | <span class="green">1.44%</span> ± 0.59% |
+| S3 | Points: Star-Heavy / High-Low | <span class="table-num">8.39%</span> ± <span class="table-num">2.40%</span> | <span class="green">2.87%</span> ± 1.32% |
+| S4 | Pos: Uniform-by-Type | <span class="table-num">4.89%</span> ± <span class="table-num">0.62%</span> | <span class="green">1.07%</span> ± 0.43% |
+| S5 | Pos: Point-Flexible | <span class="table-num">5.36%</span> ± <span class="table-num">1.66%</span> | <span class="green">1.34%</span> ± 0.68% |
+| S6 | Pos: Single-Position | <span class="table-num">5.11%</span> ± <span class="table-num">1.48%</span> | <span class="green">0.94%</span> ± 0.65% |
+| S7 | Market: Efficient / (0,0) | <span class="table-num">1.47%</span> ± <span class="table-num">0.48%</span> | <span class="green">0.48%</span> ± 0.23% |
+| S8 | Market: Mild Noise / (0,60) | <span class="table-num">5.56%</span> ± <span class="table-num">1.58%</span> | <span class="green">2.43%</span> ± 1.55% |
+| S9 | Market: Chaotic / (-5,30) | <span class="table-num">4.90%</span> ± <span class="table-num">1.24%</span> | <span class="green">1.83%</span> ± 0.82% |
+| S10 | Market: Chaotic / (+5,30) | <span class="table-num">5.54%</span> ± <span class="table-num">1.57%</span> | <span class="green">1.64%</span> ± 0.75% |
+| S11 | Market: Chaotic / (-10,30) | <span class="table-num">4.65%</span> ± <span class="table-num">1.32%</span> | <span class="green">1.90%</span> ± 0.77% |
+| S12 | Market: Chaotic / (+10,30) | <span class="table-num">5.42%</span> ± <span class="table-num">1.21%</span> | <span class="green">1.72%</span> ± 0.95% |
+| S13 | Load (High, 1:1) | <span class="table-num">8.81%</span> ± <span class="table-num">2.19%</span> | <span class="green">2.64%</span> ± 1.23% |
+| S14 | Load (Ultra-Low, 10:1) | <span class="table-num">3.29%</span> ± <span class="table-num">0.85%</span> | <span class="green">1.16%</span> ± 0.51% |
+
+---
+
+## Stress Testing: Runtime Comparison
+
+| Stress Level | Approx. Vars | IP Runtime | OCG Runtime |
+| :--- | ---: | :--- | :---: |
+| small | 334,080 | 4.23 s (optimal) | 0.85 s |
+| large | 2,289,600 | 54.26 s (optimal) | 2.34 s |
+| timeout | 49,029,120 | 1869.8 s (timeout) | 23.28 s |
+
+<div style="text-align: center;">
+  <img src="../experiments/synthetic/scaling_summary/runtime_by_variable_count.png" width="500">
+</div>
+
+- **Conclusion**: Under high computation loads where IP times out, OCG scales near-linearly and remains practical for large-scale drafts.
 
 ---
 
@@ -241,6 +319,11 @@ We tested the limits by dumping 180,000+ players into the database.
 1.  **Navigating Scarcity**: In environments where almost every player is drafted (Demand $\approx$ Supply), OCG anticipates future collapses and drafts "deep" positions late.
 2.  **Positional Flexibility**: OCG understands when a "Utility" player is a luxury vs. a necessity.
 3.  **Resilience to Noise**: Even when opponents act chaotically (Market Noise), OCG's relative difference calculation acts as a natural hedge.
+
+---
+<!-- _class: impact-slide -->
+
+# 05. Conclusions
 
 ---
 
