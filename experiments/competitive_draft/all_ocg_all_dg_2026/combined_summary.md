@@ -1,0 +1,52 @@
+# Competitive Draft Simulation Summary
+
+| Scoring | Team | Strategy | Objective | Rank | Picks | Status |
+| --- | ---: | --- | ---: | ---: | ---: | --- |
+| 2026_yahoo / all_dg | 1 | DG | 15185.40 | 1 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 12 | DG | 14787.50 | 2 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 2 | DG | 14753.00 | 3 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 1 | OCG | 14722.90 | 4 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 2 | OCG | 14708.90 | 5 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 3 | OCG | 14534.20 | 6 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 4 | OCG | 14424.60 | 7 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 3 | DG | 14424.40 | 8 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 12 | OCG | 14356.00 | 9 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 11 | OCG | 14300.60 | 10 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 5 | OCG | 14292.80 | 11 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 10 | OCG | 14289.20 | 12 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 6 | OCG | 14242.30 | 13 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 7 | DG | 14233.50 | 14 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 8 | DG | 14228.40 | 15 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 6 | DG | 14208.90 | 16 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 7 | OCG | 14201.30 | 17 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 4 | DG | 14181.60 | 18 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 9 | DG | 14179.10 | 19 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 10 | DG | 14161.80 | 20 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 9 | OCG | 14157.70 | 21 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 5 | DG | 14153.40 | 22 | 16 | COMPLETE |
+| 2026_yahoo / all_dg | 11 | DG | 14148.90 | 23 | 16 | COMPLETE |
+| 2026_yahoo / all_ocg | 8 | OCG | 14079.30 | 24 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 1 | DG | 12533.28 | 1 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 1 | OCG | 12364.92 | 2 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 12 | DG | 12294.58 | 3 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 2 | DG | 12187.30 | 4 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 2 | OCG | 12100.26 | 5 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 3 | OCG | 12009.82 | 6 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 4 | OCG | 11864.30 | 7 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 3 | DG | 11853.22 | 8 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 11 | OCG | 11796.80 | 9 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 5 | OCG | 11763.66 | 10 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 5 | DG | 11714.96 | 11 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 4 | DG | 11712.12 | 12 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 6 | OCG | 11698.96 | 13 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 6 | DG | 11697.42 | 14 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 7 | OCG | 11682.10 | 15 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 8 | OCG | 11630.28 | 16 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 9 | OCG | 11625.00 | 17 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 9 | DG | 11603.52 | 18 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 7 | DG | 11603.12 | 19 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 10 | DG | 11600.80 | 20 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 10 | OCG | 11587.52 | 21 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 8 | DG | 11572.98 | 22 | 16 | COMPLETE |
+| 2026_fangraph / all_dg | 11 | DG | 11565.66 | 23 | 16 | COMPLETE |
+| 2026_fangraph / all_ocg | 12 | OCG | 11511.84 | 24 | 16 | COMPLETE |

@@ -342,6 +342,31 @@ td {
 | S14 | Demand: Low / D=10 | <span class="table-num">3.29%</span> ± <span class="table-num">0.85%</span> | <span class="green">1.16%</span> ± 0.51% |
 
 ---
+
+<style scoped>
+h2 {
+  margin-bottom: 0.25em !important;
+}
+.runtime-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+.runtime-grid img {
+  width: 100%;
+}
+</style>
+
+## Competitive Draft Simulation: One OCG vs 11 DG
+
+<div class="runtime-grid">
+  <img src="../experiments/competitive_draft/ocg_vs_dg_2026/ocg_vs_dg_yahoo_by_draft_position.png">
+  <img src="../experiments/competitive_draft/ocg_vs_dg_2026/ocg_vs_dg_fangraph_by_draft_position.png">
+</div>
+
+---
+
 <!-- _class: impact-slide -->
 
 # 05. Conclusions

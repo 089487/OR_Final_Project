@@ -1,0 +1,52 @@
+# Draft Room Results
+
+| Scoring | Mode | OCG Team | Rank | Team | Strategy | Objective | Status |
+| --- | --- | ---: | ---: | ---: | --- | ---: | --- |
+| 2026_fangraph | all_dg |  | 1 | 1 | DG | 12533.28 | COMPLETE |
+| 2026_fangraph | all_dg |  | 2 | 12 | DG | 12294.58 | COMPLETE |
+| 2026_fangraph | all_dg |  | 3 | 2 | DG | 12187.30 | COMPLETE |
+| 2026_fangraph | all_dg |  | 4 | 3 | DG | 11853.22 | COMPLETE |
+| 2026_fangraph | all_dg |  | 5 | 5 | DG | 11714.96 | COMPLETE |
+| 2026_fangraph | all_dg |  | 6 | 4 | DG | 11712.12 | COMPLETE |
+| 2026_fangraph | all_dg |  | 7 | 6 | DG | 11697.42 | COMPLETE |
+| 2026_fangraph | all_dg |  | 8 | 9 | DG | 11603.52 | COMPLETE |
+| 2026_fangraph | all_dg |  | 9 | 7 | DG | 11603.12 | COMPLETE |
+| 2026_fangraph | all_dg |  | 10 | 10 | DG | 11600.80 | COMPLETE |
+| 2026_fangraph | all_dg |  | 11 | 8 | DG | 11572.98 | COMPLETE |
+| 2026_fangraph | all_dg |  | 12 | 11 | DG | 11565.66 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 1 | 1 | OCG | 12364.92 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 2 | 2 | OCG | 12100.26 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 3 | 3 | OCG | 12009.82 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 4 | 4 | OCG | 11864.30 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 5 | 11 | OCG | 11796.80 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 6 | 5 | OCG | 11763.66 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 7 | 6 | OCG | 11698.96 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 8 | 7 | OCG | 11682.10 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 9 | 8 | OCG | 11630.28 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 10 | 9 | OCG | 11625.00 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 11 | 10 | OCG | 11587.52 | COMPLETE |
+| 2026_fangraph | all_ocg |  | 12 | 12 | OCG | 11511.84 | COMPLETE |
+| 2026_yahoo | all_dg |  | 1 | 1 | DG | 15185.40 | COMPLETE |
+| 2026_yahoo | all_dg |  | 2 | 12 | DG | 14787.50 | COMPLETE |
+| 2026_yahoo | all_dg |  | 3 | 2 | DG | 14753.00 | COMPLETE |
+| 2026_yahoo | all_dg |  | 4 | 3 | DG | 14424.40 | COMPLETE |
+| 2026_yahoo | all_dg |  | 5 | 7 | DG | 14233.50 | COMPLETE |
+| 2026_yahoo | all_dg |  | 6 | 8 | DG | 14228.40 | COMPLETE |
+| 2026_yahoo | all_dg |  | 7 | 6 | DG | 14208.90 | COMPLETE |
+| 2026_yahoo | all_dg |  | 8 | 4 | DG | 14181.60 | COMPLETE |
+| 2026_yahoo | all_dg |  | 9 | 9 | DG | 14179.10 | COMPLETE |
+| 2026_yahoo | all_dg |  | 10 | 10 | DG | 14161.80 | COMPLETE |
+| 2026_yahoo | all_dg |  | 11 | 5 | DG | 14153.40 | COMPLETE |
+| 2026_yahoo | all_dg |  | 12 | 11 | DG | 14148.90 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 1 | 1 | OCG | 14722.90 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 2 | 2 | OCG | 14708.90 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 3 | 3 | OCG | 14534.20 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 4 | 4 | OCG | 14424.60 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 5 | 12 | OCG | 14356.00 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 6 | 11 | OCG | 14300.60 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 7 | 5 | OCG | 14292.80 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 8 | 10 | OCG | 14289.20 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 9 | 6 | OCG | 14242.30 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 10 | 7 | OCG | 14201.30 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 11 | 9 | OCG | 14157.70 | COMPLETE |
+| 2026_yahoo | all_ocg |  | 12 | 8 | OCG | 14079.30 | COMPLETE |
