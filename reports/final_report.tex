@@ -268,7 +268,7 @@ To test the algorithms under varying levels of scarcity, we manipulate the Playe
 
 \subsection{Scenario Matrix}
 
-We developed 14 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. The remaining scenarios follow the factor order introduced above: projected points distribution, position eligibility distribution, market conditions, and player demand ratio. For every scenario, we generate \textbf{10 random instances} to calculate the mean ($\mu$) and standard deviation ($\sigma$) of the performance metrics.
+We developed 12 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. The remaining scenarios follow the factor order introduced above: projected points distribution, position eligibility distribution, market conditions, and player demand ratio. For every scenario, we generate \textbf{10 random instances} to calculate the mean ($\mu$) and standard deviation ($\sigma$) of the performance metrics.
 
 \begin{table}[htbp]
 \centering
@@ -287,10 +287,10 @@ S6 & Pos: Single-Position & 3 & Normal & \textbf{Single-Position} & (0, 30) \\\m
 S7 & Market: Efficient & 3 & Normal & Roster-Ratio & \textbf{(0, 0)} \\
 S8 & Market: Mild Noise & 3 & Normal & Roster-Ratio & \textbf{(0, 60)} \\
 \midrule
-S9, 10 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{($\pm$5, 30)} \\
-S11, 12 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{($\pm$10, 30)} \\ \midrule
-S13 & Demand: High & \textbf{1} & Normal & Roster-Ratio & (0, 30) \\
-S14 & Demand: Low & \textbf{10} & Normal & Roster-Ratio & (0, 30) \\
+S9 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{(+5, 30)} \\
+S10 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{(+10, 30)} \\ \midrule
+S11 & Demand: High & \textbf{1} & Normal & Roster-Ratio & (0, 30) \\
+S12 & Demand: Low & \textbf{10} & Normal & Roster-Ratio & (0, 30) \\
 \bottomrule
 \end{tabular}%
 }
@@ -377,7 +377,7 @@ When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opp
 
 \begin{table}[H]
 \centering
-\caption{Factor C: Market Conditions and ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=0$. The second tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$. Values represent the optimality gap (\%) $\pm$ standard deviation.}
+\caption{Factor C: Market Conditions and ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=0$. The second tests nonnegative tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$. Values represent the optimality gap (\%) $\pm$ standard deviation.}
 \label{tab:factor_3}
 \begin{tabular}{llccc}
 \toprule
@@ -388,8 +388,6 @@ Sweep & Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
  & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.56\% \pm 1.58\%$ & $\mathbf{2.43\% \pm 1.55\%}$ & $\mathbf{3.33\% \pm 1.43\%}$ \\
 \midrule
 \textbf{Tolerance} & $\delta=0$ (Baseline) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
- & $\delta=-10$ (Strict) & $4.65\% \pm 1.32\%$ & $\mathbf{1.90\% \pm 0.77\%}$ & $2.91\% \pm 1.71\%$ \\
- & $\delta=-5$ & $4.90\% \pm 1.24\%$ & $\mathbf{1.83\% \pm 0.82\%}$ & $3.24\% \pm 1.40\%$ \\
  & $\delta=+5$ & $5.54\% \pm 1.57\%$ & $\mathbf{1.64\% \pm 0.75\%}$ & $\mathbf{4.16\% \pm 1.50\%}$ \\
  & $\delta=+10$ (Permissive) & $5.42\% \pm 1.21\%$ & $\mathbf{1.72\% \pm 0.95\%}$ & $3.92\% \pm 1.03\%$ \\
 \bottomrule
@@ -472,7 +470,7 @@ timeout\_target & -- & -- \\
 
 \subsection{Strategic Insights and Competitive Edge}
 
-After evaluating the algorithm across 14 distinct scenarios, we identify the conditions where the \textbf{Opportunity Cost Greedy (OCG)} algorithm provides the most significant strategic advantage. Table \ref{tab:highlights} highlights the top-performing scenarios based on the improvement over the baseline.
+After evaluating the algorithm across 12 distinct scenarios, we identify the conditions where the \textbf{Opportunity Cost Greedy (OCG)} algorithm provides the most significant strategic advantage. Table \ref{tab:highlights} highlights the top-performing scenarios based on the improvement over the baseline.
 
 \begin{table}[H]
 \centering
@@ -485,8 +483,8 @@ After evaluating the algorithm across 14 distinct scenarios, we identify the con
 \midrule
 \textbf{Points Distribution (Factor A)} & S3 & Points: Star-Heavy & \textbf{+6.10\%} \\
 \textbf{Position Eligibility (Factor B)} & S6 & Pos: Single-Position & \textbf{+4.42\%} \\
-\textbf{Market Conditions (Factor C)} & S10 & Market: Chaotic ($\delta=+5$) & \textbf{+4.16\%} \\
-\textbf{Player Demand Ratio (Factor D)} & S13 & Demand: High ($D=1$) & \textbf{+6.82\%} \\
+\textbf{Market Conditions (Factor C)} & S9 & Market: Chaotic ($\delta=+5$) & \textbf{+4.16\%} \\
+\textbf{Player Demand Ratio (Factor D)} & S11 & Demand: High ($D=1$) & \textbf{+6.82\%} \\
 \bottomrule
 \end{tabular}
 }
@@ -496,8 +494,8 @@ After evaluating the algorithm across 14 distinct scenarios, we identify the con
 \begin{itemize}
     \item \textbf{Securing Elite Talent (S3):} In star-heavy drafts, the "cost of waiting" for one more turn is mathematically massive. OCG quantifies this cost, ensuring elite assets are secured before the value "cliff" occurs.
     \item \textbf{Pos: Single-Position (S6):} When positional flexibility is eliminated, early greedy mistakes are impossible to patch. OCG's foresight prevents these catastrophic positional deficits, maintaining high optimality.
-    \item \textbf{Market: Chaotic (S10):} Even when opponents' behavior is unpredictable, OCG maintains a robust lead, proving its delay-cost heuristic acts as a natural hedge against uncertain market conditions.
-    \item \textbf{Demand: High (S13):} In environments where almost every player is drafted ($D=1$), DG often suffers from "positional blindness," leading to a 6.82\% loss in roster value. OCG's foresight prevents these late-draft collapses.
+    \item \textbf{Market: Chaotic (S9):} Even when opponents' behavior is unpredictable, OCG maintains a robust lead, proving its delay-cost heuristic acts as a natural hedge against uncertain market conditions.
+    \item \textbf{Demand: High (S11):} In environments where almost every player is drafted ($D=1$), DG often suffers from "positional blindness," leading to a 6.82\% loss in roster value. OCG's foresight prevents these late-draft collapses.
 \end{itemize}
 
 \section{Conclusions and Business Recommendations}

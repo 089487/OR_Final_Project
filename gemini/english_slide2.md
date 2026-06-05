@@ -443,36 +443,10 @@ td { padding: 4px 8px !important; }
 | S6 | Pos: Single-Position | 3 | Normal | **Single-Position** | (0, 30) |
 | S7 | Market: Efficient | 3 | Normal | Roster-Ratio | **(0, 0)** |
 | S8 | Market: Mild Noise | 3 | Normal | Roster-Ratio | **(0, 60)** |
-| S9, 10 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±5, 30)** |
-| S11, 12 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±10, 30)** |
-| S13 | Demand: High | **1** | Normal | Roster-Ratio | (0, 30) |
-| S14 | Demand: Low | **10** | Normal | Roster-Ratio | (0, 30) |
-
----
-
-## Strategic Insights: Where OCG Excels
-
-OCG shows the most dramatic improvements in the following "Stress Scenarios":
-
-- **S3 / Star-Heavy**: In markets where superstars dominate total value, DG often misses the "cliff." OCG reduces the gap from **8.39% to 2.87%**.
-- **S6 / Single-Position**: With zero flexibility, early mistakes are fatal. OCG's look-ahead prevents these traps.
-
-| Environment Factor | Scenario | Improvement over DG |
-| :--- | :---: | ---: |
-| Value Curve | Star-Heavy | **+6.10%** |
-| Flexibility | Single-Position | **+4.42%** |
- 
----
-
-## Strategic Insights: Where OCG Excels
-
-- **S10 / Chaotic Market**: Even when players are drafted slightly differently than ADP ($\delta=5$), OCG remains robust.
-- **S13 / High Demand**: When the player pool is tight, OCG's ability to "secure" value before it disappears is critical.
-
-| Environment Factor | Scenario | Improvement over DG |
-| :--- | :---: | ---: |
-| Market Accuracy | Chaotic Noise | **+4.16%** |
-| Scarcity | High Demand | **+6.82%** |
+| S9 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(+5, 30)** |
+| S10 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(+10, 30)** |
+| S11 | Demand: High | **1** | Normal | Roster-Ratio | (0, 30) |
+| S12 | Demand: Low | **10** | Normal | Roster-Ratio | (0, 30) |
 
 ---
 
@@ -505,12 +479,38 @@ td {
 | S6 | Pos: Single-Position | 5.11% ± 1.48% | **0.94% ± 0.65%** | 4.42% ± 1.95% |
 | S7 | Market: Efficient / $(0,0)$ | 1.47% ± 0.48% | **0.48% ± 0.23%** | 1.00% ± 0.50% |
 | S8 | Market: Mild Noise / $(0,60)$ | 5.56% ± 1.58% | **2.43% ± 1.55%** | 3.33% ± 1.43% |
-| S9 | Market: Chaotic / $(-5,30)$ | 4.90% ± 1.24% | **1.83% ± 0.82%** | 3.24% ± 1.40% |
-| S10 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | **1.64% ± 0.75%** | 4.16% ± 1.50% |
-| S11 | Market: Chaotic / $(-10,30)$ | 4.65% ± 1.32% | **1.90% ± 0.77%** | 2.91% ± 1.71% |
-| S12 | Market: Chaotic / $(+10,30)$ | 5.42% ± 1.21% | **1.72% ± 0.95%** | 3.92% ± 1.03% |
-| S13 | Demand: High / $D=1$ | 8.81% ± 2.19% | **2.64% ± 1.23%** | 6.82% ± 3.13% |
-| S14 | Demand: Low / $D=10$ | 3.29% ± 0.85% | **1.16% ± 0.51%** | 2.20% ± 0.83% |
+| S9 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | **1.64% ± 0.75%** | 4.16% ± 1.50% |
+| S10 | Market: Chaotic / $(+10,30)$ | 5.42% ± 1.21% | **1.72% ± 0.95%** | 3.92% ± 1.03% |
+| S11 | Demand: High / $D=1$ | 8.81% ± 2.19% | **2.64% ± 1.23%** | 6.82% ± 3.13% |
+| S12 | Demand: Low / $D=10$ | 3.29% ± 0.85% | **1.16% ± 0.51%** | 2.20% ± 0.83% |
+
+---
+
+
+## Strategic Insights: Where OCG Excels
+
+OCG shows the most dramatic improvements in the following "Stress Scenarios":
+
+- **S3 / Star-Heavy**: In markets where superstars dominate total value, DG often misses the "cliff." OCG reduces the gap from **8.39% to 2.87%**.
+- **S6 / Single-Position**: With zero flexibility, early mistakes are fatal. OCG's look-ahead prevents these traps.
+
+| Environment Factor | Scenario | Improvement over DG |
+| :--- | :---: | ---: |
+| Value Curve | Star-Heavy | **+6.10%** |
+| Flexibility | Single-Position | **+4.42%** |
+ 
+---
+
+## Strategic Insights: Where OCG Excels
+
+- **S9 / Chaotic Market**: Even when players are drafted slightly differently than ADP ($\delta=5$), OCG remains robust.
+- **S11 / High Demand**: When the player pool is tight, OCG's ability to "secure" value before it disappears is critical.
+
+| Environment Factor | Scenario | Improvement over DG |
+| :--- | :---: | ---: |
+| Market Accuracy | Chaotic Noise | **+4.16%** |
+| Scarcity | High Demand | **+6.82%** |
+
 
 ---
 

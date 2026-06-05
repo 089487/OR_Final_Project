@@ -12,15 +12,13 @@
 | S6 | Pos: Single-Position | 5.11% ± 1.48% | 0.94% ± 0.65% | 4.42% ± 1.95% |
 | S7 | Market: Efficient / $(0,0)$ | 1.47% ± 0.48% | 0.48% ± 0.23% | 1.00% ± 0.50% |
 | S8 | Market: Mild Noise / $(0,60)$ | 5.56% ± 1.58% | 2.43% ± 1.55% | 3.33% ± 1.43% |
-| S9 | Market: Chaotic / $(-5,30)$ | 4.90% ± 1.24% | 1.83% ± 0.82% | 3.24% ± 1.40% |
-| S10 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | 1.64% ± 0.75% | 4.16% ± 1.50% |
-| S11 | Market: Chaotic / $(-10,30)$ | 4.65% ± 1.32% | 1.90% ± 0.77% | 2.91% ± 1.71% |
-| S12 | Market: Chaotic / $(+10,30)$ | 5.42% ± 1.21% | 1.72% ± 0.95% | 3.92% ± 1.03% |
-| S13 | Load (High, 1:1) | 8.81% ± 2.19% | 2.64% ± 1.23% | 6.82% ± 3.13% |
-| S14 | Load (Ultra-Low, 10:1) | 3.29% ± 0.85% | 1.16% ± 0.51% | 2.20% ± 0.83% |
+| S9 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | 1.64% ± 0.75% | 4.16% ± 1.50% |
+| S10 | Market: Chaotic / $(+10,30)$ | 5.42% ± 1.21% | 1.72% ± 0.95% | 3.92% ± 1.03% |
+| S11 | Demand: High / $D=1$ | 8.81% ± 2.19% | 2.64% ± 1.23% | 6.82% ± 3.13% |
+| S12 | Demand: Low / $D=10$ | 3.29% ± 0.85% | 1.16% ± 0.51% | 2.20% ± 0.83% |
 
 > 備註：
 > - S1 是 baseline；S2-S3 對應 Factor A / value distribution。
 > - S4-S6 對應 Factor B / position eligibility。
-> - S7-S12 對應 Factor C / ADP noise and availability tolerance。
-> - S13-S14 對應 Factor D / player demand ratio；D=3 baseline-supply reference 已由 S1 表示，不另列重複 scenario。
+> - S7-S10 對應 Factor C / ADP noise and availability tolerance。
+> - S11-S12 對應 Factor D / player demand ratio；D=3 baseline-supply reference 已由 S1 表示，不另列重複 scenario。
