@@ -433,7 +433,7 @@ td { padding: 4px 8px !important; }
 
 ## Synthetic Data: Scenario Matrix
 
-| ID | Main Factor | Demand Ratio ($D$) | Points Distribution ($v_i$) | Position Eligibility ($E_i$) | ADP Uncertainty ($\delta, \sigma$) |
+| ID | Main Factor | Demand Ratio ($D$) | Points Distribution ($v_i$) | Position Eligibility ($E_i$) | ADP Noise ($\delta, \sigma$) |
 | :--- | :--- | :---: | :--- | :--- | :--- |
 | S1 | **Baseline** | 3 | Normal | Roster-Ratio | (0, 30) |
 | S2 | Points: Uniform | 3 | **Uniform** | Roster-Ratio | (0, 30) |
