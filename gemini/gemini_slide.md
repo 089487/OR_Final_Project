@@ -467,21 +467,39 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 > **實驗指標**：Optimal Gap Ratio = $\frac{Z_{\text{IP}} - Z_{\text{Heuristic}}}{Z_{\text{IP}}} \times 100\%$。
 
 ---
-| ID | Main Factor | Ratio (N:D) | Value Dist. | Pos. Dist. | ADP Noise ($\delta,\sigma$) |
+
+<style scoped>
+h2 {
+  margin-bottom: 0.3em !important;
+}
+table {
+  font-size: 15px !important;
+}
+th {
+  padding: 6px 8px !important;
+}
+td {
+  padding: 4px 8px !important;
+}
+</style>
+
+## Synthetic Data: Scenario Matrix
+
+| ID | Main Factor | Demand Ratio ($D$) | Points Dist. ($v_i$) | Pos. Dist. ($E_i$) | ADP Noise ($\delta, \sigma$) |
 | :--- | :--- | :---: | :--- | :--- | :--- |
-| S1 | Baseline | 1:1 | Normal | Roster-Ratio | (0, 30) |
-| S2 | Load (Ultra-Low) | 10:1 | Normal | Roster-Ratio | (0, 30) |
-| S3 | Load (Low) | 3:1 | Normal | Roster-Ratio | (0, 30) |
-| S4 | Load (High) | 1:1 | Normal | Roster-Ratio | (0, 30) |
-| S5 | Value: Uniform | 1:1 | Uniform | Roster-Ratio | (0, 30) |
-| S6 | Value: Star-Heavy | 1:1 | 1:9 Skewed | Roster-Ratio | (0, 30) |
-| S7 | Pos: Random | 1:1 | Normal | Uniform (Rand) | (0, 30) |
-| S8 | Pos: Versatile | 1:1 | Normal | Value-Corr. | (0, 30) |
-| S9 | Pos: Rigid | 1:1 | Normal | 1:1 (Single) | (0, 30) |
-| S10 | Market: Rigid | 1:1 | Normal | Roster-Ratio | (0, 0) |
-| S11 | Market: Mild Noise | 1:1 | Normal | Roster-Ratio | (0, 60) |
-| S12, 13 | Market: Chaotic | 1:1 | Normal | Roster-Ratio | (±5, 30) |
-| S14, 15 | Market: Chaotic | 1:1 | Normal | Roster-Ratio | (±10, 30) |
+| S1 | **Baseline** | 3 | Normal | Roster-Ratio | (0, 30) |
+| S2 | Points: Uniform | 3 | **Uniform** | Roster-Ratio | (0, 30) |
+| S3 | Points: Star-Heavy | 3 | **High-Low** | Roster-Ratio | (0, 30) |
+| S4 | Pos: Uniform-by-Type | 3 | Normal | **Uniform-by-Type** | (0, 30) |
+| S5 | Pos: Point-Flexible | 3 | Normal | **Point-Flexible** | (0, 30) |
+| S6 | Pos: Single-Position | 3 | Normal | **Single-Position** | (0, 30) |
+| S7 | Market: Efficient | 3 | Normal | Roster-Ratio | **(0, 0)** |
+| S8 | Market: Mild Noise | 3 | Normal | Roster-Ratio | **(0, 60)** |
+| S9, 10 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±5, 30)** |
+| S11, 12 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±10, 30)** |
+| S13 | Load (High) | **1** | Normal | Roster-Ratio | (0, 30) |
+| S14 | Load (Low) | **3** | Normal | Roster-Ratio | (0, 30) |
+| S15 | Load (Ultra-Low) | **10** | Normal | Roster-Ratio | (0, 30) |
 
 ---
 
@@ -489,10 +507,10 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 
 OCG 對以下幾種極端場景的改善最明顯：
 
-- **S6 / High-Low**：價值曲線高度不平衡，DG 會錯失關鍵巨星；OCG 將 gap 由 8.39% 降到 2.87%。
-- **S9 / Single-Position**：由於球員守位限制，OCG 能避免早期選秀錯誤被後線放大。
-- **S4 / D=1 (極度稀缺)**：市場供給緊繃時，OCG 仍能提早佈局，保住整體陣容價值。
-- **S11-S15 / Chaotic Market**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
+- **S3 / High-Low**：價值曲線高度不平衡，DG 會錯失關鍵巨星；OCG 將 gap 由 8.39% 降到 2.87%。
+- **S6 / Single-Position**：由於球員守位限制，OCG 能避免早期選秀錯誤被後線放大。
+- **S13 / D=1 (極度稀缺)**：市場供給緊繃時，OCG 仍能提早佈局，保住整體陣容價值。
+- **S8-S12 / Chaotic Market**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
 
 | Scenario | DG Gap | OCG Gap | Key Benefit |
 | :--- | :---: | :---: | :--- |
