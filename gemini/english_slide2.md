@@ -294,9 +294,18 @@ $$ \max \sum_{i \in I} v_i y_i $$
 ## 6. Model Formulation II: Constraints
 
 1. **Draft Logic & Roster Integrity**:
-   $$ \sum_{i \in I} z_{ik} = 1 \quad \forall k \in K \quad \text{(One player per pick)} $$
-   $$ \sum_{p \in P} x_{ip} = y_i \quad \forall i \in I \quad \text{(Assign position if drafted)} $$
-   $$ \sum_{i \in I} x_{ip} = r_p \quad \forall p \in P \quad \text{(Satisfy roster requirements)} $$
+   $$
+   \begin{alignedat}{3}
+   \sum_{i \in I} z_{ik} &= 1 && \quad \forall k \in K && \quad \text{(One player per pick)} ; \\
+   \sum_{k \in K} z_{ik} &= y_i && \quad \forall i \in I && \quad \text{(At most one pick per player)}
+   \end{alignedat}
+   $$
+   $$
+   \begin{alignedat}{3}
+   \sum_{p \in P} x_{ip} &= y_i && \quad \forall i \in I && \quad \text{(Assign position if drafted)} ; \\
+   \sum_{i \in I} x_{ip} &= r_p && \quad \forall p \in P && \quad \text{(Satisfy roster requirements)}
+   \end{alignedat}
+   $$
 
 2. **Market Availability Constraint**:
    $$ z_{ik} = 0 \quad \text{if } S_k > \text{adp}_i + \delta, \quad \forall i \in I, k \in K $$
@@ -473,10 +482,10 @@ td {
 |---|---|---:|---:|---:|
 | S1 | Baseline (Normal / Roster-Ratio / $D=3$ / $(0,30)$) | 4.79% ± 1.18% | **1.92% ± 0.57%** | 3.02% ± 1.34% |
 | S2 | Points: Uniform | 3.24% ± 0.77% | **1.44% ± 0.59%** | 1.87% ± 0.65% |
-| S3 | Points: Star-Heavy / High-Low | 8.39% ± 2.40% | **2.87% ± 1.32%** | 6.10% ± 3.46% |
+| S3 | Points: Star-Heavy / High-Low | 8.39% ± 2.40% | **2.87% ± 1.32%** | <span class="highlight">6.10% ± 3.46%</span> |
 | S4 | Pos: Uniform-by-Type | 4.89% ± 0.62% | **1.07% ± 0.43%** | 4.02% ± 0.82% |
 | S5 | Pos: Point-Flexible | 5.36% ± 1.66% | **1.34% ± 0.68%** | 4.27% ± 1.83% |
-| S6 | Pos: Single-Position | 5.11% ± 1.48% | **0.94% ± 0.65%** | 4.42% ± 1.95% |
+| S6 | Pos: Single-Position | 5.11% ± 1.48% | **0.94% ± 0.65%** | <span class="highlight">4.42% ± 1.95%</span> |
 | S7 | Market: Efficient / $(0,0)$ | 1.47% ± 0.48% | **0.48% ± 0.23%** | 1.00% ± 0.50% |
 | S8 | Market: Mild Noise / $(0,60)$ | 5.56% ± 1.58% | **2.43% ± 1.55%** | 3.33% ± 1.43% |
 | S9 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | **1.64% ± 0.75%** | 4.16% ± 1.50% |
@@ -550,29 +559,25 @@ OCG shows the most dramatic improvements in the following "Stress Scenarios":
 
 ---
 
-## 10. Conclusions & Business Recommendations
+## 10. Conclusions & Future Extensions
 
-**Final Strategic Recommendations for GMs:**
+1. **OCG provides a deployable balance between time efficiency and draft performance.**
+-  Outperformed all baseline greedy variants in simulations across diverse draft positions.
+-  Generate decisions in seconds even in large-scaled scenarios while maintaining high near-optimality.
 
-1. **Direct Greedy is Risky**: Relying on "scarcity" or "best-player-available" without considering timing leads to significant value loss, especially in star-heavy markets.
-2. **IP is a Benchmark, not a Tool**: Use IP for post-draft analysis or pre-season simulation. Its runtime makes it unviable for live, high-stakes draft environments.
-3. **OCG is the Deployable Solution**: By quantifying the "delay cost," OCG captures the essence of IP logic while remaining fast enough to handle **50 million decision variables** in under 25 seconds.
+2. **OCG offers significant Competitive Edges in scarce of tight markets.** 
+3. **Future Extensions**: 
+    - **Stochastic Opponent Modeling:** incorporate probability distributions and more strategies for opponent behaviors (e.g., team bias, "homer" picks).
+    - **Real-World Application :** Transitioning from academic simulation to live 2026 Fantasy Baseball competition game to again validate our strategies!
 
----
 
-## Limitations & Future Extensions
-
-Our roadmap for "System 2.0":
-
-- **Probabilistic Opponent Modeling**:
-  Currently, ADP is treated as a deterministic threshold. Future versions will incorporate probability distributions for opponent behavior (e.g., team bias, "homer" picks).
-- **Monte Carlo Risk Integration**:
-  Player projections are averages. Incorporating variance (injury risk, slump risk) will allow the OCG to optimize for "Upside" vs. "Safety" depending on team needs.
+<!--
+ By quantifying the "delay cost," OCG captures the essence of IP logic while remaining fast enough to handle **a large scale of decision variables** under a short period of time.-->
 
 ---
 
 <!-- _class: title-slide -->
-# Thank You for Your Attention!
+# Thank You for Watching!
 
 <div class="author-block">
   <strong>OR114-2 Final Project, Group 4</strong><br>
