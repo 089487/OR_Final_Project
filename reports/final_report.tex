@@ -19,7 +19,7 @@
 \setstretch{1.15}
 
 \title{\textbf{Algorithmic Roster Construction: \\ Strategic Talent Acquisition under Competitive Scarcity} \\[0.5em]
-\large A Fantasy Baseball Testbed for Optimization and Real-Time Heuristics \\[1em]
+\large A Fantasy Baseball Testbed for Optimization and Real-Time Heuristics\thanks{Source code and data: \url{https://github.com/089487/OR_Final_Project}} \\[1em]
 \normalsize OR114-2 Final Project, Group 4}
 \author{
 B13705051 周孟承 \and
@@ -31,6 +31,9 @@ B11705039 李盈盈
 
 \begin{document}
 \maketitle
+
+\vspace{-3em}  % 這裡的數字可以調整，-3em 左右通常能顯著縮減間距
+
 
 \begin{abstract}
 In this report, we study a \textbf{sequential resource allocation problem under competitive scarcity}. We utilize \textbf{Fantasy Baseball as a data-rich testbed} due to its complex roster constraints and high-frequency market dynamics. For modern sports organizations, identifying talent is only one part of the challenge; the true competitive edge lies in the \textbf{strategy of draft execution}. While traditional Integer Programming (IP) provides a mathematical benchmark, it fails to scale to massive player pools under real-time pressure. We propose the \emph{Opportunity Cost Greedy (OCG)} algorithm, which captures the \textbf{cost-of-delay} by forecasting future asset availability. Our results across synthetic and real-world 2026 data show that OCG achieves near-optimal performance in seconds, effectively functioning as a scalable decision-support framework.
@@ -493,23 +496,47 @@ After evaluating the algorithm across 12 distinct scenarios, we identify the con
 \end{table}
 
 \noindent \textbf{Analysis of the Competitive Edge:}
-\begin{itemize}
-    \item \textbf{Securing Elite Talent (S3):} In star-heavy drafts, the "cost of waiting" for one more turn is mathematically massive. OCG quantifies this cost, ensuring elite assets are secured before the value "cliff" occurs.
-    \item \textbf{Pos: Single-Position (S6):} When positional flexibility is eliminated, early greedy mistakes are impossible to patch. OCG's foresight prevents these catastrophic positional deficits, maintaining high optimality.
-    \item \textbf{Market: Chaotic (S9):} Even when opponents' behavior is unpredictable, OCG maintains a robust lead, proving its delay-cost heuristic acts as a natural hedge against uncertain market conditions.
-    \item \textbf{Demand: High (S11):} In environments where almost every player is drafted ($D=1$), DG often suffers from "positional blindness," leading to a 6.82\% loss in roster value. OCG's foresight prevents these late-draft collapses.
-\end{itemize}
+The highlighted scenarios reveal where cost-of-delay reasoning matters most. In star-heavy drafts (S3), OCG secures elite assets before the value cliff occurs. Under single-position eligibility (S6), it prevents early positional mistakes that cannot be repaired later. In chaotic markets (S9), the delay-cost heuristic remains robust to uncertain opponent behavior. Finally, in high-demand environments (S11), OCG avoids DG's ``positional blindness'' and prevents late-draft roster collapses.
+\enlargethispage{2\baselineskip}
 
-\section{Conclusions and Business Recommendations}
+\subsection{Competitive Market Simulation}
 
-For modern sports roster construction, a successful draft can shape the long-term quality of the team. While player evaluations have largely converged across many data-driven environments, draft execution remains a highly exploitable inefficiency. 
+To evaluate OCG in a multi-agent environment, we implemented a 12-team draft simulation. Unlike the previous IP-benchmark experiments, this test measures how one OCG-managed team performs while competing directly against 11 DG-managed teams for the same player pool.
 
-This project successfully translated the chaotic, interdependent environment of a fantasy snake draft into a rigorous Operations Research model. We demonstrated that relying on naive ``best player available'' mentalities (Direct Greedy) bleeds significant roster value, especially when the talent pool is top-heavy or positional flexibility is low. 
+\textbf{Methodology:}
+Using real-world 2026 Yahoo and FanGraphs projections, we ran 12 separate snake drafts and shifted the OCG team's starting position from the 1st pick to the 12th pick. All teams followed the same roster requirements and market availability rules.
 
-While the exact ADP-aware IP provides flawless rosters, the limitless nature of the baseball player pool renders exact optimization operationally dead-on-arrival due to exponential runtime scaling. Our proposed \textbf{Opportunity Cost Greedy (OCG)} algorithm brilliantly bridges this gap. By calculating the delay-cost of waiting just one pick into the future, OCG captures the strategic essence of the IP. It consistently minimizes the optimality gap under severe market stress and processes 50-million variable equivalent draft instances in less than 25 seconds.
+\textbf{Results and Analysis:}
+Figure \ref{fig:competitive_simulation} compares the OCG team's objective and rank against DG opponents across all draft positions. OCG achieves first place across all Yahoo positions and first or second place across all FanGraphs positions. This suggests that cost-of-delay reasoning remains robust even when multiple agents compete for the same scarce resources.
 
-\textbf{Limitations \& Future Extensions:} ADP is only a proxy for opponent behavior; human managers exhibit biases (e.g., hometown favorites) that ADP misses. Furthermore, point projections carry standard deviations (injury risk, slump risk) not currently modeled. Future iterations of this tool could incorporate probabilistic opponent modeling and Monte Carlo simulations on projection variance, upgrading OCG from a deterministic solver to a fully probabilistic draft-day AI. 
+\begin{figure}[H]
+    \centering
+    \vspace{-0.6em}
+    \begin{minipage}[t]{0.42\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{./ocg_vs_dg_yahoo_by_draft_position.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.42\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{./ocg_vs_dg_fangraph_by_draft_position.png}
+    \end{minipage}
+    \vspace{-0.6em}
+    \caption{Competitive simulation: one OCG team vs. 11 DG teams across all draft positions. Left: Yahoo; right: FanGraphs. OCG ranks first for Yahoo and either first or second for FanGraphs.}
+    \label{fig:competitive_simulation}
+    \vspace{-0.8em}
+\end{figure}
 
-Ultimately, this report proves that the OCG algorithm provides a strong, deployable balance between execution speed and solution quality. While our empirical validation was conducted on baseball data, the underlying \textbf{cost-of-delay logic} is highly generalizable. It can be extended to any domain involving competitive talent recruitment or procurement scenarios, where multiple agents must secure scarce, heterogeneous assets in a rapidly changing market environment under real-time constraints.
+\section{Conclusions and Strategic Outlook}
+
+The results demonstrate that roster construction in competitive markets is a complex sequential decision problem that can be effectively addressed through systematic optimization logic. Based on our evaluation, we draw three primary conclusions:
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=0pt,topsep=2pt]
+    \item \textbf{Computational Efficiency:} IP provides a necessary mathematical benchmark, but its exponential complexity makes it impractical for real-time environments. OCG bridges this gap by delivering near-optimal rosters with second-level execution times, ensuring scalability even for massive player pools.
+    \item \textbf{Strategic Resilience under Scarcity:} OCG effectively navigates ``Value Cliff'' thresholds, where the talent supply declines sharply. This foresight provides utility gains in star-heavy, high-demand, and low-flexibility markets where myopic strategies typically fail.
+    \item \textbf{Robustness in Competitive Environments:} Multi-agent simulations suggest that managing the cost-of-delay provides a tangible advantage. OCG-managed teams consistently outperform or remain competitive with DG-managed teams across all draft positions.
+\end{enumerate}
+
+\textbf{Future Extensions:} Future work could incorporate \textbf{Stochastic Opponent Modeling} and \textbf{Risk-Aware Utility} to account for behavioral biases and performance volatility (e.g., injury risks). While validated on baseball data, the underlying cost-of-delay logic is generalizable to competitive procurement or talent acquisition scenarios where agents must secure scarce assets under real-time pressure.
 
 \end{document}
