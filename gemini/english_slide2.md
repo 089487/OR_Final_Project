@@ -300,7 +300,7 @@ $$ \max \sum_{i \in I} v_i y_i $$
 
 2. **Market Availability Constraint**:
    $$ z_{ik} = 0 \quad \text{if } S_k > \text{adp}_i + \delta, \quad \forall i \in I, k \in K $$
-   > *If our pick $S_k$ is later than the player's $\text{adp}_i + \delta$ (buffer), the player is considered "unavailable."*
+   > *If our pick $S_k$ is later than the player's $\text{adp}_i + \delta$ , he is considered "unavailable."*
 
 ---
 
@@ -466,7 +466,7 @@ OCG shows the most dramatic improvements in the following "Stress Scenarios":
 
 ## Strategic Insights: Where OCG Excels
 
-- **S10 / Chaotic Market**: Even when players are drafted slightly differently than ADP ($\delta=+5$), OCG remains robust.
+- **S10 / Chaotic Market**: Even when players are drafted slightly differently than ADP ($\delta=5$), OCG remains robust.
 - **S13 / High Demand**: When the player pool is tight, OCG's ability to "secure" value before it disappears is critical.
 
 | Environment Factor | Scenario | Improvement over DG |
@@ -493,11 +493,11 @@ td {
 }
 </style>
 
-## all data result
+## All data result
 
 | Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio |
 |---|---|---:|---:|
-| S1 | Baseline (Normal / Roster-Ratio / 3:1 / $(0,30)$) | 4.79% ± 1.18% | **1.92% ± 0.57%** |
+| S1 | Baseline (Normal / Roster-Ratio / $D=3$ / $(0,30)$) | 4.79% ± 1.18% | **1.92% ± 0.57%** |
 | S2 | Points: Uniform | 3.24% ± 0.77% | **1.44% ± 0.59%** |
 | S3 | Points: Star-Heavy / High-Low | 8.39% ± 2.40% | **2.87% ± 1.32%** |
 | S4 | Pos: Uniform-by-Type | 4.89% ± 0.62% | **1.07% ± 0.43%** |
