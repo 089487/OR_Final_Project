@@ -376,19 +376,19 @@ Single-Position & $5.11\% \pm 1.48\%$ & $\mathbf{0.94\% \pm 0.65\%}$ & $\mathbf{
 
 Table \ref{tab:factor_3} demonstrates performance under chaotic draft markets. We split the analysis into two sweeps: varying market noise ($\sigma_{\text{adp}}$) and varying availability tolerance ($\delta$).
 
-When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opponent behavior is trivial, and both algorithms perform exceptionally well. As noise increases to $\sigma_{\text{adp}}=60$, the draft becomes unpredictable. Direct Greedy struggles significantly (gap over $5\%$), whereas OCG remains highly robust ($2.92\%$). Similarly, whether the availability tolerance ($\delta$) is incredibly strict ($-10$) or highly permissive ($10$), OCG consistently keeps the gap under $2\%$. Because OCG bases its priority on the \textit{relative difference} (Opportunity Cost) rather than absolute values, it inherently hedges against market volatility.
+When the market is perfectly efficient ($\sigma_{\text{adp}}=0$), predicting opponent behavior is trivial, and both algorithms perform exceptionally well. As noise increases to $\sigma_{\text{adp}}=60$, the draft becomes unpredictable. Direct Greedy struggles significantly (gap over $5\%$), whereas OCG remains highly robust ($2.43\%$). Similarly, whether the availability tolerance ($\delta$) is incredibly strict ($-10$) or highly permissive ($10$), OCG consistently keeps the gap under $2\%$. Because OCG bases its priority on the \textit{relative difference} (Opportunity Cost) rather than absolute values, it inherently hedges against market volatility.
 
 \begin{table}[H]
 \centering
-\caption{Factor C: ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=30$. The second tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$. Values represent the optimality gap (\%) $\pm$ standard deviation.}
+\caption{Factor C: ADP Uncertainty results. The first sweep tests market noise ($\sigma_{\text{adp}}$) with fixed $\delta=0$. The second tests tolerance ($\delta$) with fixed $\sigma_{\text{adp}}=30$. Values represent the optimality gap (\%) $\pm$ standard deviation.}
 \label{tab:factor_3}
 \begin{tabular}{llccc}
 \toprule
 Sweep & Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
-\textbf{Noise} & $\sigma_{\text{adp}}=0$ (Efficient) & $2.78\% \pm 1.33\%$ & $\mathbf{1.52\% \pm 1.15\%}$ & $1.00\% \pm 0.50\%$ \\
- & $\sigma_{\text{adp}}=30$ (Moderate) & $5.79\% \pm 1.35\%$ & $\mathbf{2.72\% \pm 1.39\%}$ & $3.02\% \pm 1.34\%$ \\
- & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.10\% \pm 1.29\%$ & $\mathbf{2.92\% \pm 1.75\%}$ & $\mathbf{3.33\% \pm 1.43\%}$ \\
+\textbf{Noise} & $\sigma_{\text{adp}}=0$ (Efficient) & $1.47\% \pm 0.48\%$ & $\mathbf{0.48\% \pm 0.23\%}$ & $1.00\% \pm 0.50\%$ \\
+ & $\sigma_{\text{adp}}=30$ (Moderate) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
+ & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.56\% \pm 1.58\%$ & $\mathbf{2.43\% \pm 1.55\%}$ & $\mathbf{3.33\% \pm 1.43\%}$ \\
 \midrule
 \textbf{Tolerance} & $\delta=-10$ (Strict) & $4.65\% \pm 1.32\%$ & $\mathbf{1.90\% \pm 0.77\%}$ & $2.91\% \pm 1.71\%$ \\
  & $\delta=0$ (Neutral) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
