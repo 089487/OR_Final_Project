@@ -177,13 +177,13 @@ We use Fantasy Baseball not as the final application itself, but as a data-rich 
 
 <!--
 Presenter notes:
-The motivation of this project is the general manager's dilemma.
+In simple terms, this is a step-by-step talent selection problem in a competitive market.
 
-The draft is not just a game mechanic. It is a sequential resource allocation problem under competitive scarcity. Multiple decision makers compete for a finite pool of heterogeneous assets, and every opponent's pick changes the feasible set for everyone else.
+Technically, we model it as sequential resource allocation under scarcity. Multiple decision makers compete for a limited pool of unique players, and every opponent's pick changes the feasible set for everyone else.
 
-The manager must satisfy hard roster constraints, maximize objective value, and control timing risk. Sometimes the best available player is not the most urgent choice, because a scarce position may hit a value cliff before the next pick.
+A manager must balance roster requirements with the timing paradox: knowing when to secure a scarce asset before its market availability expires.
 
-So our goal is to build a decision-support framework that bridges theoretical optimality and real-time execution speed.
+So our goal is to build a decision-support framework that provides a deployable balance between theoretical optimality and real-time execution speed.
 -->
 ---
 <!-- _class: impact-slide -->
@@ -231,7 +231,7 @@ Each player in the draft pool is defined by three key attributes:
 Presenter notes:
 To model sequential talent acquisition, each player has three attributes.
 
-First, the value proxy \(v_i\) represents consensus projected utility, which becomes the objective value. Second, ADP represents market expectation and gives us the availability horizon of each asset. Third, eligible positions \(E_i\) define which roster slots the player can legally satisfy.
+First is the Value Proxy, \(v_i\), representing consensus projected utility. Second is ADP, or Average Draft Position. This serves as a market expectation proxy, telling us how long an asset is likely to remain available. Finally, eligibility defines where a player fits into the roster's structural constraints.
 
 So \(v_i\) tells us expected utility, ADP tells us timing risk, and eligibility tells us whether the asset fits the roster structure.
 -->
@@ -338,7 +338,7 @@ We collected aggregate ADP from FantasyPros, combining information from platform
 
 ADP is important because it represents the market's expectation of when each player will be drafted. In our model, it defines the availability horizon of each asset.
 
-For example, if a player's ADP is much earlier than our next pick, then we should not assume that player will still be available. This makes the model more realistic than simple myopic utility maximization.
+For example, if a player's ADP is much earlier than our next pick, then we should not assume that player will still be available. This makes the model more realistic than simply ranking players by projected points.
 -->
 ---
 <!-- _class: impact-slide -->
@@ -484,15 +484,15 @@ So DG is useful as a baseline, but it does not capture the timing value of a dra
 Presenter notes:
 Our main contribution is Opportunity Cost Greedy, or OCG.
 
-OCG is a dynamic cost-of-delay assessment.
+OCG asks a simple question: if we do not select this asset now, what value might we lose by our next turn?
 
-Instead of only maximizing immediate utility, it asks: if we wait until the next decision point, how much value will disappear?
+We call this the cost of delay.
 
 For each position, OCG compares \(V_{\text{now}}\), the best asset now, with \(V_{\text{next}}\), the best asset likely available next.
 
-The difference is the cost of delay. If the gap is large, that position is approaching a value cliff, so OCG prioritizes it.
+If the gap is large, that position is approaching a Value Cliff, meaning the talent pool is likely to decline sharply before our next decision point.
 
-This gives OCG strategic foresight while keeping the computation fast enough for real-time decision support.
+This gives OCG strategic foresight while remaining computationally efficient enough for real-time decision support.
 -->
 ---
 ## 9. Algorithms: Complexity Analysis
@@ -704,11 +704,11 @@ OCG shows the most dramatic improvements in the following "Stress Scenarios":
 
 <!--
 Presenter notes:
-The results show that OCG is especially strong in stress scenarios.
+Our results show that OCG is most effective in stress scenarios.
 
-In the star-heavy scenario, Direct Greedy often misses the value cliff. It may focus on positional scarcity and fail to secure elite players before they disappear. OCG reduces the gap from 8.39% to 2.87%.
+In a star-heavy market, simpler methods often miss the timing and fail to secure elite players. OCG's look-ahead logic prevents this by identifying the value cliff early.
 
-In the single-position scenario, early mistakes are costly because there is no positional flexibility. OCG's look-ahead helps prevent these traps.
+In the single-position scenario, early mistakes are also costly because there is no positional flexibility. OCG helps maintain a strong balance across the entire roster.
 -->
 ---
 ## Strategic Insights: Where OCG Excels
@@ -811,15 +811,15 @@ The result again supports the robustness of opportunity-cost reasoning in a comp
 
 <!--
 Presenter notes:
-To conclude, OCG is a real-time decision-support framework for competitive talent acquisition.
+To conclude, OCG provides a strong balance between execution speed and solution quality.
 
-Direct Greedy is risky because immediate scarcity can cause major value loss. IP is an excellent benchmark, but too slow under strict decision windows.
+It functions as a real-time decision-support framework that handles millions of variables in seconds.
 
-OCG sits between them. It captures cost-of-delay logic while remaining deployable.
+While we use baseball as our testbed, this cost-of-delay logic can generalize to other competitive talent acquisition scenarios under scarcity.
 
-Our experiments show that OCG performs especially well under competitive scarcity, including star-heavy value curves, low flexibility, chaotic markets, and high demand.
+Our experiments show that OCG performs especially well under stress scenarios, including star-heavy value curves, low flexibility, chaotic markets, and high demand.
 
-Future work can add stochastic opponent modeling and risk-aware utility, so the framework can handle uncertain behavior, injuries, and upside-versus-safety preferences.
+Future work can add predicting opponent moves and risk-aware utility, so the framework can handle uncertain behavior, injuries, and upside-versus-safety preferences.
 -->
 ---
 <!-- _class: title-slide -->
