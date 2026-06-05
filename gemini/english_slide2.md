@@ -171,10 +171,6 @@ We use Fantasy Baseball not as the final application itself, but as a data-rich 
 
 > **Our Approach**: Fantasy Baseball serves as a data-rich **competitive testbed** for real-time decision-support heuristics.
 
-<div class="img-right">
-  <img src="image-2.jpeg" width="500">
-</div>
-
 <!--
 Presenter notes:
 In simple terms, this is a step-by-step talent selection problem in a competitive market.
