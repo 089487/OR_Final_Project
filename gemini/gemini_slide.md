@@ -498,8 +498,7 @@ td {
 | S9, 10 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±5, 30)** |
 | S11, 12 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±10, 30)** |
 | S13 | Load (High) | **1** | Normal | Roster-Ratio | (0, 30) |
-| S14 | Load (Low) | **3** | Normal | Roster-Ratio | (0, 30) |
-| S15 | Load (Ultra-Low) | **10** | Normal | Roster-Ratio | (0, 30) |
+| S14 | Load (Ultra-Low) | **10** | Normal | Roster-Ratio | (0, 30) |
 
 ---
 
