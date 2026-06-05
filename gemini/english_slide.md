@@ -129,7 +129,7 @@ We validated our system using projected data for the **2026 MLB Season** from **
 
 ## 05. Model Formulation: Integer Programming (IP)
 
-We first formulate the exact ADP-aware Integer Linear Program (ILP) as our benchmark.
+We first formulate the exact ADP-aware Integer Programming (IP) model as our benchmark.
 
 *   **Objective**: $\max \sum_{i \in I} v_i y_i$ (Maximize total roster points)
 *   **Decision Variables**:
@@ -154,7 +154,7 @@ We first formulate the exact ADP-aware Integer Linear Program (ILP) as our bench
 **Why is the perfect IP solution not practical for a live draft?**
 
 1.  **NP-Hardness**: The Draft Pool scales to **tens of thousands** of eligible players.
-2.  **Exponential Explosion**: The Branch-and-Bound tree of the ILP grows exponentially with $n$.
+2.  **Exponential Explosion**: The Branch-and-Bound tree of the IP grows exponentially with $n$.
 3.  **Real-Time Pressure**: Draft rooms operate on a 60-90 second clock. 
 4.  **Failure**: In large-scale scenarios (100k+ players), Gurobi exceeds memory limits or solver time-outs.
 
@@ -190,7 +190,7 @@ Our flagship algorithm, **Opportunity Cost Greedy (OCG)**, looks ahead to the **
 **Data Structure**: Uses Max-Heaps with <u>Lazy Deletion</u> to maintain $\mathcal{O}(n \log n)$ efficiency.
 
 </div>
----
+
 <!-- _class: impact-slide -->
 
 ---
@@ -205,11 +205,11 @@ To prove robustness, we developed a **Synthetic Data Generator** to stress-test 
 1.  **Factor A (Points Distribution)**:
     *   *Normal*: standard year.
     *   *Star-Heavy*: Top 10% of players hold 50% of the value.
-2.  **Factor B (Positional Rigidity)**: 
+2.  **Factor B (Position Eligibility Distribution)**: 
     *   *Versatile*: Many "Utility" players.
     *   *Single-Position*: Eliminates all flexibility (The hardest test).
-3.  **Factor C (Market Noise)**: Introducing Gaussian error to ADP ($\sigma_{adp}$).
-4.  **Factor D (Demand Ratio)**: Simulating "Extreme Scarcity" (Supply $\approx$ Demand).
+3.  **Factor C (Market Conditions and ADP Uncertainty)**: Introducing Gaussian error to ADP ($\sigma_{adp}$).
+4.  **Factor D (Player Demand Ratio)**: Simulating high-demand markets where supply is tight.
 
 ---
 
@@ -230,7 +230,7 @@ Comparison of **Optimality Gap** (Distance from perfect IP solution):
 
 ## Synthetic Data: Scenario Matrix
 
-| ID | Main Factor | Demand Ratio (D) | Points Dist. (v_i) | Pos. Dist. (E_i) | ADP Noise (δ, σ) |
+| ID | Main Factor | Demand Ratio (D) | Points Distribution (v_i) | Position Eligibility (E_i) | ADP Uncertainty (δ, σ) |
 | :--- | :--- | :---: | :--- | :--- | :--- |
 | S1 | Baseline | 3 | Normal | Roster-Ratio | (0, 30) |
 | S2 | Points: Uniform | 3 | Uniform | Roster-Ratio | (0, 30) |
@@ -242,8 +242,8 @@ Comparison of **Optimality Gap** (Distance from perfect IP solution):
 | S8 | Market: Mild Noise | 3 | Normal | Roster-Ratio | (0, 60) |
 | S9,10 | Market: Chaotic | 3 | Normal | Roster-Ratio | (±5, 30) |
 | S11,12 | Market: Chaotic | 3 | Normal | Roster-Ratio | (±10, 30) |
-| S13 | Load (High) | 1 | Normal | Roster-Ratio | (0, 30) |
-| S14 | Load (Ultra-Low) | 10 | Normal | Roster-Ratio | (0, 30) |
+| S13 | Demand: High | 1 | Normal | Roster-Ratio | (0, 30) |
+| S14 | Demand: Low | 10 | Normal | Roster-Ratio | (0, 30) |
 
 ---
 
@@ -261,24 +261,38 @@ Comparison of **Optimality Gap** (Distance from perfect IP solution):
 | S10 | Market: Chaotic / (+5,30) | <span class="table-num">5.54%</span> ± <span class="table-num">1.57%</span> | <span class="green">1.64%</span> ± 0.75% |
 | S11 | Market: Chaotic / (-10,30) | <span class="table-num">4.65%</span> ± <span class="table-num">1.32%</span> | <span class="green">1.90%</span> ± 0.77% |
 | S12 | Market: Chaotic / (+10,30) | <span class="table-num">5.42%</span> ± <span class="table-num">1.21%</span> | <span class="green">1.72%</span> ± 0.95% |
-| S13 | Load (High, 1:1) | <span class="table-num">8.81%</span> ± <span class="table-num">2.19%</span> | <span class="green">2.64%</span> ± 1.23% |
-| S14 | Load (Ultra-Low, 10:1) | <span class="table-num">3.29%</span> ± <span class="table-num">0.85%</span> | <span class="green">1.16%</span> ± 0.51% |
+| S13 | Demand: High / D=1 | <span class="table-num">8.81%</span> ± <span class="table-num">2.19%</span> | <span class="green">2.64%</span> ± 1.23% |
+| S14 | Demand: Low / D=10 | <span class="table-num">3.29%</span> ± <span class="table-num">0.85%</span> | <span class="green">1.16%</span> ± 0.51% |
 
 ---
 
-## Stress Testing: Runtime Comparison
+## Stress Testing: Runtime Scaling
 
-| Stress Level | Approx. Vars | IP Runtime | OCG Runtime |
-| :--- | ---: | :--- | :---: |
-| small | 334,080 | 4.23 s (optimal) | 0.85 s |
-| large | 2,289,600 | 54.26 s (optimal) | 2.34 s |
-| timeout | 49,029,120 | 1869.8 s (timeout) | 23.28 s |
+**Approx. Variables** estimates the decision-variable scale of the IP model:
+
+$$
+\text{Approx. Variables} = n \times (1 + p + r)
+$$
+
+- $n$: number of available players
+- $p$: number of roster position types
+- $r$: picks per team / roster size
+
+| Stress Level | Players | Teams | Picks/Team | DG Time | OCG Time | IP Time | IP Status |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
+| small | 5,760 | 12 | 48 | 0.790s | 0.852s | 4.235s | OPTIMAL |
+| medium | 9,600 | 15 | 64 | 0.951s | 1.144s | 12.230s | OPTIMAL |
+| large | 21,600 | 15 | 96 | 1.981s | 2.344s | 54.267s | OPTIMAL |
+| xlarge | 64,000 | 20 | 160 | 6.172s | 10.360s | 276.895s | OPTIMAL |
+| timeout | 184,320 | 24 | 256 | 17.760s | 23.286s | **1869.805s** | **TIMEOUT** |
+
+---
+
+## Stress Testing: Runtime Scaling
 
 <div style="text-align: center;">
-  <img src="../experiments/synthetic/scaling_summary/runtime_by_variable_count.png" width="500">
+  <img src="../experiments/synthetic/scaling_summary/runtime_by_variable_count.png" width="900">
 </div>
-
-- **Conclusion**: Under high computation loads where IP times out, OCG scales near-linearly and remains practical for large-scale drafts.
 
 ---
 
@@ -297,28 +311,21 @@ Comparison of **Optimality Gap** (Distance from perfect IP solution):
 
 ---
 
-## 12. Analysis: Scalability Stress Test
+## 12. Strategic Insights: Where OCG Wins Most
 
-We tested the limits by dumping 180,000+ players into the database.
+OCG's largest gains appear in environments where waiting has a measurable cost:
 
-| Instance | Players | IP Runtime | OCG Runtime | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| Medium | 9,600 | 12.23 s | 1.14 s | Optimal |
-| X-Large | 64,000 | 276.90 s | 10.36 s | Optimal |
-| **Limit** | **184,320** | <span class="clay">1869.8 s</span> | <span class="green">23.28 s</span> | **TIMEOUT** |
+- **S3 / Points: Star-Heavy**: DG misses key elite players; OCG reduces the gap from 8.39% to 2.87%.
+- **S6 / Pos: Single-Position**: OCG avoids late positional shortages when flexibility disappears.
+- **S13 / Demand: High**: OCG plans ahead when almost every player will be drafted.
+- **S9-S12 / Market: Chaotic**: OCG remains stable under ADP noise and tolerance shifts.
 
-*   **The Verdict**: While IP finds perfect rosters, it is **operationally dead-on-arrival** for large datasets. 
-*   **OCG Efficiency**: Processes 50-million variable equivalents in **under 25 seconds**.
-
----
-
-## 13. Strategic Insights: The "Wait" Logic
-
-**Why does OCG beat standard greedy?**
-
-1.  **Navigating Scarcity**: In environments where almost every player is drafted (Demand $\approx$ Supply), OCG anticipates future collapses and drafts "deep" positions late.
-2.  **Positional Flexibility**: OCG understands when a "Utility" player is a luxury vs. a necessity.
-3.  **Resilience to Noise**: Even when opponents act chaotically (Market Noise), OCG's relative difference calculation acts as a natural hedge.
+| Scenario | DG Gap | OCG Gap | Key Benefit |
+| :--- | :---: | :---: | :--- |
+| Points: Star-Heavy | 8.39% | 2.87% | Secures elite talent |
+| Pos: Single-Position | 5.11% | 0.94% | Avoids positional collapse |
+| Demand: High | 8.81% | 2.64% | Anticipates scarcity |
+| Market: Chaotic | 5.56% / 5.42% | 2.43% / 1.72% | Robust under uncertainty |
 
 ---
 <!-- _class: impact-slide -->
@@ -327,13 +334,13 @@ We tested the limits by dumping 180,000+ players into the database.
 
 ---
 
-## 14. Conclusions & Recommendations
+## 13. Conclusions & Business Recommendations
 
 **For the Front Office:**
 
-*   **Discard Naive Greedy**: "Fill-the-need" mentalities bleed significant roster value (approx. 3-8% per season).
-*   **Adopt OCG for Real-Time Decision Support**: It offers near-perfect optimization with the speed required for live draft rooms.
-*   **Hybrid Approach**: Use **IP** for off-season simulations and **OCG** for the actual draft day.
+1.  **Direct Greedy loses roster value**: Fill-the-need logic turns local mistakes into visible optimality gaps in star-heavy, single-position, and high-demand scenarios.
+2.  **IP is the perfect benchmark, but not a draft-day tool**: As the player pool and roster size grow, IP runtime explodes and eventually exceeds the 30-minute solver limit.
+3.  **OCG is the deployable core contribution**: Its one-pick look-ahead captures the strategic spirit of IP, beats DG across all 14 scenarios, and handles the 50-million-variable stress case in **23.286 seconds**.
 
 <div class="card">
   <strong>Final Proof:</strong> Computational draft optimization is not just a theoretical exercise; it is a scalable, real-time weapon for competitive parity.
@@ -341,7 +348,7 @@ We tested the limits by dumping 180,000+ players into the database.
 
 ---
 
-## 15. Future Extensions & Q&A
+## 14. Future Extensions & Q&A
 
 *   **Probabilistic Modeling**: Moving from static ADP to Monte Carlo simulations of opponent behavior.
 *   **Injury Risk Variance**: Incorporating standard deviations of player projections into the objective function.
