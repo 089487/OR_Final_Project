@@ -167,7 +167,9 @@ Our flagship algorithm, **Opportunity Cost Greedy (OCG)**, looks ahead to the **
 *   **Decision**: Draft the player where the **Opportunity Cost** is maximized.
 
 <div class="card">
-  <strong>Data Structure</strong>: Uses Max-Heaps with <u>Lazy Deletion</u> to maintain $\mathcal{O}(n \log n)$ efficiency.
+
+**Data Structure**: Uses Max-Heaps with <u>Lazy Deletion</u> to maintain $\mathcal{O}(n \log n)$ efficiency.
+
 </div>
 
 ---
