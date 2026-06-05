@@ -161,15 +161,49 @@ Specifically, we study a sequential decision-making problem where a manager must
 We use Fantasy Baseball not as the final application itself, but as a data-rich competitive testbed for studying sequential talent acquisition under scarcity. It gives us real market expectations, projected player utility, and a timed draft environment where opportunity cost matters.
 -->
 ---
-## 1. Introduction: The General Manager's Dilemma
+## 1. Introduction: The Road to the 2026 Season
 
-- **The Problem**: Sequential resource allocation under competitive scarcity.
-- **The Core Challenge**:
-  - **Roster Integrity**: Satisfying rigid structural constraints (16 unique positions).
-  - **Market Dynamics**: Opponent choices dynamically shrink the feasible talent pool.
-  - **The Timing Paradox**: When to secure a scarce asset versus the best available talent.
+**Drafts are the foundation of MLB team building which require superior winning strategies.**
 
-> **Our Approach**: Fantasy Baseball serves as a data-rich **competitive testbed** for real-time decision-support heuristics.
+<div class="grid-2" style="margin-top: 20px;">
+<div>
+
+- **The Front Office Focus**
+    The duty of professional GMs.
+- **The Global Fanbase**
+  Through **Fantasy Baseball** such online games, millions of fans engage in the same mathematical puzzle.
+</div>
+
+<div class="img-right">
+  <img src="image-2.jpeg" width="550">
+</div>
+</div>
+
+---
+
+## 2. Motivation: Importance and Challenge
+
+<div class="grid-2">
+<div class="card">
+  <div class="tag">Strategic Complexity</div>
+  <ul>
+    <li><b>Roster Composition</b>: 
+    <br> a balanced / "M-Shaped" roster?</li>
+    <li><b>Market Volatility</b>: <br> How to react when opponents "snipe" the planned targets?</li>
+  </ul>
+</div>
+
+<div class="card card-orange">
+  <div class="tag">Combinatorial Explosion</div>
+  <ul>
+    <li>More than <b>12</b> teams & <b>1,000+ players</b> in the pool.</li>
+    <li><b>16 Roster Slots</b> per team with rigid position constraints.</li>
+    <li><b>Real-time Pressure</b>: Most decisions must be made in <b>60 seconds</b>.</li>
+  </ul>
+</div>
+</div>
+
+> **Problem**: Humans cannot mentally process hundreds of Alternative Plans A, B, C... in real-time. We need a scalable **Decision Support System**.
 
 <!--
 Presenter notes:
@@ -449,7 +483,7 @@ To bridge the gap between optimality and speed, we designed two heuristics.
 ### ❌ Baseline: Direct Greedy (DG)
 - **Logic**: When it's our turn, calculate the "Scarcity" of each remaining position and pick the best player for the most scarce slot.
   - **Scarcity Calculation**: $\max_{p} \left( \frac{\text{Slots Remaining}}{\text{Available Players in Market}} \right)$
-- **Flaw**: It is purely myopic: One might pick a mediocre Catcher just because the position is "scarce," missing out on a once-in-a-generation superstar at another position.
+- **Flaw**: Purely Myopic: One might pick a mediocre Catcher just because the position is "scarce," missing out on a once-in-a-generation superstar at another position.
 
 <!--
 Presenter notes:
