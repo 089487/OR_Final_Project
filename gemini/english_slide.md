@@ -247,25 +247,6 @@ Comparison of **Optimality Gap** (Distance from perfect IP solution):
 
 ---
 
-| Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio |
-|---|---|---:|---:|
-| S1 | Baseline (Normal / Roster-Ratio / 3:1 / (0,30)) | <span class="table-num">4.79%</span> ± <span class="table-num">1.18%</span> | <span class="green">1.92%</span> ± 0.57% |
-| S2 | Points: Uniform | <span class="table-num">3.24%</span> ± <span class="table-num">0.77%</span> | <span class="green">1.44%</span> ± 0.59% |
-| S3 | Points: Star-Heavy / High-Low | <span class="table-num">8.39%</span> ± <span class="table-num">2.40%</span> | <span class="green">2.87%</span> ± 1.32% |
-| S4 | Pos: Uniform-by-Type | <span class="table-num">4.89%</span> ± <span class="table-num">0.62%</span> | <span class="green">1.07%</span> ± 0.43% |
-| S5 | Pos: Point-Flexible | <span class="table-num">5.36%</span> ± <span class="table-num">1.66%</span> | <span class="green">1.34%</span> ± 0.68% |
-| S6 | Pos: Single-Position | <span class="table-num">5.11%</span> ± <span class="table-num">1.48%</span> | <span class="green">0.94%</span> ± 0.65% |
-| S7 | Market: Efficient / (0,0) | <span class="table-num">1.47%</span> ± <span class="table-num">0.48%</span> | <span class="green">0.48%</span> ± 0.23% |
-| S8 | Market: Mild Noise / (0,60) | <span class="table-num">5.56%</span> ± <span class="table-num">1.58%</span> | <span class="green">2.43%</span> ± 1.55% |
-| S9 | Market: Chaotic / (-5,30) | <span class="table-num">4.90%</span> ± <span class="table-num">1.24%</span> | <span class="green">1.83%</span> ± 0.82% |
-| S10 | Market: Chaotic / (+5,30) | <span class="table-num">5.54%</span> ± <span class="table-num">1.57%</span> | <span class="green">1.64%</span> ± 0.75% |
-| S11 | Market: Chaotic / (-10,30) | <span class="table-num">4.65%</span> ± <span class="table-num">1.32%</span> | <span class="green">1.90%</span> ± 0.77% |
-| S12 | Market: Chaotic / (+10,30) | <span class="table-num">5.42%</span> ± <span class="table-num">1.21%</span> | <span class="green">1.72%</span> ± 0.95% |
-| S13 | Demand: High / D=1 | <span class="table-num">8.81%</span> ± <span class="table-num">2.19%</span> | <span class="green">2.64%</span> ± 1.23% |
-| S14 | Demand: Low / D=10 | <span class="table-num">3.29%</span> ± <span class="table-num">0.85%</span> | <span class="green">1.16%</span> ± 0.51% |
-
----
-
 ## Stress Testing: Runtime Scaling
 
 **Approx. Variables** estimates the decision-variable scale of the IP model:
@@ -326,6 +307,27 @@ OCG's largest gains appear in environments where waiting has a measurable cost:
 | Pos: Single-Position | 5.11% | 0.94% | Avoids positional collapse |
 | Demand: High | 8.81% | 2.64% | Anticipates scarcity |
 | Market: Chaotic | 5.56% / 5.42% | 2.43% / 1.72% | Robust under uncertainty |
+
+---
+
+## All Scenario Results
+
+| Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio |
+|---|---|---:|---:|
+| S1 | Baseline (Normal / Roster-Ratio / 3:1 / (0,30)) | <span class="table-num">4.79%</span> ± <span class="table-num">1.18%</span> | <span class="green">1.92%</span> ± 0.57% |
+| S2 | Points: Uniform | <span class="table-num">3.24%</span> ± <span class="table-num">0.77%</span> | <span class="green">1.44%</span> ± 0.59% |
+| S3 | Points: Star-Heavy / High-Low | <span class="table-num">8.39%</span> ± <span class="table-num">2.40%</span> | <span class="green">2.87%</span> ± 1.32% |
+| S4 | Pos: Uniform-by-Type | <span class="table-num">4.89%</span> ± <span class="table-num">0.62%</span> | <span class="green">1.07%</span> ± 0.43% |
+| S5 | Pos: Point-Flexible | <span class="table-num">5.36%</span> ± <span class="table-num">1.66%</span> | <span class="green">1.34%</span> ± 0.68% |
+| S6 | Pos: Single-Position | <span class="table-num">5.11%</span> ± <span class="table-num">1.48%</span> | <span class="green">0.94%</span> ± 0.65% |
+| S7 | Market: Efficient / (0,0) | <span class="table-num">1.47%</span> ± <span class="table-num">0.48%</span> | <span class="green">0.48%</span> ± 0.23% |
+| S8 | Market: Mild Noise / (0,60) | <span class="table-num">5.56%</span> ± <span class="table-num">1.58%</span> | <span class="green">2.43%</span> ± 1.55% |
+| S9 | Market: Chaotic / (-5,30) | <span class="table-num">4.90%</span> ± <span class="table-num">1.24%</span> | <span class="green">1.83%</span> ± 0.82% |
+| S10 | Market: Chaotic / (+5,30) | <span class="table-num">5.54%</span> ± <span class="table-num">1.57%</span> | <span class="green">1.64%</span> ± 0.75% |
+| S11 | Market: Chaotic / (-10,30) | <span class="table-num">4.65%</span> ± <span class="table-num">1.32%</span> | <span class="green">1.90%</span> ± 0.77% |
+| S12 | Market: Chaotic / (+10,30) | <span class="table-num">5.42%</span> ± <span class="table-num">1.21%</span> | <span class="green">1.72%</span> ± 0.95% |
+| S13 | Demand: High / D=1 | <span class="table-num">8.81%</span> ± <span class="table-num">2.19%</span> | <span class="green">2.64%</span> ± 1.23% |
+| S14 | Demand: Low / D=10 | <span class="table-num">3.29%</span> ± <span class="table-num">0.85%</span> | <span class="green">1.16%</span> ± 0.51% |
 
 ---
 <!-- _class: impact-slide -->
