@@ -5,12 +5,12 @@
 | Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio | Improve $\mu \pm \sigma$ |
 |---|---|---:|---:|---:|
 | S1 | Baseline (Normal / Roster-Ratio / 3:1 / $(0,30)$) | 4.79% ± 1.18% | 1.92% ± 0.57% | 3.02% ± 1.34% |
-| S2 | Value: Uniform | 3.24% ± 0.77% | 1.44% ± 0.59% | 1.87% ± 0.65% |
-| S3 | Value: Star-Heavy / High-Low | 8.39% ± 2.40% | 2.87% ± 1.32% | 6.10% ± 3.46% |
-| S4 | Pos: Random / Uniform-by-Type | 4.89% ± 0.62% | 1.07% ± 0.43% | 4.02% ± 0.82% |
-| S5 | Pos: Versatile / Value-Correlation | 5.36% ± 1.66% | 1.34% ± 0.68% | 4.27% ± 1.83% |
-| S6 | Pos: Rigid / Single-Position | 5.11% ± 1.48% | 0.94% ± 0.65% | 4.42% ± 1.95% |
-| S7 | Market: Rigid / $(0,0)$ | 1.47% ± 0.48% | 0.48% ± 0.23% | 1.00% ± 0.50% |
+| S2 | Points: Uniform | 3.24% ± 0.77% | 1.44% ± 0.59% | 1.87% ± 0.65% |
+| S3 | Points: Star-Heavy / High-Low | 8.39% ± 2.40% | 2.87% ± 1.32% | 6.10% ± 3.46% |
+| S4 | Pos: Uniform-by-Type | 4.89% ± 0.62% | 1.07% ± 0.43% | 4.02% ± 0.82% |
+| S5 | Pos: Point-Flexible | 5.36% ± 1.66% | 1.34% ± 0.68% | 4.27% ± 1.83% |
+| S6 | Pos: Single-Position | 5.11% ± 1.48% | 0.94% ± 0.65% | 4.42% ± 1.95% |
+| S7 | Market: Efficient / $(0,0)$ | 1.47% ± 0.48% | 0.48% ± 0.23% | 1.00% ± 0.50% |
 | S8 | Market: Mild Noise / $(0,60)$ | 5.56% ± 1.58% | 2.43% ± 1.55% | 3.33% ± 1.43% |
 | S9 | Market: Chaotic / $(-5,30)$ | 4.90% ± 1.24% | 1.83% ± 0.82% | 3.24% ± 1.40% |
 | S10 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | 1.64% ± 0.75% | 4.16% ± 1.50% |
