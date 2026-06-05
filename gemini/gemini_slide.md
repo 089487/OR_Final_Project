@@ -520,6 +520,44 @@ OCG 對以下幾種極端場景的改善最明顯：
 
 ---
 
+<style scoped>
+h2 {
+  margin-bottom: 0.35em !important;
+}
+table {
+  width: 100% !important;
+  font-size: 16px !important;
+  line-height: 1.18 !important;
+}
+th {
+  padding: 8px 10px !important;
+}
+td {
+  padding: 5px 10px !important;
+}
+</style>
+
+## all data result
+
+| Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio |
+|---|---|---:|---:|
+| S1 | Baseline (Normal / Roster-Ratio / 3:1 / $(0,30)$) | 4.79% ± 1.18% | **1.92% ± 0.57%** |
+| S2 | Points: Uniform | 3.24% ± 0.77% | **1.44% ± 0.59%** |
+| S3 | Points: Star-Heavy / High-Low | 8.39% ± 2.40% | **2.87% ± 1.32%** |
+| S4 | Pos: Uniform-by-Type | 4.89% ± 0.62% | **1.07% ± 0.43%** |
+| S5 | Pos: Point-Flexible | 5.36% ± 1.66% | **1.34% ± 0.68%** |
+| S6 | Pos: Single-Position | 5.11% ± 1.48% | **0.94% ± 0.65%** |
+| S7 | Market: Efficient / $(0,0)$ | 1.47% ± 0.48% | **0.48% ± 0.23%** |
+| S8 | Market: Mild Noise / $(0,60)$ | 5.56% ± 1.58% | **2.43% ± 1.55%** |
+| S9 | Market: Chaotic / $(-5,30)$ | 4.90% ± 1.24% | **1.83% ± 0.82%** |
+| S10 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | **1.64% ± 0.75%** |
+| S11 | Market: Chaotic / $(-10,30)$ | 4.65% ± 1.32% | **1.90% ± 0.77%** |
+| S12 | Market: Chaotic / $(+10,30)$ | 5.42% ± 1.21% | **1.72% ± 0.95%** |
+| S13 | Load (High, 1:1) | 8.81% ± 2.19% | **2.64% ± 1.23%** |
+| S14 | Load (Ultra-Low, 10:1) | 3.29% ± 0.85% | **1.16% ± 0.51%** |
+
+---
+
 
 ## Stress Testing: Runtime Scaling
 
