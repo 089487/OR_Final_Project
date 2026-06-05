@@ -433,17 +433,19 @@ The Branch-and-Bound tree of the ILP explores an exponentially growing space. As
 \small
 \caption{Stress Test: Execution Times for DG, OCG, and ILP.}
 \label{tab:stress_time}
-\begin{tabular}{lrrrrl}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrrrl}
 \toprule
-Instance Level & Players & DG Time(s) & OCG Time(s) & ILP Time(s) & ILP Status \\
+Instance Level & Players & Teams & Picks/Team & DG Time(s) & OCG Time(s) & ILP Time(s) & ILP Status \\
 \midrule
-stress\_small  & 5,760 & 0.790 & 0.852 & 4.235 & OPTIMAL \\
-stress\_medium & 9,600 & 0.951 & 1.144 & 12.230 & OPTIMAL \\
-stress\_large  & 21,600 & 1.981 & 2.344 & 54.267 & OPTIMAL \\
-stress\_xlarge & 64,000 & 6.172 & 10.360 & 276.895 & OPTIMAL \\
-timeout\_target & 184,320 & 17.760 & 23.286 & \textbf{1869.805} & \textbf{TIMEOUT} \\
+stress\_small  & 5,760 & 12 & 48 & 0.790 & 0.852 & 4.235 & OPTIMAL \\
+stress\_medium & 9,600 & 15 & 64 & 0.951 & 1.144 & 12.230 & OPTIMAL \\
+stress\_large  & 21,600 & 15 & 96 & 1.981 & 2.344 & 54.267 & OPTIMAL \\
+stress\_xlarge & 64,000 & 20 & 160 & 6.172 & 10.360 & 276.895 & OPTIMAL \\
+timeout\_target & 184,320 & 24 & 256 & 17.760 & 23.286 & \textbf{1869.805} & \textbf{TIMEOUT} \\
 \bottomrule
 \end{tabular}
+}
 \end{table}
 
 \begin{table}[H]
