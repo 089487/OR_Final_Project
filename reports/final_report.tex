@@ -18,7 +18,9 @@
 % 調整行距以符合長篇報告閱讀舒適度
 \setstretch{1.15}
 
-\title{\textbf{Strategic Fantasy Baseball Draft Optimization} \\[0.5em] \large Building a Scalable Decision-Support System for Front Offices \\[1em] \normalsize OR114-2 Final Project, Group 4}
+\title{\textbf{Algorithmic Roster Construction: \\ Strategic Talent Acquisition under Competitive Scarcity} \\[0.5em]
+\large A Fantasy Baseball Testbed for Optimization and Real-Time Heuristics \\[1em]
+\normalsize OR114-2 Final Project, Group 4}
 \author{
 B13705051 周孟承 \and
 B13902103 鄭宇宏 \and
@@ -31,16 +33,16 @@ B11705039 李盈盈
 \maketitle
 
 \begin{abstract}
-For a modern Major League Baseball (MLB) franchise, the draft is the most cost-effective avenue for building a championship roster. As internal scouting and player evaluation models converge across the league, the competitive edge shifts from merely identifying talent to executing a mathematically superior drafting strategy. In this report, we model the draft as an operations research problem. Because the pool of draft-eligible players is massive, traditional Integer Programming (IP) fails to scale. We propose a highly efficient heuristic, \emph{Opportunity Cost Greedy (OCG)}, which estimates the delay-cost of waiting for future turns. Tested across various synthetic market stressors and real-world 2026 projections, OCG delivers near-optimal rosters in a fraction of a second, effectively bridging the gap between exact optimization and massive-scale practicality.
+In this report, we study a \textbf{sequential resource allocation problem under competitive scarcity}. We utilize \textbf{Fantasy Baseball as a data-rich testbed} due to its complex roster constraints and high-frequency market dynamics. For modern sports organizations, identifying talent is only one part of the challenge; the true competitive edge lies in the \textbf{strategy of draft execution}. While traditional Integer Programming (IP) provides a mathematical benchmark, it fails to scale to massive player pools under real-time pressure. We propose the \emph{Opportunity Cost Greedy (OCG)} algorithm, which captures the \textbf{cost-of-delay} by forecasting future asset availability. Our results across synthetic and real-world 2026 data show that OCG achieves near-optimal performance in seconds, effectively functioning as a scalable decision-support framework.
 \end{abstract}
 
-\section{Introduction: The Front Office Perspective}
+\section{Introduction: The General Manager's Dilemma}
 
-The origins of Fantasy Baseball (FB) can be traced back to the 1960s, when John Burgeson developed the first computer-simulated baseball game using an IBM 1620. However, the modern strategic framework of the game was primarily shaped in the 1980s by writer Daniel Okrent. Okrent's ``Rotisserie'' system transformed player evaluation into a competitive management simulation. Today, FB has evolved into a sophisticated strategic game where participants act as General Managers (GMs), constructing virtual teams whose success depends on the real-life statistical performance of MLB players throughout a 162-game season. In the analytically driven Head-to-Head (H2H) Points format, diverse statistical categories are translated into a single scalar value via a predetermined weighting system, turning the construction of a roster into a complex portfolio optimization race.
+The draft is a critical portfolio optimization puzzle for modern sports roster construction. In an era where scouting analytics and player evaluations have largely converged, the competitive edge has shifted from identifying talent to the \textbf{strategy of execution}. This project models the draft process as a \textbf{sequential resource acquisition problem}. We use Fantasy Baseball not as the final application itself, but as a high-fidelity competitive testbed to study how decision-makers can maximize objective utility under strict structural constraints and intense market competition.
 
-For any MLB front office, constructing a roster before the season begins is the ultimate optimization puzzle. The most efficient and critical way to acquire talent is through the draft. Every team possesses internal scouting models and proprietary projections (e.g., WAR, fantasy points) to evaluate players. However, in the modern data-driven era, these evaluations often converge. When all general managers have access to similar player rankings, the true competitive advantage is no longer just \textit{who} you evaluate as good, but \textit{when} and \textit{how} you draft them relative to your opponents and your roster constraints.
+In this environment, the manager must answer a fundamental question: \textit{Which asset must I secure now because market timing and positional scarcity will cause equivalent options to disappear by my next turn?} This is the ``Timing Paradox''---balancing immediate projected value with long-term roster integrity. We aim to build a framework that provides a deployable balance between theoretical optimality and real-time execution speed.
 
-While the actual MLB draft uses a fixed order based on reverse standings, we abstract our environment into a \textbf{Snake Draft}. This format serves as a perfect proxy to simulate a highly competitive, fair, and strategically demanding environment. In a snake draft, a manager owns a fixed sequence of picks, and the player pool is continually depleted by opponents. The practical decision is not simply selecting the player with the highest isolated score (the naive ``Best Player Available'' approach). Instead, a manager must answer a harder question: \textit{Which player must I draft now because market timing and positional scarcity will make equivalent options disappear by my next turn?}
+While the actual MLB draft uses a fixed order based on reverse standings, we abstract our environment into a \textbf{Snake Draft}. This format serves as a useful test environment for a highly competitive, fair, and strategically demanding sequence of decisions. In a snake draft, a manager owns a fixed sequence of picks, and the player pool is continually depleted by opponents. The practical decision is not simply selecting the player with the highest isolated score (the naive ``Best Player Available'' approach), but deciding how to trade off immediate value, positional scarcity, and future availability.
 
 This decision is inherently interdependent. A high-projection player might be suboptimal if he occupies a position where supply is abundant, whereas a lower-projection player might be highly valuable if he fills a scarce roster slot. To solve this, we translate the draft into a mathematical model. 
 
@@ -177,7 +179,7 @@ To evaluate our algorithms, we utilize both real-world data and a highly customi
 
 \subsection{Real Data Collection}
 
-Real data validation serves as our first step of validation. We constructed our real dataset by downloading the Average Draft Position (ADP) and 2026 player projected batting and pitching statistics from FantasyPros. Figures \ref{fig:projected_data} and \ref{fig:player_adp} display examples of the projected data and ADP metrics collected.
+Real data validation serves as our first step of validation. We synthesize our dataset from FantasyPros, utilizing \textbf{projected points as a player utility proxy ($v_i$)} and \textbf{Average Draft Position (ADP) as a market availability window proxy}. Figures \ref{fig:projected_data} and \ref{fig:player_adp} display examples of the underlying data structure.
 
 \begin{figure}[H]
   \centering
@@ -500,7 +502,7 @@ After evaluating the algorithm across 12 distinct scenarios, we identify the con
 
 \section{Conclusions and Business Recommendations}
 
-For an MLB front office, a successful draft dictates the trajectory of the franchise. While internal scouting evaluations have largely converged across the league, draft execution remains a highly exploitable inefficiency. 
+For modern sports roster construction, a successful draft can shape the long-term quality of the team. While player evaluations have largely converged across many data-driven environments, draft execution remains a highly exploitable inefficiency. 
 
 This project successfully translated the chaotic, interdependent environment of a fantasy snake draft into a rigorous Operations Research model. We demonstrated that relying on naive ``best player available'' mentalities (Direct Greedy) bleeds significant roster value, especially when the talent pool is top-heavy or positional flexibility is low. 
 
@@ -508,6 +510,6 @@ While the exact ADP-aware IP provides flawless rosters, the limitless nature of 
 
 \textbf{Limitations \& Future Extensions:} ADP is only a proxy for opponent behavior; human managers exhibit biases (e.g., hometown favorites) that ADP misses. Furthermore, point projections carry standard deviations (injury risk, slump risk) not currently modeled. Future iterations of this tool could incorporate probabilistic opponent modeling and Monte Carlo simulations on projection variance, upgrading OCG from a deterministic solver to a fully probabilistic draft-day AI. 
 
-Ultimately, this report proves to the front office that computational draft optimization is not just a theoretical exercise, but a scalable, real-time weapon capable of maximizing roster value on draft day.
+Ultimately, this report proves that the OCG algorithm provides a strong, deployable balance between execution speed and solution quality. While our empirical validation was conducted on baseball data, the underlying \textbf{cost-of-delay logic} is highly generalizable. It can be extended to any domain involving competitive talent recruitment or procurement scenarios, where multiple agents must secure scarce, heterogeneous assets in a rapidly changing market environment under real-time constraints.
 
 \end{document}
