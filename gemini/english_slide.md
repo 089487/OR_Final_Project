@@ -310,6 +310,18 @@ OCG's largest gains appear in environments where waiting has a measurable cost:
 
 ---
 
+<style scoped>
+table {
+  font-size: 13.5px !important;
+}
+th {
+  padding: 4px 5px !important;
+}
+td {
+  padding: 3px 5px !important;
+}
+</style>
+
 ## All Scenario Results
 
 | Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio |
