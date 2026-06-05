@@ -4,7 +4,7 @@
 
 | Scenario | Description | DG optimal_gap_ratio | OCG optimal_gap_ratio | Improve $\mu \pm \sigma$ |
 |---|---|---:|---:|---:|
-| S1 | Baseline (Normal / Roster-Ratio / 1:1 / $(0,30)$) | 4.79% ± 1.18% | 1.92% ± 0.57% | 3.02% ± 1.34% |
+| S1 | Baseline (Normal / Roster-Ratio / 3:1 / $(0,30)$) | 4.79% ± 1.18% | 1.92% ± 0.57% | 3.02% ± 1.34% |
 | S2 | Value: Uniform | 3.24% ± 0.77% | 1.44% ± 0.59% | 1.87% ± 0.65% |
 | S3 | Value: Star-Heavy / High-Low | 8.39% ± 2.40% | 2.87% ± 1.32% | 6.10% ± 3.46% |
 | S4 | Pos: Random / Uniform-by-Type | 4.89% ± 0.62% | 1.07% ± 0.43% | 4.02% ± 0.82% |
@@ -17,11 +17,10 @@
 | S11 | Market: Chaotic / $(-10,30)$ | 4.65% ± 1.32% | 1.90% ± 0.77% | 2.91% ± 1.71% |
 | S12 | Market: Chaotic / $(+10,30)$ | 5.42% ± 1.21% | 1.72% ± 0.95% | 3.92% ± 1.03% |
 | S13 | Load (High, 1:1) | 8.81% ± 2.19% | 2.64% ± 1.23% | 6.82% ± 3.13% |
-| S14 | Load (Low, 3:1) | 4.79% ± 1.18% | 1.92% ± 0.57% | 3.02% ± 1.34% |
-| S15 | Load (Ultra-Low, 10:1) | 3.29% ± 0.85% | 1.16% ± 0.51% | 2.20% ± 0.83% |
+| S14 | Load (Ultra-Low, 10:1) | 3.29% ± 0.85% | 1.16% ± 0.51% | 2.20% ± 0.83% |
 
 > 備註：
 > - S1 是 baseline；S2-S3 對應 Factor A / value distribution。
 > - S4-S6 對應 Factor B / position eligibility。
 > - S7-S12 對應 Factor C / ADP noise and availability tolerance。
-> - S13-S15 對應 Factor D / player demand ratio。
+> - S13-S14 對應 Factor D / player demand ratio；D=3 baseline-supply reference 已由 S1 表示，不另列重複 scenario。
