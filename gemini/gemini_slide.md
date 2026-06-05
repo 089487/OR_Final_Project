@@ -318,7 +318,7 @@ style: |
 
 ## 4. Model Formulation I：變數與目標函數
 
-有了真實的 $v_i$ 與 $\text{adp}_i$ 後，我們將問題建構為 **Integer Linear Program (IP)**。
+有了真實的 $v_i$ 與 $\text{adp}_i$ 後，我們將問題建構為 **Integer Programming (IP)**。
 令 $I$ 為球員集合，$P$ 為守位集合，$K$ 為我們擁有的選秀籤集合。
 
 **決策變數 (Decision Variables)**：
@@ -449,12 +449,12 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 </div>
 <div class="card" style="padding:20px;">
   <div class="tag">Factor 2</div>
-  <strong>Positions Distribution</strong><br>
+  <strong>Position Eligibility Distribution</strong><br>
   從高彈性工具人到嚴格單一守位。
 </div>
 <div class="card" style="padding:20px;">
   <div class="tag">Factor 3</div>
-  <strong>Market Volatility</strong><br>
+  <strong>Market Conditions and ADP Uncertainty</strong><br>
   測試 ADP 噪音與容錯空間的穩定度。
 </div>
 <div class="card" style="padding:20px;">
@@ -485,7 +485,7 @@ td {
 
 ## Synthetic Data: Scenario Matrix
 
-| ID | Main Factor | Demand Ratio ($D$) | Points Dist. ($v_i$) | Pos. Dist. ($E_i$) | ADP Noise ($\delta, \sigma$) |
+| ID | Main Factor | Demand Ratio ($D$) | Points Distribution ($v_i$) | Position Eligibility ($E_i$) | ADP Uncertainty ($\delta, \sigma$) |
 | :--- | :--- | :---: | :--- | :--- | :--- |
 | S1 | **Baseline** | 3 | Normal | Roster-Ratio | (0, 30) |
 | S2 | Points: Uniform | 3 | **Uniform** | Roster-Ratio | (0, 30) |
@@ -497,8 +497,8 @@ td {
 | S8 | Market: Mild Noise | 3 | Normal | Roster-Ratio | **(0, 60)** |
 | S9, 10 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±5, 30)** |
 | S11, 12 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±10, 30)** |
-| S13 | Load (High) | **1** | Normal | Roster-Ratio | (0, 30) |
-| S14 | Load (Ultra-Low) | **10** | Normal | Roster-Ratio | (0, 30) |
+| S13 | Demand: High | **1** | Normal | Roster-Ratio | (0, 30) |
+| S14 | Demand: Low | **10** | Normal | Roster-Ratio | (0, 30) |
 
 ---
 
@@ -506,17 +506,17 @@ td {
 
 OCG 對以下幾種極端場景的改善最明顯：
 
-- **S3 / High-Low**：價值曲線高度不平衡，DG 會錯失關鍵巨星；OCG 將 gap 由 8.39% 降到 2.87%。
-- **S6 / Single-Position**：由於球員守位限制，OCG 能避免早期選秀錯誤被後線放大。
-- **S13 / D=1 (極度稀缺)**：市場供給緊繃時，OCG 仍能提早佈局，保住整體陣容價值。
-- **S7-S12 / Market Volatility**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
+- **S3 / Points: Star-Heavy**：價值曲線高度不平衡，DG 會錯失關鍵巨星；OCG 將 gap 由 8.39% 降到 2.87%。
+- **S6 / Pos: Single-Position**：由於球員守位限制，OCG 能避免早期選秀錯誤被後線放大。
+- **S13 / Demand: High**：市場供給緊繃時，OCG 仍能提早佈局，保住整體陣容價值。
+- **S9-S12 / Market: Chaotic**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
 
 | Scenario | DG Gap | OCG Gap | Key Benefit |
 | :--- | :---: | :---: | :--- |
-| High-Low | 8.39% | 2.87% | 穩住頂級球員 |
-| Single-Position | 5.11% | 0.94% | 避免守位枯竭 |
-| D=1 | 8.81% | 2.64% | 極度稀缺下仍可預判 |
-| Market Volatility | 5.56% / 5.42% | 2.43% / 1.72% | 高不確定性下更穩定 |
+| Points: Star-Heavy | 8.39% | 2.87% | 穩住頂級球員 |
+| Pos: Single-Position | 5.11% | 0.94% | 避免守位枯竭 |
+| Demand: High | 8.81% | 2.64% | 極度稀缺下仍可預判 |
+| Market: Chaotic | 5.56% / 5.42% | 2.43% / 1.72% | 高不確定性下更穩定 |
 
 ---
 
@@ -553,8 +553,8 @@ td {
 | S10 | Market: Chaotic / $(+5,30)$ | 5.54% ± 1.57% | **1.64% ± 0.75%** |
 | S11 | Market: Chaotic / $(-10,30)$ | 4.65% ± 1.32% | **1.90% ± 0.77%** |
 | S12 | Market: Chaotic / $(+10,30)$ | 5.42% ± 1.21% | **1.72% ± 0.95%** |
-| S13 | Load (High, 1:1) | 8.81% ± 2.19% | **2.64% ± 1.23%** |
-| S14 | Load (Ultra-Low, 10:1) | 3.29% ± 0.85% | **1.16% ± 0.51%** |
+| S13 | Demand: High / $D=1$ | 8.81% ± 2.19% | **2.64% ± 1.23%** |
+| S14 | Demand: Low / $D=10$ | 3.29% ± 0.85% | **1.16% ± 0.51%** |
 
 ---
 
