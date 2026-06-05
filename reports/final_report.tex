@@ -269,7 +269,7 @@ To test the algorithms under varying levels of scarcity, we manipulate the Playe
 
 \subsection{Scenario Matrix}
 
-We developed 15 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. The remaining scenarios follow the factor order introduced above: projected points distribution, position eligibility distribution, market volatility, and player demand ratio. For every scenario, we generate \textbf{30 random instances} to calculate the mean ($\mu=0$) and standard deviation ($\sigma$) of the performance metrics.
+We developed 14 distinct scenarios to isolate the impact of each factor. As shown in Table~\ref{tab:scenario_matrix}, \textbf{Scenario S1} serves as the baseline for all comparative analyses. The remaining scenarios follow the factor order introduced above: projected points distribution, position eligibility distribution, market volatility, and player demand ratio. For every scenario, we generate \textbf{10 random instances} to calculate the mean ($\mu$) and standard deviation ($\sigma$) of the performance metrics.
 
 \begin{table}[htbp]
 \centering
@@ -292,8 +292,7 @@ S8 & Market: Mild Noise & 3 & Normal & Roster-Ratio & \textbf{(0, 60)} \\
 S9, 10 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{($\pm$5, 30)} \\
 S11, 12 & Market: Chaotic & 3 & Normal & Roster-Ratio & \textbf{($\pm$10, 30)} \\ \midrule
 S13 & Load (High) & \textbf{1} & Normal & Roster-Ratio & (0, 30) \\
-S14 & Load (Low) & \textbf{3} & Normal & Roster-Ratio & (0, 30) \\
-S15 & Load (Ultra-Low) & \textbf{10} & Normal & Roster-Ratio & (0, 30) \\
+S14 & Load (Ultra-Low) & \textbf{10} & Normal & Roster-Ratio & (0, 30) \\
 \bottomrule
 \end{tabular}%
 }
@@ -305,7 +304,7 @@ To evaluate the absolute computational limits of our algorithms relative to the 
 
 \section{Performance Evaluation}
 
-Algorithms are evaluated using two primary metrics across 30 random seeds for each scenario:
+Algorithms are evaluated using two primary metrics across 10 random seeds for each scenario:
 \begin{itemize}[leftmargin=1.5em]
     \item \textbf{Optimal Gap Ratio (\%)}: The distance from the ILP benchmark, defined as $\frac{Z_{\text{ILP}} - Z_{\text{Heuristic}}}{Z_{\text{ILP}}} \times 100\%$. A lower value indicates higher accuracy.
     \item \textbf{Improvement (\%)}: The direct gain of OCG over the DG baseline, calculated per seed as $\frac{Z_{\text{OCG}} - Z_{\text{DG}}}{Z_{\text{DG}}} \times 100\%$ and reported as $\mu \pm \sigma$.
@@ -390,16 +389,18 @@ Sweep & Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
  & $\sigma_{\text{adp}}=30$ (Moderate) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
  & $\sigma_{\text{adp}}=60$ (Chaotic) & $5.56\% \pm 1.58\%$ & $\mathbf{2.43\% \pm 1.55\%}$ & $\mathbf{3.33\% \pm 1.43\%}$ \\
 \midrule
-\textbf{Tolerance} & $\delta=-10$ (Strict) & $4.65\% \pm 1.32\%$ & $\mathbf{1.90\% \pm 0.77\%}$ & $2.91\% \pm 1.71\%$ \\
- & $\delta=0$ (Neutral) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
- & $\delta=10$ (Permissive) & $5.42\% \pm 1.21\%$ & $\mathbf{1.72\% \pm 0.95\%}$ & $\mathbf{3.92\% \pm 1.03\%}$ \\
+\textbf{Tolerance} & $\delta=0$ (Baseline) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
+ & $\delta=-10$ (Strict) & $4.65\% \pm 1.32\%$ & $\mathbf{1.90\% \pm 0.77\%}$ & $2.91\% \pm 1.71\%$ \\
+ & $\delta=-5$ & $4.90\% \pm 1.24\%$ & $\mathbf{1.83\% \pm 0.82\%}$ & $3.24\% \pm 1.40\%$ \\
+ & $\delta=+5$ & $5.54\% \pm 1.57\%$ & $\mathbf{1.64\% \pm 0.75\%}$ & $\mathbf{4.16\% \pm 1.50\%}$ \\
+ & $\delta=+10$ (Permissive) & $5.42\% \pm 1.21\%$ & $\mathbf{1.72\% \pm 0.95\%}$ & $3.92\% \pm 1.03\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Factor D: Player Demand Ratio}
 
-Table \ref{tab:factor_4} highlights scaling under tight vs. loose supply (Player Demand Ratio $D$). When supply is brutally tight ($D=1$, meaning almost every player must be drafted), Direct Greedy collapses (8.81\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 2.64\% gap. In a high-abundance scenario ($D=10$), OCG drops the error rate to a mere $1.16\%$.
+Table \ref{tab:factor_4} highlights scaling under baseline, tight, and loose supply (Player Demand Ratio $D$). When supply is brutally tight ($D=1$, meaning almost every player must be drafted), Direct Greedy collapses (8.81\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 2.64\% gap. In a high-abundance scenario ($D=10$), OCG drops the error rate to a mere $1.16\%$.
 
 \begin{table}[H]
 \centering
@@ -409,8 +410,8 @@ Table \ref{tab:factor_4} highlights scaling under tight vs. loose supply (Player
 \toprule
 Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 \midrule
+D = 3 (Baseline) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
 D = 1 (Extreme Scarcity) & $8.81\% \pm 2.19\%$ & $\mathbf{2.64\% \pm 1.23\%}$ & $\mathbf{6.82\% \pm 3.13\%}$ \\
-D = 3 (Baseline Supply) & $4.79\% \pm 1.18\%$ & $\mathbf{1.92\% \pm 0.57\%}$ & $3.02\% \pm 1.34\%$ \\
 D = 10 (High Abundance) & $3.29\% \pm 0.85\%$ & $\mathbf{1.16\% \pm 0.51\%}$ & $2.20\% \pm 0.83\%$ \\
 \bottomrule
 \end{tabular}
@@ -471,7 +472,7 @@ timeout\_target & -- & -- \\
 
 \subsection{Strategic Insights and Competitive Edge}
 
-After evaluating the algorithm across 15 distinct scenarios, we identify the conditions where the \textbf{Opportunity Cost Greedy (OCG)} algorithm provides the most significant strategic advantage. Table \ref{tab:highlights} highlights the top-performing scenarios based on the improvement over the baseline.
+After evaluating the algorithm across 14 distinct scenarios, we identify the conditions where the \textbf{Opportunity Cost Greedy (OCG)} algorithm provides the most significant strategic advantage. Table \ref{tab:highlights} highlights the top-performing scenarios based on the improvement over the baseline.
 
 \begin{table}[H]
 \centering
