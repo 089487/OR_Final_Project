@@ -239,7 +239,7 @@ A valid team must strictly satisfy specific roster constraints shown below:
 ---
 
 #### 1. Player Projected Points ($v_i$)
-- Scraped 2026 projection data from **FantasyPros**.
+- Scraped 2026 projection data from **FantasyPros**.<img src="image.png" height="180" style="vertical-align: middle; margin-left: 10px;">
 - Applied two major scoring systems to evaluate model robustness:
 
 <div class="grid-2">
@@ -282,9 +282,9 @@ Using $v_i$ and $\text{adp}_i$, we construct an **Integer Programming (IP)** mod
 Let $I$ be the set of players, $P$ the set of positions, and $K$ the set of our draft picks.
 
 **Decision Variables**:
-- $y_i \in \{0,1\}$: Whether player $i$ is drafted.
-- $x_{ip} \in \{0,1\}$: Whether player $i$ is assigned to position $p$.
-- $z_{ik} \in \{0,1\}$: Whether player $i$ is selected at our $k$-th pick.
+- $y_i \in \{0,1\}$: if player $i$ is drafted.
+- $x_{ip} \in \{0,1\}$: if player $i$ is assigned to position $p$.
+- $z_{ik} \in \{0,1\}$: if player $i$ is selected at our $k$-th pick.
 
 **Objective Function**: Maximize the total projected value of the starting roster.
 $$ \max \sum_{i \in I} v_i y_i $$
@@ -307,26 +307,25 @@ $$ \max \sum_{i \in I} v_i y_i $$
 <!-- _class: impact-slide -->
 
 # The Bottleneck
-## Why Traditional IP Isn't Enough
-When Academic Models Meet Real-World Scale
+## Why Traditional IP Isn't Enough?
 
 ---
 
 ## The Fatal Flaws of IP in Practice
 
-While Gurobi provides the **mathematically optimal solution**, it fails in real-world draft rooms:
+While Gurobi provides a mathematically optimal solution, it may fail in real-world draft rooms:
 
 <div class="grid-2">
 <div class="card">
   <div class="tag">Scalability Crisis</div>
   <h3 style="margin-top:0;">Exponential Complexity</h3>
-  The player pool is massive. As $n$ (players) increases, the Branch-and-Bound search space explodes <span class="highlight">exponentially</span>.
+  The player pool is massive. As the players increase, the Branch-and-Bound search space explodes <span class="highlight">exponentially</span>.
 </div>
 
 <div class="card card-orange">
   <div class="tag">Real-Time Execution</div>
   <h3 style="margin-top:0;">Draft-Day Pressure</h3>
-  Drafts have timers (usually 60 seconds). A GM cannot wait for an IP solver to converge. In large-scale cases, IP <span class="highlight">timeouts</span>, making it useless for live decision-making.
+  Drafts usually have <span class="highlight">timers </span>(60 secs). A GM cannot wait for an IP solver to converge in large-scale cases.
 </div>
 </div>
 
@@ -339,14 +338,14 @@ To bridge the gap between optimality and speed, we designed two heuristics.
 ### ❌ Baseline: Direct Greedy (DG)
 - **Logic**: When it's our turn, calculate the "Scarcity" of each remaining position and pick the best player for the most scarce slot.
   - **Scarcity Calculation**: $\max_{p} \left( \frac{\text{Slots Remaining}}{\text{Available Players in Market}} \right)$
-- **Flaw**: It is purely myopic. It might pick a mediocre Catcher just because the position is "scarce," missing out on a once-in-a-generation superstar at another position.
+- **Flaw**: It is purely myopic: One might pick a mediocre Catcher just because the position is "scarce," missing out on a once-in-a-generation superstar at another position.
 
 ---
 
 ## 8. Opportunity Cost Greedy (OCG)
 <span class="highlight">Expanding the Strategic Horizon</span>
 
-- **Core Concept**: Incorporate economic "Delay-Cost" into the greedy choice.
+- **Core Concept**: Incorporate economic concepts, "Delay-Cost", into the greedy choice.
 - **Decision Workflow**:
   1. Evaluate all remaining roster gaps.
   2. Identify the best player available **now** for each slot ($V_{\text{now}}$).
@@ -365,7 +364,7 @@ To bridge the gap between optimality and speed, we designed two heuristics.
   - **Lazy Deletion**: Players taken by opponents aren't removed instantly; they are validated only when popped from the heap.
 - **Performance**:
   - Let $n$ = total players, $r$ = roster size, $p$ = number of positions.
-  - **Total Complexity**: $\mathcal{O}(n \log n + r \cdot p)$
+  - **Total Complexity**: $\mathcal{O}(n \log n + r \cdot p)$ (same as DG)
 
 <div class="card" style="text-align:center; margin-top:20px; color:#1e40af; font-weight:bold;">
   OCG guarantees near-linear execution time, handling millions of variables in seconds.
