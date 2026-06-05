@@ -432,7 +432,7 @@ td { padding: 4px 8px !important; }
 
 ## Synthetic Data: Scenario Matrix
 
-| ID | Main Factor | Demand Ratio ($D$) | Points Dist. ($v_i$) | Position Elig. ($E_i$) | ADP Noise ($\delta, \sigma$) |
+| ID | Main Factor | Demand Ratio ($D$) | Points Distribution ($v_i$) | Position Eligibility ($E_i$) | ADP Uncertainty ($\delta, \sigma$) |
 | :--- | :--- | :---: | :--- | :--- | :--- |
 | S1 | **Baseline** | 3 | Normal | Roster-Ratio | (0, 30) |
 | S2 | Points: Uniform | 3 | **Uniform** | Roster-Ratio | (0, 30) |
@@ -442,7 +442,8 @@ td { padding: 4px 8px !important; }
 | S6 | Pos: Single-Position | 3 | Normal | **Single-Position** | (0, 30) |
 | S7 | Market: Efficient | 3 | Normal | Roster-Ratio | **(0, 0)** |
 | S8 | Market: Mild Noise | 3 | Normal | Roster-Ratio | **(0, 60)** |
-| S10 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(+5, 30)** |
+| S9, 10 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±5, 30)** |
+| S11, 12 | Market: Chaotic | 3 | Normal | Roster-Ratio | **(±10, 30)** |
 | S13 | Demand: High | **1** | Normal | Roster-Ratio | (0, 30) |
 | S14 | Demand: Low | **10** | Normal | Roster-Ratio | (0, 30) |
 
