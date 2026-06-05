@@ -275,7 +275,6 @@ We developed 14 distinct scenarios to isolate the impact of each factor. As show
 \centering
 \caption{Experimental Scenario Matrix for Draft Optimization}
 \label{tab:scenario_matrix}
-\small
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{clcccc}
 \toprule
@@ -400,7 +399,7 @@ Sweep & Level & DG Gap (\%) & OCG Gap (\%) & Improvement (\%) \\
 
 \subsection{Factor D: Player Demand Ratio}
 
-Table \ref{tab:factor_4} highlights scaling under baseline, tight, and loose supply (Player Demand Ratio $D$). When supply is brutally tight ($D=1$, meaning almost every player must be drafted), Direct Greedy collapses (8.81\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 2.64\% gap. In a high-abundance scenario ($D=10$), OCG drops the error rate to a mere $1.16\%$.
+Table \ref{tab:factor_4} highlights scaling under tight vs. loose supply (Player Demand Ratio $D$). When supply is brutally tight ($D=1$, meaning almost every player must be drafted), Direct Greedy collapses (8.81\% gap) as it blindly paints itself into a corner. OCG, aware of the impending scarcity, navigates the tight market with only a 2.64\% gap. In a high-abundance scenario ($D=10$), OCG drops the error rate to a mere $1.16\%$.
 
 \begin{table}[H]
 \centering
