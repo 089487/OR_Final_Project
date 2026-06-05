@@ -97,13 +97,12 @@ Let $I$ be the set of players, $P$ the set of roster positions, and $K$ the set 
 & \sum_{i \in I} z_{ik} = 1, && \forall k \in K \label{eq:one_per_pick} \\
 & \sum_{k \in K} z_{ik} = y_i, && \forall i \in I \label{eq:link_draft} \\
 & \sum_{p \in P} x_{ip} = y_i, && \forall i \in I \label{eq:link_assign} \\
-& x_{ip} \le 1 , && \forall i \in I, p \in E_i \label{eq:eligibility} \\
 & \sum_{i \in I} x_{ip} = r_p, && \forall p \in P \label{eq:roster_req} \\
 & z_{ik} = 0 \quad \text{if } S_k > \text{adp}_i + \delta, && \forall i \in I, k \in K \label{eq:adp} \\
 & y_i, x_{ip}, z_{ik} \in \{0,1\} && \forall i, p, k
 \end{align}
 
-Constraint \eqref{eq:one_per_pick} enforces exactly one selection per pick. \eqref{eq:link_draft} and \eqref{eq:link_assign} ensure logical consistency between picking, drafting, and assigning. \eqref{eq:eligibility} restricts assignments to legal positions. \eqref{eq:roster_req} dictates the roster shape. Constraint \eqref{eq:adp} is the vital \textbf{Market Availability Constraint}: a player cannot be drafted if the current pick $S_k$ is later than his expected depletion point (ADP + a tolerance buffer $\delta$).
+Constraint \eqref{eq:one_per_pick} enforces exactly one selection per pick. \eqref{eq:link_draft} and \eqref{eq:link_assign} ensure logical consistency between picking, drafting, and assigning. \eqref{eq:roster_req} dictates the roster shape. Constraint \eqref{eq:adp} is the vital \textbf{Market Availability Constraint}: a player cannot be drafted if the current pick $S_k$ is later than his expected depletion point (ADP + a tolerance buffer $\delta$).
 
 \section{Algorithms}
 
@@ -221,7 +220,7 @@ CS        & --  &0 (-2.8) &     &     &     \\
 \end{tabular}
 \end{table}
 
-Slight modifications were made to the original projected stats to align with these scoring categories. For example, since the projected stats lack Hit By Pitch (HBP) and Caught Stealing (CS) for batters, we effectively set their scoring weights to zero (original standard weights are shown in parentheses in the table). Furthermore, since outs are required for pitching calculations, we compute them as Innings Pitched (IP) $\times$ 3. 
+Slight modifications were made to the original projected stats to align with these scoring categories. For example, since the projected stats lack Hit By Pitch (HBP) and Caught Stealing (CS) for batters, we effectively set their scoring weights to zero (original standard weights are shown in parentheses in the table). 
 
 Additionally, across all experiments (both real and synthetic data), the manager's initial draft position is standardized to the middle of the draft order (e.g., the 6th pick in a 12-team league, or the 12th pick in a 24-team league) to maintain a consistent evaluation baseline.
 
