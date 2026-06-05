@@ -402,7 +402,8 @@ We design four factors for experiments to test the boundaries of our algorithm:
 <div class="card" style="padding:20px;">
   <div class="tag">Factor 1</div>
   <strong>Points Distribution</strong><br>
-  From "Uniform Value" to "Star-Heavy" curves.
+  The distribution of players' values. <br>
+  (normal / uniform / right-skewed(1:9))
 </div>
 <div class="card" style="padding:20px;">
   <div class="tag">Factor 2</div>
@@ -412,12 +413,12 @@ We design four factors for experiments to test the boundaries of our algorithm:
 <div class="card" style="padding:20px;">
   <div class="tag">Factor 3</div>
   <strong>Market Uncertainty</strong><br>
-  Testing sensitivity to ADP noise and systemic bias ($\delta$).
+  Testing sensitivity to ADP noise and systemic bias (δ).
 </div>
 <div class="card" style="padding:20px;">
   <div class="tag">Factor 4</div>
   <strong>Demand Ratio</strong><br>
-  Simulating "Scarcity" markets vs. "Oversupply" markets.
+  Simulating "Scarcity" markets v.s. "Oversupply" markets.
 </div>
 </div>
 
