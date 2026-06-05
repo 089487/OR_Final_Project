@@ -549,13 +549,13 @@ OCG shows the most dramatic improvements in the following "Stress Scenarios":
 
 ## Draft Simulation: One OCG vs 11 DG Teams (Yahoo)
 
-![height:420px center](../experiments/competitive_draft/ocg_vs_dg_2026/ocg_vs_dg_yahoo_by_draft_position.png)
+![height:500px center](../experiments/competitive_draft/ocg_vs_dg_2026/ocg_vs_dg_yahoo_by_draft_position.png)
 
 ---
 
 ## Draft Simulation: One OCG vs 11 DG Teams (FanGraphs)
 
-![height:420px center](../experiments/competitive_draft/ocg_vs_dg_2026/ocg_vs_dg_fangraph_by_draft_position.png)
+![height:500px center](../experiments/competitive_draft/ocg_vs_dg_2026/ocg_vs_dg_fangraph_by_draft_position.png)
 
 ---
 
