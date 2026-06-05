@@ -396,7 +396,7 @@ Using 2026 Projection Data:
 
 ## Four Dimensions of Synthetic Testing
 
-Real data only reflects one market state. Synthetic data allows us to test the boundaries of our algorithm:
+We design four factors for experiments to test the boundaries of our algorithm:
 
 <div class="grid-2" style="gap:20px; margin-top:15px;">
 <div class="card" style="padding:20px;">
@@ -457,7 +457,7 @@ OCG shows the most dramatic improvements in the following "Stress Scenarios":
 - **S6 / Single-Position**: With zero flexibility, early mistakes are fatal. OCG's look-ahead prevents these traps.
 - **S10 / Chaotic Market**: Even when players are drafted slightly differently than ADP ($\delta=+5$), OCG remains robust.
 - **S13 / High Demand**: When the player pool is tight, OCG's ability to "secure" value before it disappears is critical.
-
+---
 | Environment Factor | Scenario | Improvement over DG |
 | :--- | :---: | ---: |
 | Value Curve | Star-Heavy | **+6.10%** |
