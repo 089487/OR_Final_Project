@@ -521,18 +521,34 @@ OCG 對以下幾種極端場景的改善最明顯：
 ---
 
 
-## Stress Testing: Runtime Comparison
-| Stress Level | Approx. Vars | IP Runtime | OCG Runtime |
-| :--- | ---: | :--- | :---: |
-| small | 334,080 | 4.23 s  | 0.85 s |
-| large | 2,289,600 | 54.26 s  | 2.34 s |
-| timeout | 49,029,120 | 30 mins timeout | 23.28 s |
+## Stress Testing: Runtime Scaling
 
-![bg right:55% 90%](../experiments/synthetic/scaling_summary/runtime_by_variable_count.png)
+**Approx. Variables** 用來估計 IP 的決策變數規模：
 
-**結論**：在運算量增大，造成 IP 超時的情況下，我們設計的OCG演算法之運算時間仍趨近線性成長，在高維度之選秀市場中更有其實用性。
+$$
+\text{Approx. Variables} = n \times (1 + p + r)
+$$
 
-<!-- i don't know why but 他的排版有點醜。 -->
+- $n$：可選球員數
+- $p$：守位類型數
+- $r$：每隊選秀輪數 / roster size
+
+| Stress Level | Players | Teams | Picks/Team | DG Time | OCG Time | IP Time | IP Status |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
+| small | 5,760 | 12 | 48 | 0.790s | 0.852s | 4.235s | OPTIMAL |
+| medium | 9,600 | 15 | 64 | 0.951s | 1.144s | 12.230s | OPTIMAL |
+| large | 21,600 | 15 | 96 | 1.981s | 2.344s | 54.267s | OPTIMAL |
+| xlarge | 64,000 | 20 | 160 | 6.172s | 10.360s | 276.895s | OPTIMAL |
+| timeout | 184,320 | 24 | 256 | 17.760s | 23.286s | **1869.805s** | **TIMEOUT** |
+
+---
+
+## Stress Testing: Runtime Scaling
+
+<div style="text-align: center;">
+  <img src="../experiments/synthetic/scaling_summary/runtime_by_variable_count.png" width="900">
+</div>
+
 ---
 ## 8. Conclusions & Business Recommendations
 
