@@ -143,7 +143,9 @@ style: |
 ---
 <!-- _class: title-slide -->
 
-# Strategic Fantasy Baseball Draft Optimization
+# Algorithmic Roster Construction
+## Strategic Talent Acquisition under Competitive Scarcity
+### A Fantasy Baseball Testbed for Real-Time Draft Optimization
 
 <div class="author-block">
   <strong>OR114-2 Final Project, Group 4</strong><br>
@@ -152,19 +154,22 @@ style: |
 
 <!--
 Presenter notes:
-Hi everyone. Today, we will present our project, **Strategic Fantasy Baseball Draft Optimization**.
+Hi everyone. Today, we will present our project, **Algorithmic Roster Construction**.
 
-In this project, we study the fantasy baseball draft as an operations research problem. A draft is not only about choosing famous players or the highest-ranked player available. It is a sequential decision-making problem with limited picks, roster requirements, and competition from other managers.
+Specifically, we study a sequential decision-making problem where a manager must acquire talent under strict constraints and intense market competition.
 
-Our goal is to design a method that helps a manager build a high-value roster under realistic draft constraints, while still being fast enough for real draft-day decisions.
+We use Fantasy Baseball not as the final application itself, but as a data-rich competitive testbed for studying sequential talent acquisition under scarcity. It gives us real market expectations, projected player utility, and a timed draft environment where opportunity cost matters.
 -->
 ---
-## 1. Introduction: The Cornerstone of Roster Building
+## 1. Introduction: The General Manager's Dilemma
 
-- **What is the Draft?**
-  Before the season begins, General Managers (GMs) take turns selecting players from a pool of amateur or free-agent talent.
-- **The Challenge**:
-  How to precisely fill roster slots and maximize total team value given limited picks and intense competition?
+- **The Problem**: Sequential resource allocation under competitive scarcity.
+- **The Core Challenge**:
+  - **Roster Integrity**: Satisfying rigid structural constraints (16 unique positions).
+  - **Market Dynamics**: Opponent choices dynamically shrink the feasible talent pool.
+  - **The Timing Paradox**: When to secure a scarce asset versus the best available talent.
+
+> **Our Approach**: Fantasy Baseball serves as a data-rich **competitive testbed** for real-time decision-support heuristics.
 
 <div class="img-right">
   <img src="image-2.jpeg" width="500">
@@ -172,13 +177,13 @@ Our goal is to design a method that helps a manager build a high-value roster un
 
 <!--
 Presenter notes:
-Before the season begins, General Managers, or GMs, take turns selecting players from a pool of available talent. Through this process, each manager builds the roster that will compete throughout the season.
+The motivation of this project is the general manager's dilemma.
 
-Fantasy Baseball simulates this roster-building process. Managers draft players and then compete based on the statistical performance of those players during the season.
+The draft is not just a game mechanic. It is a sequential resource allocation problem under competitive scarcity. Multiple decision makers compete for a finite pool of heterogeneous assets, and every opponent's pick changes the feasible set for everyone else.
 
-However, drafting is not simply about selecting the strongest available player. Managers must balance projected player value, positional requirements, and player availability, while competing against other managers for the same pool of players.
+The manager must satisfy hard roster constraints, maximize objective value, and control timing risk. Sometimes the best available player is not the most urgent choice, because a scarce position may hit a value cliff before the next pick.
 
-Therefore, the main challenge is: **how can we fill roster slots correctly and maximize total team value with limited picks and intense competition?**
+So our goal is to build a decision-support framework that bridges theoretical optimality and real-time execution speed.
 -->
 ---
 <!-- _class: impact-slide -->
@@ -199,7 +204,7 @@ Each player in the draft pool is defined by three key attributes:
 <div class="grid-2" style="margin-top: 15px;">
 <div>
 
-**1. Projected Value ($v_i$)**: Expected Points earned per player in the season
+**1. Value Proxy ($v_i$)**: Consensus projected utility for each player
 <div class="card" style="margin-top: 15px;">
   <h3 style="margin-top:0;">Convergence of Analytics</h3>
   Team evaluations of players converges as scouting becomes more data-driven. <br>
@@ -209,7 +214,7 @@ Each player in the draft pool is defined by three key attributes:
 </div>
 <div>
 
-**2. Average Draft Position (ADP)**: Market Expectation Rank
+**2. Average Draft Position (ADP)**: Market expectation / availability window
 
 <div class="card card-orange" style="margin-top: 15px;">
   <h3 style="margin-top:0;">Market Game Theory</h3>
@@ -220,21 +225,15 @@ Each player in the draft pool is defined by three key attributes:
 <br>
 </div>
 
-**3. Eligible Positions ($E_i$)**: The legal defensive slots a player can occupy.
+**3. Eligible Positions ($E_i$)**: The structural roster slots a player can occupy.
 
 <!--
 Presenter notes:
-To model the draft process, each player in the draft pool is characterized by three key attributes.
+To model sequential talent acquisition, each player has three attributes.
 
-The first attribute is **projected value**, denoted by \(v_i\). It represents the expected fantasy points a player can earn during the season.
+First, the value proxy \(v_i\) represents consensus projected utility, which becomes the objective value. Second, ADP represents market expectation and gives us the availability horizon of each asset. Third, eligible positions \(E_i\) define which roster slots the player can legally satisfy.
 
-As scouting and player evaluation become more data-driven, teams tend to assign similar valuations to the same player. This is the convergence of analytics, and it gives us a standardized measure of player quality.
-
-The second attribute is **Average Draft Position**, or ADP. ADP reflects the market expectation of when a player is likely to be selected. It helps us estimate whether a player may still be available at a later pick.
-
-The third attribute is **eligible positions**, denoted by \(E_i\). This tells us which roster slots a player can legally fill.
-
-In short, projected value tells us how good a player is, ADP tells us whether we can still draft him, and eligible positions tell us where he can fit.
+So \(v_i\) tells us expected utility, ADP tells us timing risk, and eligibility tells us whether the asset fits the roster structure.
 -->
 ---
 ## 3. Problem Settings II: Snake Draft Mechanism
@@ -250,15 +249,11 @@ While the MLB uses a fixed-order draft based on the previous year's record, we u
 
 <!--
 Presenter notes:
-After defining player attributes, we introduce the draft environment.
+Next, we define the draft environment.
 
-In Major League Baseball, draft order is usually fixed based on the previous season's standings. But in this project, we use a **snake draft**, which is widely used in Fantasy Baseball.
+We use a snake draft, which reverses the order every round. If round one is 1, 2, 3, then round two is 3, 2, 1. This reduces the absolute advantage of the first pick and makes timing strategy more important.
 
-The key feature of a snake draft is that the order reverses every round. For example, if the first round follows the order 1, 2, 3, then the second round follows 3, 2, 1.
-
-This mechanism reduces the absolute advantage of having the first pick and places more emphasis on strategy.
-
-The equations on the slide convert the round number and our initial position into our absolute pick number. This lets us know exactly when our team will draft in every round.
+The equations convert the round number and initial position into the absolute pick number, so we know exactly when our team drafts in each round.
 -->
 ---
 ## 4. Problem Settings III: Roster Requirements
@@ -275,32 +270,28 @@ A valid team must strictly satisfy specific roster constraints shown below:
 
 <!--
 Presenter notes:
-A valid draft strategy must satisfy roster requirements.
+A valid draft must satisfy roster requirements.
 
-In this study, we consider a 16-slot starting lineup. The lineup requires one catcher, one first baseman, one second baseman, one third baseman, one shortstop, three outfielders, one utility hitter, five starting pitchers, and two relief pitchers.
+We use a 16-slot starting lineup: infield positions, three outfielders, one hitter-only utility slot, five starting pitchers, and two relief pitchers.
 
-One important detail is that the utility position can only be filled by hitters. Pitchers cannot occupy that slot.
-
-So our objective is not simply to draft the highest-valued players. We must also ensure that every required position is filled correctly.
-
-These roster requirements later become constraints in our optimization model.
+This means the model cannot simply choose the highest-valued players. It must also fill every required position correctly. These roster requirements become hard constraints in the optimization model.
 -->
 ---
 <!-- _class: impact-slide -->
 
-# Real Data Collection
-## Transforming the Baseball Market into Data
+# Data Framework
+## Consensus Projections & Market Expectations
 
 <!--
 Presenter notes:
-After defining the draft environment, we transform the baseball market into data.
+After defining the draft environment, we transform the baseball market into a structured data framework.
 
-For each player, we need projected performance, fantasy scoring rules, draft market expectations, and position eligibility. These data components allow us to build both the optimization model and the heuristic algorithms.
+For each player, we need a value proxy, a market availability proxy, and position eligibility. Fantasy Baseball is useful here because it provides a high-frequency market with consensus projections and observable draft expectations.
 -->
 ---
-#### 1. Player Projected Points ($v_i$)
-- Scraped 2026 projection data from **FantasyPros**.<img src="image.png" height="180" style="vertical-align: middle; margin-left: 10px;">
-- Applied two major scoring systems to evaluate model robustness:
+#### 1. Value Proxy ($v_i$): Consensus Projected Utility
+- Synthesized 2026 consensus projections from **FantasyPros**.<img src="image.png" height="180" style="vertical-align: middle; margin-left: 10px;">
+- Applied two scoring systems to test robustness across reward structures:
 
 <div class="grid-2">
 <div class="card">
@@ -322,32 +313,32 @@ For each player, we need projected performance, fantasy scoring rules, draft mar
 
 <!--
 Presenter notes:
-The first dataset is player projected points, which becomes the projected value \(v_i\) in our model.
+The first data component is the value proxy, \(v_i\).
 
-We scraped 2026 projection data from FantasyPros. The raw projections include baseball statistics such as home runs, stolen bases, runs, RBIs, innings pitched, strikeouts, saves, and wins.
+We use 2026 FantasyPros consensus projections. The raw projections include batting and pitching statistics such as home runs, stolen bases, innings, strikeouts, saves, and wins.
 
-However, these raw statistics cannot be used directly in our optimization model. We first convert them into fantasy points using league-specific scoring systems.
+However, these raw statistics cannot be used directly as objective values. We convert them into projected utility using league-specific scoring systems.
 
-To test robustness, we use two scoring formats: Yahoo Scoring and FanGraphs Scoring. Because the two systems assign different weights to the same baseball events, the same player may have different fantasy values in different league settings.
+To test robustness, we use Yahoo and FanGraphs scoring. Because they assign different weights to the same events, the same player may have different utility under different reward structures.
 
-By testing both systems, we can check whether our algorithm performs consistently across different scoring environments.
+By testing both systems, we check whether the decision framework performs consistently across different reward structures.
 -->
 ---
-#### 2. Average Draft Position (ADP)
-- Collected aggregate ADP from **FantasyPros**, combining data across Yahoo, ESPN, CBS, and NFBC.
-- Used to define the "availability window" for each player in the draft pool.
+#### 2. Market Availability Proxy (ADP)
+- Aggregate ADP from **FantasyPros**, combining Yahoo, ESPN, CBS, and NFBC.
+- Defines the **availability horizon** for each asset in the talent pool.
 
 ![alt text](image-1.png)
 
 <!--
 Presenter notes:
-The second major dataset is Average Draft Position, or ADP.
+The second data component is Average Draft Position, or ADP.
 
 We collected aggregate ADP from FantasyPros, combining information from platforms such as Yahoo, ESPN, CBS, and NFBC.
 
-ADP is important because it represents the market's expectation of when each player will be drafted. In our model, it helps define the availability window of a player.
+ADP is important because it represents the market's expectation of when each player will be drafted. In our model, it defines the availability horizon of each asset.
 
-For example, if a player's ADP is much earlier than our next pick, then we should not assume that player will still be available. This makes the model more realistic than simply ranking players by projected points.
+For example, if a player's ADP is much earlier than our next pick, then we should not assume that player will still be available. This makes the model more realistic than simple myopic utility maximization.
 -->
 ---
 <!-- _class: impact-slide -->
@@ -376,15 +367,11 @@ $$ \max \sum_{i \in I} v_i y_i $$
 
 <!--
 Presenter notes:
-In our integer programming model, we define three types of binary decision variables.
+In the IP model, we define three binary variables.
 
-First, \(y_i\) equals 1 if player \(i\) is drafted, and 0 otherwise.
+\(y_i\) indicates whether player \(i\) is drafted. \(x_{ip}\) assigns player \(i\) to position \(p\). \(z_{ik}\) records whether player \(i\) is selected at our \(k\)-th pick.
 
-Second, \(x_{ip}\) equals 1 if player \(i\) is assigned to position \(p\). This handles position eligibility and roster construction.
-
-Third, \(z_{ik}\) equals 1 if player \(i\) is selected at our \(k\)-th pick. This connects player selection with the draft timeline.
-
-The objective is to maximize the total projected value of our starting roster. In other words, we want to select the combination of players that gives the highest total fantasy points while satisfying all draft and roster constraints.
+The objective is to maximize the total projected utility of the starting roster while satisfying all draft and roster constraints.
 -->
 ---
 ## 6. Model Formulation II: Constraints
@@ -409,17 +396,11 @@ The objective is to maximize the total projected value of our starting roster. I
 
 <!--
 Presenter notes:
-The constraints make sure the solution is realistic.
+The constraints make the solution realistic.
 
-First, we draft exactly one player at each of our picks. This is represented by the constraint that the sum of \(z_{ik}\) over all players equals 1 for every pick.
+First, we draft exactly one player at each pick, and each drafted player can only be selected once. Second, every drafted player must be assigned to one roster position. Third, every position must satisfy its required slot count.
 
-Second, if a player is drafted, he must be assigned to exactly one roster position. This links the drafting decision \(y_i\) with the assignment variable \(x_{ip}\).
-
-Third, every position must satisfy its required number of roster slots.
-
-Finally, we add a market availability constraint using ADP. If our pick is later than a player's ADP plus a buffer, we treat that player as unavailable.
-
-This prevents the model from choosing players who would probably already be drafted by opponents.
+Finally, ADP creates the market availability constraint. If our pick is later than a player's ADP plus a buffer, that player is treated as unavailable, because competitors probably selected him already.
 -->
 ---
 <!-- _class: impact-slide -->
@@ -456,11 +437,11 @@ While Gurobi provides a mathematically optimal solution, it may fail in real-wor
 
 <!--
 Presenter notes:
-Although Gurobi can provide a mathematically optimal solution, traditional IP has two major practical problems.
+Although Gurobi can provide an optimal solution, IP has two practical problems.
 
-The first is scalability. As the number of players increases, the branch-and-bound search space grows very quickly. With a large player pool, the solver may need too much time to prove optimality.
+First is scalability. As the player pool grows, the branch-and-bound search space grows quickly.
 
-The second is real-time execution. Drafts usually have timers, often around 60 seconds per pick. A manager cannot wait several minutes, or even longer, for an optimization solver during a live draft.
+Second is real-time execution. Drafts often have 60-second timers, so a manager cannot wait several minutes for a solver.
 
 Therefore, we use IP as a benchmark, but we need a faster method for real-time decision making.
 -->
@@ -476,43 +457,42 @@ To bridge the gap between optimality and speed, we designed two heuristics.
 
 <!--
 Presenter notes:
-To bridge the gap between optimality and speed, we designed two heuristic algorithms.
+To bridge optimality and speed, we design heuristic algorithms.
 
-The first one is the baseline method: **Direct Greedy**.
+The baseline is Direct Greedy.
 
-The idea is simple. At each pick, the algorithm estimates which position is most scarce by comparing remaining roster slots with available players in the market. Then it selects the best player for the most scarce position.
+At each pick, DG estimates which position is most scarce by comparing remaining roster slots with available players, then selects the best player for that position.
 
-This is fast and intuitive, but it is also myopic. For example, it may draft a mediocre catcher just because catcher looks scarce, while missing a much more valuable superstar at another position.
+This is fast, but myopic. It may overreact to current scarcity and miss a much more valuable asset at another position.
 
-So Direct Greedy gives us a useful baseline, but it does not fully capture the timing value of a draft pick.
+So DG is useful as a baseline, but it does not capture the timing value of a draft pick.
 -->
 ---
 ## 8. Opportunity Cost Greedy (OCG)
-<span class="highlight">Expanding the Strategic Horizon</span>
+<span class="highlight">Dynamic Cost-of-Delay Assessment</span>
 
-- **Core Concept**: Incorporate economic concepts, "Delay-Cost", into the greedy choice.
-- **Decision Workflow**:
-  1. Evaluate all remaining roster gaps.
-  2. Identify the best player available **now** for each slot ($V_{\text{now}}$).
-  3. Forecast the best player likely to remain for that slot by **our next pick** ($V_{\text{next}}$).
-  4. Calculate **Opportunity Cost**: $\text{Score} = V_{\text{now}} - V_{\text{next}}$
-  5. Select the player/position that minimizes this potential loss.
+- **The Logic**: Shift from myopic utility to **look-ahead opportunity cost**.
+- **The Mechanism**:
+  1. Evaluate the best asset available **now** ($V_{\text{now}}$).
+  2. Forecast the best asset likely available at the **next decision point** ($V_{\text{next}}$).
+  3. Calculate **Cost-of-Delay**: $V_{\text{now}} - V_{\text{next}}$.
+  4. Prioritize the market segment where the **value cliff** is most imminent.
 
-> OCG quantifies the "cost of waiting," allowing for fast decisions that retain IP-like strategic foresight.
+> OCG captures IP-like strategic depth while remaining fast enough for real-time decision support.
 
 <!--
 Presenter notes:
-Our main heuristic is **Opportunity Cost Greedy**, or OCG.
+Our main contribution is Opportunity Cost Greedy, or OCG.
 
-The key idea is to measure the **cost of waiting**.
+OCG is a dynamic cost-of-delay assessment.
 
-At each pick, OCG first looks at all remaining roster gaps. For each position, it identifies the best player available now, which we call \(V_{\text{now}}\).
+Instead of only maximizing immediate utility, it asks: if we wait until the next decision point, how much value will disappear?
 
-Then it forecasts the best player who is likely to remain available by our next pick, called \(V_{\text{next}}\).
+For each position, OCG compares \(V_{\text{now}}\), the best asset now, with \(V_{\text{next}}\), the best asset likely available next.
 
-The opportunity cost is the difference between these two values. If the difference is large, waiting is expensive, so we should draft that position now. If the difference is small, we can safely delay.
+The difference is the cost of delay. If the gap is large, that position is approaching a value cliff, so OCG prioritizes it.
 
-This gives OCG some strategic look-ahead, while still keeping the algorithm fast enough for live decisions.
+This gives OCG strategic foresight while keeping the computation fast enough for real-time decision support.
 -->
 ---
 ## 9. Algorithms: Complexity Analysis
@@ -530,17 +510,17 @@ This gives OCG some strategic look-ahead, while still keeping the algorithm fast
 
 <!--
 Presenter notes:
-For implementation, we maintain a max-heap, or priority queue, for every position.
+For implementation, we maintain a max-heap for every position.
 
-This allows the algorithm to quickly find the best available player for each roster slot.
+This allows the algorithm to quickly find the best available asset for each roster slot.
 
-We also use lazy deletion. When opponents draft players, we do not immediately remove those players from every heap. Instead, when a player is popped from a heap, we check whether he is still available. If not, we discard him and continue.
+We also use lazy deletion. When opponents draft players, we do not immediately remove them from every heap. We only check availability when a player is popped.
 
-This improves efficiency because we avoid many unnecessary updates.
+This avoids many unnecessary updates.
 
 Let \(n\) be the total number of players, \(r\) be the roster size, and \(p\) be the number of positions. The total complexity is \(O(n \log n + r \cdot p)\), which is the same order as Direct Greedy.
 
-So OCG adds strategic look-ahead without sacrificing real-time performance.
+So OCG adds look-ahead without sacrificing real-time performance.
 -->
 ---
 ## Real-Data Validation
@@ -613,15 +593,15 @@ We design four factors for experiments to test the boundaries of our algorithm:
 Presenter notes:
 We test four main dimensions.
 
-The first is the distribution of player points. We consider normal, uniform, and star-heavy distributions.
+First is the distribution of player points: normal, uniform, and star-heavy.
 
-The second is position eligibility. Some players may be flexible and eligible for multiple positions, while others may be restricted to a single position.
+Second is position eligibility, from flexible multi-position players to strict single-position players.
 
 The third is market uncertainty. We test how sensitive the algorithm is to ADP noise and systematic bias.
 
 The fourth is the demand ratio. This controls whether the player pool is tight or abundant relative to roster needs.
 
-Together, these factors let us test the algorithm in a much wider range of environments than real data alone.
+Together, these factors test the algorithm in a wider range of environments than real data alone.
 -->
 ---
 <style scoped>
@@ -650,17 +630,17 @@ td { padding: 4px 8px !important; }
 
 <!--
 Presenter notes:
-This table summarizes the 14 synthetic scenarios.
+This table summarizes the 12 synthetic scenarios.
 
-Scenario S1 is the baseline. Then we change one major factor at a time, such as the points distribution, position flexibility, market accuracy, or demand ratio.
+S1 is the baseline. Then we change one major factor at a time: points distribution, position flexibility, market accuracy, or demand ratio.
 
 For example, S3 uses a star-heavy point distribution, where a small number of elite players account for a large share of total value.
 
 S6 uses single-position eligibility, which makes roster construction harder because players cannot flex into multiple slots.
 
-S13 represents a high-demand market, where available players are scarce compared with roster needs.
+S11 represents a high-demand market, where available players are scarce compared with roster needs.
 
-By comparing results across these scenarios, we can identify where OCG provides the greatest advantage.
+Comparing these scenarios shows where OCG provides the greatest advantage.
 -->
 ---
 <style scoped>
@@ -707,7 +687,7 @@ For example, in the baseline case, Direct Greedy has a gap of 4.79%, while OCG r
 
 In the star-heavy case, the gap falls from 8.39% to 2.87%. In the high-demand case, it falls from 8.81% to 2.64%.
 
-The main conclusion is that OCG remains close to the IP optimum across all 14 scenarios, usually keeping the gap under 3%.
+The main conclusion is that OCG remains close to the IP optimum across all 12 scenarios, usually keeping the gap under 3%.
 -->
 ---
 ## Strategic Insights: Where OCG Excels
@@ -765,15 +745,11 @@ Finally, in high-demand markets, the player pool is tight. OCG performs well bec
 Presenter notes:
 Next, we evaluate runtime scaling.
 
-The approximate number of variables grows with the number of players, positions, and roster size. As the test size increases, IP becomes much slower.
+As the number of players, positions, and roster slots grows, IP becomes much slower.
 
-For small and medium cases, IP can still solve the problem optimally. But as the player pool grows, runtime increases sharply.
+In the largest timeout case, IP runs for more than 1,869 seconds and still does not finish.
 
-In the timeout case, with more than 184,000 players and 24 teams, IP runs for more than 1,869 seconds and times out.
-
-In contrast, both DG and OCG remain fast. OCG completes the largest case in about 23 seconds.
-
-This confirms that OCG is much more practical for large-scale or real-time draft environments.
+In contrast, DG and OCG remain fast. OCG completes the largest case in about 23 seconds, which makes it much more practical for large-scale or real-time decision environments.
 -->
 ---
 ## Scaling Visualization
@@ -784,13 +760,13 @@ This confirms that OCG is much more practical for large-scale or real-time draft
 
 <!--
 Presenter notes:
-The visualization shows the same runtime pattern more clearly.
+The visualization shows the same runtime pattern.
 
-As the number of variables increases, the IP curve rises much faster than the heuristic methods.
+As variables increase, the IP curve rises much faster than the heuristic methods.
 
 Direct Greedy is slightly faster than OCG, but the difference is small compared with the improvement in solution quality.
 
-This is the key trade-off of our method: OCG spends a little more computation time than a simple greedy algorithm, but it achieves much better draft quality while still remaining fast enough for practical use.
+This is the key trade-off: OCG spends a little more computation than simple greedy, but achieves better draft quality while remaining practical.
 -->
 ---
 ## Draft Simulation: One OCG vs 11 DG Teams (Yahoo)
@@ -821,38 +797,29 @@ The result again supports the robustness of opportunity-cost reasoning in a comp
 ---
 ## 10. Conclusions & Future Extensions
 
-1. **OCG provides a deployable balance between time efficiency and draft performance.**
--  Outperformed all baseline greedy variants in simulations across diverse draft positions.
--  Generate decisions in seconds even in large-scaled scenarios while maintaining high near-optimality.
+1. **OCG provides a deployable balance between speed and solution quality.**
+- Outperforms baseline greedy variants across scoring systems and draft positions.
+- Generates decisions in seconds while maintaining strong near-optimality.
 
-2. **OCG offers significant Competitive Edges in scarce of tight markets.** 
+2. **OCG is strongest under competitive scarcity.**
+- Star-heavy value curves, low flexibility, chaotic markets, and high demand all amplify the value of cost-of-delay reasoning.
+
 3. **Future Extensions**: 
-    - **Stochastic Opponent Modeling:** incorporate probability distributions and more strategies for opponent behaviors (e.g., team bias, "homer" picks).
-    - **Real-World Application :** Transitioning from academic simulation to live 2026 Fantasy Baseball competition game to again validate our strategies!
+    - **Stochastic Opponent Modeling:** incorporate probability distributions and richer opponent behaviors.
+    - **Risk-Aware Utility:** integrate uncertainty in projections, injuries, and upside-vs-safety preferences.
 
-
-<!--
- By quantifying the "delay cost," OCG captures the essence of IP logic while remaining fast enough to handle **a large scale of decision variables** under a short period of time.-->
 
 <!--
 Presenter notes:
-To conclude, we provide three recommendations for fantasy baseball managers.
+To conclude, OCG is a real-time decision-support framework for competitive talent acquisition.
 
-First, Direct Greedy is risky. Choosing only by positional scarcity or best available player can lead to significant value loss, especially in star-heavy or high-demand markets.
+Direct Greedy is risky because immediate scarcity can cause major value loss. IP is an excellent benchmark, but too slow under strict decision windows.
 
-Second, IP is a strong benchmark, but not a practical live-draft tool. It is useful for post-draft analysis or pre-season simulation, but its runtime makes it difficult to use during a timed draft.
+OCG sits between them. It captures cost-of-delay logic while remaining deployable.
 
-Third, OCG is the deployable solution. By quantifying the delay cost, OCG captures much of the strategic logic of IP while remaining fast enough for real-time decision making.
+Our experiments show that OCG performs especially well under competitive scarcity, including star-heavy value curves, low flexibility, chaotic markets, and high demand.
 
-In our largest test, it handled around 50 million decision variables in under 25 seconds.
-
-There are still several limitations and possible extensions.
-
-First, our current model treats ADP as a deterministic threshold. In future work, we can build probabilistic opponent models that capture different drafting behaviors, such as team preferences, risk tolerance, or favorite players.
-
-Second, player projections are treated as average values. But in reality, players have risk. Injuries, slumps, and breakout seasons can all affect performance.
-
-Therefore, future versions can incorporate Monte Carlo simulation and risk preferences. This would allow the algorithm to balance upside and safety depending on the manager's strategy.
+Future work can add stochastic opponent modeling and risk-aware utility, so the framework can handle uncertain behavior, injuries, and upside-versus-safety preferences.
 -->
 ---
 <!-- _class: title-slide -->
@@ -867,7 +834,7 @@ Therefore, future versions can incorporate Monte Carlo simulation and risk prefe
 Presenter notes:
 Thank you for your attention.
 
-This project shows that fantasy baseball drafting can be modeled as a strategic optimization problem. By combining real data, integer programming, and a fast opportunity-cost heuristic, we can produce draft recommendations that are both high-quality and practical.
+This project shows that Fantasy Baseball can serve as a data-rich testbed for sequential talent acquisition under scarcity. By combining real market data, integer programming, and a fast opportunity-cost heuristic, we can produce recommendations that are both high-quality and practical.
 
 We are happy to answer any questions.
 -->
