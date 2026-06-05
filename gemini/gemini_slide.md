@@ -163,7 +163,7 @@ style: |
 ## 報告大綱 (Outline)
 
 1. **Introduction**：棒球選秀介紹與現代制服組洞察
-2. **Problem Description**：蛇形選秀環境與大谷條款
+2. **Problem Description**：蛇形選秀環境與 ADP 可用性限制
 3. **Real Data Collection**：基於 FantasyPros 的真實數據爬取
 4. **Model Formulation**：整數線性規劃 (IP) 建模
 5. **The Bottleneck**：為何傳統 IP 遇到效能瓶頸？
@@ -360,13 +360,13 @@ $$ \max \sum_{i \in I} v_i y_i $$
 <div class="card">
   <div class="tag">Scalability Crisis</div>
   <h3 style="margin-top:0;">指數爆炸的可擴展性</h3>
-  棒球選秀的母體池極其龐大，大聯盟加上無數新秀，球員池高達十幾萬人。當球員數 ($n$) 放大，ip 的 Branch-and-Bound 搜尋空間會呈<span class="highlight">指數爆炸</span>。
+  棒球選秀的母體池極其龐大，大聯盟加上無數新秀，球員池高達十幾萬人。當球員數 ($n$) 放大，IP 的 Branch-and-Bound 搜尋空間會呈<span class="highlight">指數爆炸</span>。
 </div>
 
 <div class="card card-orange">
   <div class="tag">Real-time execution</div>
   <h3 style="margin-top:0;">實戰的時間壓力</h3>
-  選秀是有時間限制的。總管不可能在選秀室等 Gurobi 跑半個小時甚至超過。在巨大規模下，IP 會直接<span class="highlight"> 超時 或 記憶體耗盡 (MLE)</span>。
+  選秀是有時間限制的。總管不可能在選秀室等 Gurobi 跑半個小時甚至超過。在巨大規模下，IP 會直接<span class="highlight">超時</span>，難以作為即時決策工具。
 </div>
 </div>
 
@@ -399,7 +399,7 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
   4. 計算**機會成本**： $\text{Score} = V_{\text{now}} - V_{\text{next}}$
   5. 優先選擇機會成本（損失）最大的守位與球員。
 
-> OCG 保證了策略在具時間序列之數據下依然有效！
+> OCG 將「現在不選會失去多少」量化，讓快速決策仍保留接近 IP 的策略視野。
 
 ---
 
@@ -418,7 +418,7 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 
 ---
 
-## ：Real-Data Validation
+## Real-Data Validation
 
 | 數據來源 (2026) | 演算法 | **Optimal Gap Ratio** |
 | :--- | :--- | :--- |
@@ -459,7 +459,7 @@ Direct Greedy 就像是一般的休閒玩家，只看現在缺什麼就補什麼
 </div>
 <div class="card" style="padding:20px;">
   <div class="tag">Factor 4</div>
-  <strong>Scale & Demand</strong><br>
+  <strong>Player Demand Ratio</strong><br>
   檢驗稀缺市場與供給過多對策略的影響。
 </div>
 </div>
@@ -509,14 +509,14 @@ OCG 對以下幾種極端場景的改善最明顯：
 - **S3 / High-Low**：價值曲線高度不平衡，DG 會錯失關鍵巨星；OCG 將 gap 由 8.39% 降到 2.87%。
 - **S6 / Single-Position**：由於球員守位限制，OCG 能避免早期選秀錯誤被後線放大。
 - **S13 / D=1 (極度稀缺)**：市場供給緊繃時，OCG 仍能提早佈局，保住整體陣容價值。
-- **S8-S12 / Chaotic Market**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
+- **S7-S12 / Market Volatility**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
 
 | Scenario | DG Gap | OCG Gap | Key Benefit |
 | :--- | :---: | :---: | :--- |
 | High-Low | 8.39% | 2.87% | 穩住頂級球員 |
 | Single-Position | 5.11% | 0.94% | 避免守位枯竭 |
 | D=1 | 8.81% | 2.64% | 極度稀缺下仍可預判 |
-| Chaotic Market | 5.56% / 5.42% | 2.43% / 1.72% | 高不確定性下更穩定 |
+| Market Volatility | 5.56% / 5.42% | 2.43% / 1.72% | 高不確定性下更穩定 |
 
 ---
 
@@ -592,12 +592,12 @@ $$
 
 **給球隊總管 (GM) 的最終建議：**
 
-1. **傳統的「選最好球員 (BPA)」策略已經過時**：
-   不考慮機會成本的貪婪選秀可能會讓球隊流失極大的預期戰力。
-2. **完美最佳化 (IP) 不具備實戰操作性**：
-   選秀有時間限制。當考量全聯盟農場與潛力新秀時，指數爆炸的 IP 較難作為 Real-time 輔助工具。
-3. **導入 Opportunity Cost Greedy (OCG) 系統**：
-   OCG 成功捕捉了 IP 的策略精髓（預判未來），將最佳化落差控制在極小範圍，且擁有應付五千萬級變數的即時運算能力。
+1. **Direct Greedy 會流失明顯 roster value**：
+   只看當下最佳球員或當下缺口，會在 star-heavy、single-position、scarcity 等環境中被放大成明顯 optimality gap。
+2. **IP 是完美 benchmark，但不是 draft-day 工具**：
+   當 player pool 和 roster size 放大，IP runtime 快速膨脹，最大 stress case 超過 30 分鐘並 timeout。
+3. **OCG 是本專題的核心可落地成果**：
+   OCG 用一輪 look-ahead 的 delay cost 捕捉 IP 的策略精神；在所有 14 個 scenario 都優於 DG，且在 50-million-variable 等級仍能於 **23.286 秒**完成。
 
 ---
 
