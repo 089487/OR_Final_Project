@@ -298,15 +298,15 @@ OCG's largest gains appear in environments where waiting has a measurable cost:
 
 - **S3 / Points: Star-Heavy**: DG misses key elite players; OCG reduces the gap from 8.39% to 2.87%.
 - **S6 / Pos: Single-Position**: OCG avoids late positional shortages when flexibility disappears.
+- **S10 / Market: Chaotic ($\delta=+5$)**: OCG keeps a robust lead even when opponent behavior is uncertain.
 - **S13 / Demand: High**: OCG plans ahead when almost every player will be drafted.
-- **S9-S12 / Market: Chaotic**: OCG remains stable under ADP noise and tolerance shifts.
 
-| Scenario | DG Gap | OCG Gap | Key Benefit |
-| :--- | :---: | :---: | :--- |
-| Points: Star-Heavy | 8.39% | 2.87% | Secures elite talent |
-| Pos: Single-Position | 5.11% | 0.94% | Avoids positional collapse |
-| Demand: High | 8.81% | 2.64% | Anticipates scarcity |
-| Market: Chaotic | 5.56% / 5.42% | 2.43% / 1.72% | Robust under uncertainty |
+| Factor | Scenario ID | Environment Condition | Improvement (%) |
+| :--- | :---: | :--- | ---: |
+| Points Distribution (Factor A) | S3 | Points: Star-Heavy | **+6.10%** |
+| Position Eligibility (Factor B) | S6 | Pos: Single-Position | **+4.42%** |
+| Market Conditions (Factor C) | S10 | Market: Chaotic ($\delta=+5$) | **+4.16%** |
+| Player Demand Ratio (Factor D) | S13 | Demand: High ($D=1$) | **+6.82%** |
 
 ---
 

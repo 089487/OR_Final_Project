@@ -508,15 +508,15 @@ OCG 對以下幾種極端場景的改善最明顯：
 
 - **S3 / Points: Star-Heavy**：價值曲線高度不平衡，DG 會錯失關鍵巨星；OCG 將 gap 由 8.39% 降到 2.87%。
 - **S6 / Pos: Single-Position**：由於球員守位限制，OCG 能避免早期選秀錯誤被後線放大。
+- **S10 / Market: Chaotic ($\delta=+5$)**：即使市場行為不穩定，OCG 仍能維持穩健領先。
 - **S13 / Demand: High**：市場供給緊繃時，OCG 仍能提早佈局，保住整體陣容價值。
-- **S9-S12 / Market: Chaotic**：ADP 噪音與容錯改變時，OCG 表現更穩定，適合高不確定性環境。
 
-| Scenario | DG Gap | OCG Gap | Key Benefit |
-| :--- | :---: | :---: | :--- |
-| Points: Star-Heavy | 8.39% | 2.87% | 穩住頂級球員 |
-| Pos: Single-Position | 5.11% | 0.94% | 避免守位枯竭 |
-| Demand: High | 8.81% | 2.64% | 極度稀缺下仍可預判 |
-| Market: Chaotic | 5.56% / 5.42% | 2.43% / 1.72% | 高不確定性下更穩定 |
+| Factor | Scenario ID | Environment Condition | Improvement (%) |
+| :--- | :---: | :--- | ---: |
+| Points Distribution (Factor A) | S3 | Points: Star-Heavy | **+6.10%** |
+| Position Eligibility (Factor B) | S6 | Pos: Single-Position | **+4.42%** |
+| Market Conditions (Factor C) | S10 | Market: Chaotic ($\delta=+5$) | **+4.16%** |
+| Player Demand Ratio (Factor D) | S13 | Demand: High ($D=1$) | **+6.82%** |
 
 ---
 
