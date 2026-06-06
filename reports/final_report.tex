@@ -59,7 +59,7 @@ We consider a snake draft environment where a manager operates a predetermined s
 \begin{enumerate}
     \item \textbf{Projected Value}: The expected statistical output (points) for the season.
     \item \textbf{Eligible Positions}: The real-life positions the player can occupy.
-    \item \textbf{Average Draft Position (ADP)}: A market consensus of when the player is expected to be drafted by opponents.
+    \item \textbf{Average Draft Position (ADP)}: A market consensus of when the player is expected to be drafted by opponents \hyperref[ref:fantasypros-adp]{[2]}.
 \end{enumerate}
 
 The objective is to maximize the sum of projected points for the starting roster. The drafted players must perfectly fulfill strict positional requirements. The base roster structure used in our study demands 16 active slots, as detailed in Table \ref{tab:roster}. (Note: The Utility (\texttt{Util}) slot is hitter-only, meaning pitchers cannot be assigned there).
@@ -77,7 +77,7 @@ Required Slots & 1 & 1 & 1 & 1 & 1 & 3 & 1 & 5 & 2 \\
 \end{tabular}
 \end{table}
 
-A player can only be drafted if he is still available in the market. We treat ADP as a proxy for market depletion. If the manager's current draft pick occurs much later than a player's ADP, that player is considered successfully drafted by an opponent and is unavailable. By integrating ADP market constraints and positional flexibility into the sequence of decisions, draft planning is transformed from a subjective ranking exercise into a strict operations research problem.
+A player can only be drafted if he is still available in the market. We treat ADP as a proxy for market depletion using FantasyPros consensus ADP \hyperref[ref:fantasypros-adp]{[2]}. If the manager's current draft pick occurs much later than a player's ADP, that player is considered successfully drafted by an opponent and is unavailable. By integrating ADP market constraints and positional flexibility into the sequence of decisions, draft planning is transformed from a subjective ranking exercise into a strict operations research problem.
 
 \section{Model Formulation}
 
@@ -182,27 +182,27 @@ To evaluate our algorithms, we utilize both real-world data and a highly customi
 
 \subsection{Real Data Collection}
 
-Real data validation serves as our first step of validation. We synthesize our dataset from FantasyPros, utilizing \textbf{projected points as a player utility proxy ($v_i$)} and \textbf{Average Draft Position (ADP) as a market availability window proxy}. Figures \ref{fig:projected_data} and \ref{fig:player_adp} display examples of the underlying data structure.
+Real data validation serves as our first step of validation. We synthesize our dataset from FantasyPros, utilizing \textbf{projected points as a player utility proxy ($v_i$)} \hyperref[ref:fantasypros-proj]{[1]} and \textbf{Average Draft Position (ADP) as a market availability window proxy} \hyperref[ref:fantasypros-adp]{[2]}. Figures \ref{fig:projected_data} and \ref{fig:player_adp} display examples of the underlying data structure.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\linewidth]{./image.png}
-  \caption{Example of 2026 player projected batting and pitching statistics.}
+  \caption{Example of 2026 player projected batting and pitching statistics from FantasyPros \hyperref[ref:fantasypros-proj]{[1]}.}
   \label{fig:projected_data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{./image-1.png}
-  \caption{Example of player Average Draft Position (ADP).}
+  \caption{Example of player Average Draft Position (ADP) from FantasyPros consensus ADP \hyperref[ref:fantasypros-adp]{[2]}.}
   \label{fig:player_adp}
 \end{figure}
 
-Player values are calculated using two distinct standard scoring benchmarks: Yahoo (which focuses on traditional counting stats) and FanGraphs (which incorporates more advanced player metrics based on linear weights). The detailed scoring weights for both batters and pitchers are outlined in Table \ref{tab:scoring_weights}.
+Player values are calculated using two distinct standard scoring benchmarks: Yahoo (which focuses on traditional counting stats) \hyperref[ref:yahoo-scoring]{[3]} and FanGraphs/Ottoneu (which incorporates more advanced player metrics based on linear weights) \hyperref[ref:fangraphs-scoring]{[4]}. The detailed scoring weights for both batters and pitchers are outlined in Table \ref{tab:scoring_weights}.
 
 \begin{table}[H]
 \centering
-\caption{Scoring weights for Yahoo and FanGraphs formats.}
+\caption{Scoring weights for Yahoo and FanGraphs/Ottoneu formats \hyperref[ref:yahoo-scoring]{[3]}, \hyperref[ref:fangraphs-scoring]{[4]}.}
 \label{tab:scoring_weights}
 \small
 \begin{tabular}{l c c | l c c}
@@ -225,7 +225,7 @@ CS        & --  &0 (-2.8) &     &     &     \\
 \end{tabular}
 \end{table}
 
-Slight modifications were made to the original projected stats to align with these scoring categories. For example, since the projected stats lack Hit By Pitch (HBP) and Caught Stealing (CS) for batters, we effectively set their scoring weights to zero (original standard weights are shown in parentheses in the table). 
+Slight modifications were made to the original projected stats to align with these scoring categories \hyperref[ref:yahoo-scoring]{[3]}, \hyperref[ref:fangraphs-scoring]{[4]}. For example, since the projected stats lack Hit By Pitch (HBP) and Caught Stealing (CS) for batters, we effectively set their scoring weights to zero (original standard weights are shown in parentheses in the table). 
 
 Additionally, across all experiments (both real and synthetic data), the manager's initial draft position is standardized to the middle of the draft order (e.g., the 6th pick in a 12-team league, or the 12th pick in a 24-team league) to maintain a consistent evaluation baseline.
 
@@ -239,7 +239,7 @@ The total number of generated players in the synthetic environment is defined dy
 Our experimental framework generates synthetic profiles encompassing four primary operational factors:
 
 \subsection{Factor A: Points Distribution (\texorpdfstring{$v_i$}{vi})}
-We designed three points distributions to simulate different talent pools, clipping all generated values to a realistic range of $[10.0, 800.0]$ according to the real data we collected above:
+We designed three points distributions to simulate different talent pools, clipping all generated values to a realistic range of $[10.0, 800.0]$ according to the FantasyPros projection data collected above \hyperref[ref:fantasypros-proj]{[1]}:
 \begin{itemize}[leftmargin=1.5em]
     \item \textbf{Normal (Baseline)}: Values follow a normal distribution $v_i \sim \mathcal{N}(400, 120^2)$. This represents an average draft class where the majority of players are solid, mid-tier contributors.
     \item \textbf{Uniform}: Values are uniformly distributed $v_i \sim \mathcal{U}(10, 800)$. This flattens the talent curve, offering many viable replacement options and minimizing scarcity.
@@ -316,7 +316,7 @@ Unless otherwise noted, all synthetic results are reported as Mean $\pm$ Standar
 
 \subsection{Real-Data Validation}
 
-As the first step of validation, we ran the algorithms on the real-world 2026 Yahoo and FanGraphs projections. As seen in Table \ref{tab:real_data}, OCG successfully trims the point loss caused by naive greedy drafting, confirming its practical viability on real MLB data structures before proceeding to the more comprehensive synthetic validations.
+As the first step of validation, we ran the algorithms on the real-world 2026 FantasyPros projections with Yahoo and FanGraphs/Ottoneu scoring rules \hyperref[ref:fantasypros-proj]{[1]}, \hyperref[ref:yahoo-scoring]{[3]}, \hyperref[ref:fangraphs-scoring]{[4]}. As seen in Table \ref{tab:real_data}, OCG successfully trims the point loss caused by naive greedy drafting, confirming its practical viability on real MLB data structures before proceeding to the more comprehensive synthetic validations.
 
 \begin{table}[H]
 \centering
@@ -504,7 +504,7 @@ The highlighted scenarios reveal where cost-of-delay reasoning matters most. In 
 To evaluate OCG in a multi-agent environment, we implemented a 12-team draft simulation. Unlike the previous IP-benchmark experiments, this test measures how one OCG-managed team performs while competing directly against 11 DG-managed teams for the same player pool.
 
 \textbf{Methodology:}
-Using real-world 2026 Yahoo and FanGraphs projections, we ran 12 separate snake drafts and shifted the OCG team's starting position from the 1st pick to the 12th pick. All teams followed the same roster requirements and market availability rules.
+Using real-world 2026 FantasyPros projections, FantasyPros ADP, and Yahoo/FanGraphs scoring rules, we ran 12 separate snake drafts and shifted the OCG team's starting position from the 1st pick to the 12th pick \hyperref[ref:fantasypros-proj]{[1]}, \hyperref[ref:fantasypros-adp]{[2]}, \hyperref[ref:yahoo-scoring]{[3]}, \hyperref[ref:fangraphs-scoring]{[4]}. All teams followed the same roster requirements and market availability rules.
 
 \textbf{Results and Analysis:}
 Figure \ref{fig:competitive_simulation} compares the OCG team's objective and rank against DG opponents across all draft positions. OCG achieves first place across all Yahoo positions and first or second place across all FanGraphs positions. This suggests that cost-of-delay reasoning remains robust even when multiple agents compete for the same scarce resources.
@@ -541,11 +541,15 @@ The results demonstrate that roster construction in competitive markets is a com
 
 \section*{References}
 
+{\small
+\begin{sloppypar}
 \begin{enumerate}[label={[\arabic*]}, leftmargin=2em, itemsep=2pt]
-    \item \textbf{FantasyPros.} \textit{2026 MLB Player Projected Statistics (Batting/Pitching).} \url{https://www.fantasypros.com/mlb/projections/}
-    \item \textbf{FantasyPros.} \textit{2026 Fantasy Baseball Average Draft Position (ADP) Consensus.} \url{https://www.fantasypros.com/mlb/adp/overall.php}
-    \item \textbf{Yahoo Sports.} \textit{Default League Settings and Head-to-Head Points Scoring System.} \url{https://help.yahoo.com/kb/default-league-settings-fantasy-baseball-sln6785.html}
-    \item \textbf{FanGraphs / Justin Merry.} \textit{Ottoneu Scoring and Linear Weights for Sabermetric Evaluation.} \url{https://ottoneu.fangraphs.com/support}
+    \item \label{ref:fantasypros-proj}\textbf{FantasyPros.} \textit{2026 MLB Player Projected Statistics (Batting/Pitching).} \url{https://www.fantasypros.com/mlb/projections/}
+    \item \label{ref:fantasypros-adp}\textbf{FantasyPros.} \textit{2026 Fantasy Baseball Average Draft Position (ADP) Consensus.} \url{https://www.fantasypros.com/mlb/adp/overall.php}
+    \item \label{ref:yahoo-scoring}\textbf{Yahoo Sports.} \textit{Default League Settings and Head-to-Head Points Scoring System.} \url{https://help.yahoo.com/kb/default-league-settings-fantasy-baseball-sln6785.html}
+    \item \label{ref:fangraphs-scoring}\textbf{FanGraphs / Justin Merry.} \textit{Ottoneu Scoring and Linear Weights for Sabermetric Evaluation.} \url{https://ottoneu.fangraphs.com/support}
 \end{enumerate}
+\end{sloppypar}
+}
 
 \end{document}
