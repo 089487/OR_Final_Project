@@ -3,7 +3,7 @@
   "system": "yahoo_points",
   "platform": "yahoo_fantasy_baseball",
   "description": "Yahoo Fantasy Baseball default Head-to-Head Points scoring",
-  "link": "https://ottoneu.fangraphs.com/support",
+  "link": "https://help.yahoo.com/kb/default-league-settings-fantasy-baseball-sln6785.html",
   "note" : "more focus on traditional stats",
 
   "batters": {
