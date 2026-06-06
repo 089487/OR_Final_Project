@@ -13,6 +13,7 @@ myenv/
 .ipynb_checkpoints/
 .pytest_cache/
 .mypy_cache/
+.understand-anything/
 
 data/processed/*
 !data/processed/2026_yahoo_data.csv
@@ -48,4 +49,3 @@ mock_results*/
 
 *.log
 *.tmp
-
