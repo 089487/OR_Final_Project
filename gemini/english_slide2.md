@@ -579,6 +579,93 @@ Under FanGraphs scoring, OCG has a gap of 1.24%, while Direct Greedy has a gap o
 This shows that OCG consistently stays within 1.5% of the mathematical optimum and clearly outperforms the standard greedy approach.
 -->
 ---
+
+<style scoped>
+  /* 針對此頁面的局部樣式調整 */
+  section {
+    padding: 25px 35px;
+  }
+  h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: #1e3a8a;
+    text-align: center;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  table {
+    font-size: 14px !important; /* 稍微再縮小一點以確保三欄位能橫向塞入 */
+    line-height: 1.05 !important;
+    margin-top: 0 !important;
+    width: 100%;
+  }
+  th, td {
+    padding: 3px 8px !important; /* 極致收緊間距 */
+    white-space: nowrap; /* 防止名字斷行 */
+  }
+</style>
+
+## Comparative Roster Analysis: 
+
+<div class="grid-2">
+
+<div>
+<h3>OCG Yahoo Roster (15239.8)</h3>
+
+| Slot | Player | Points |
+| :--- | :--- | :---: |
+| SP | Tarik Skubal_P | 974.2 |
+| OF | Kyle Schwarber_H | 1382.1 |
+| OF | **Brent Rooker_H** | 1274.4 |
+| 1B | Freddie Freeman_H | 1222.2 |
+| C | William Contreras_H | 1094.5 |
+| SP | **Jesus Luzardo_P** | 734.2 |
+| RP | Devin Williams_P | 561.1 |
+| SP | Sonny Gray_P | 661.6 |
+| SS | **Willy Adames_H** | 1166.1 |
+| 3B | **Matt Chapman_H** | 1119.4 |
+| 2B | **Gleyber Torres_H** | 1081.2 |
+| OF | **Ian Happ_H** | 1142.4 |
+| SP | Jack Flaherty_P | 614.2 |
+| RP | **Cody Ponce_P** | 515.9 |
+| Util | Spencer Torkelson_H | 1101.6 |
+| SP | Zac Gallen_P | 594.7 |
+
+</div>
+
+<div>
+<h3>IP Yahoo Roster (Benchmark=15702.2)</h3>
+
+| Slot | Player | Points |
+| :--- | :--- | :---: |
+| Util | Shohei Ohtani_H | 1673.1 |
+| SP | Garrett Crochet_P | 926.6 |
+| 1B | Pete Alonso_H | 1269.7 |
+| OF | **Brent Rooker_H** | 1274.4 |
+| RP | Edwin Diaz_P | 644.9 |
+| SP | Dylan Cease_P | 723.8 |
+| SP | **Jesus Luzardo_P** | 734.2 |
+| OF | Randy Arozarena_H | 1169.9 |
+| SS | **Willy Adames_H** | 1166.1 |
+| SP | Spencer Strider_P | 644.1 |
+| 3B | **Matt Chapman_H** | 1119.4 |
+| OF | **Ian Happ_H** | 1142.4 |
+| SP | MacKenzie Gore_P | 640.3 |
+| C | Ivan Herrera_H | 976.2 |
+| 2B | **Gleyber Torres_H** | 1081.2 |
+| RP | **Cody Ponce_P** | 515.9 |
+
+</div>
+
+</div>
+
+> **Insights:** OCG remains highly competitive by identifying efficient value in mid-tier starters and consistent outfielders with only half of players identical to IP.
+
+---
 <!-- _class: impact-slide -->
 
 # Synthetic Data & Evaluation
@@ -832,11 +919,11 @@ The result again supports the robustness of opportunity-cost reasoning in a comp
 - Generates decisions in seconds while maintaining strong near-optimality.
 
 2. **OCG is strongest under competitive scarcity.**
-- Star-heavy value curves, low flexibility, chaotic markets, and high demand all amplify the value of cost-of-delay reasoning.
 
 3. **Future Extensions**: 
-    - **Stochastic Opponent Modeling:** incorporate probability distributions and richer opponent behaviors.
+    - **Stochastic Opponent Modeling:** incorporate probability distributions and richer opponent behaviors (e.g., team bias, "homer" picks).
     - **Risk-Aware Utility:** integrate uncertainty in projections, injuries, and upside-vs-safety preferences.
+    - **Real-World Application:** Transitioning from academic simulation to live 2026 Fantasy Baseball competition game to again validate our strategies!
 
 
 <!--
@@ -865,6 +952,4 @@ Presenter notes:
 Thank you for your attention.
 
 This project shows that Fantasy Baseball can serve as a data-rich testbed for sequential talent acquisition under scarcity. By combining real market data, integer programming, and a fast opportunity-cost heuristic, we can produce recommendations that are both high-quality and practical.
-
-We are happy to answer any questions.
 -->
